@@ -396,8 +396,6 @@ body {
     }
 }
 
-
-
 .page.layers .layers__layer_content {
     background-color: #fff;
     z-index: 1
@@ -505,4 +503,29 @@ body {
     .page {
         padding: 0 44px
     }
+}
+
+select {
+    width: 100%;
+    border: 1px solid #fff;
+}
+
+select:hover {
+    border: 1px solid #fff;
+}
+
+.orgin {
+    color: orange;
+}
+
+.red {
+    color: red
+}
+
+.green {
+    color: green
+}
+
+.blur {
+    color: blue
 }

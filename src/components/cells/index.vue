@@ -1,7 +1,7 @@
 <template>
   <div class="weui-cells">
-    <item v-for="(item,index) in datas" :key="index" :title="item.title" @click="itemClick(item)">
-      {{item.slot}}
+    <item :html="item.slot" v-for="(item,index) in datas" :left-style="leftStyle" :key="index" :title="item.title" :desc="item.desc" @click="itemClick(item,index)">
+
     </item>
   </div>
 </template>
@@ -16,12 +16,23 @@ export default {
     datas: {
       type: Array,
       required: true
+    },
+    leftStyle: {
+      type: String,
+      default: "weui-cell_access"
     }
   },
   methods: {
-    itemClick(item) {
-      this.$emit("item-click", item);
+    itemClick(item, index) {
+      this.$emit("item-click", item, index);
     }
   }
 };
 </script>
+<style>
+.weui-cells a.link {
+  text-decoration: none;
+  color: #999999;
+}
+</style>
+

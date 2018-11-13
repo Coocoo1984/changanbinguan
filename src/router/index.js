@@ -12,6 +12,27 @@ export function createRouter() {
                 path: "/", component: () => import("../views/home")
             },
             {
+                path: "/adm/purchase", component: () => import("../views/admin/purchase")
+            },
+            {
+                path: "/adm/purchase/item", component: () => import("../views/admin/purchase/item")
+            },
+            {
+                path: "/adm/purchase/back", component: () => import("../views/admin/purchase/back")
+            },
+            {
+                path: "/adm/purchase/content", component: () => import("../views/admin/purchase/content")
+            },
+            {
+                path: "/adm/quote", component: () => import("../views/admin/quote")
+            },
+            {
+                path: "/adm/quote/content", component: () => import("../views/admin/quote/content")
+            },
+            {
+                path: "/adm/quote/quoter", component: () => import("../views/admin/quote/quoter")
+            },
+            {
                 path: "/manager", component: () => import("../views/manager")
             },
             {
@@ -39,6 +60,9 @@ export function createRouter() {
                 path: "/purchase/add", component: () => import("../views/purchase/add")
             },
             {
+                path: "/purchase/add/item", component: () => import("../views/purchase/add/add_item.vue")
+            },
+            {
                 path: "/purchase/list", component: () => import("../views/purchase/list")
             },
             {
@@ -46,6 +70,15 @@ export function createRouter() {
             },
             {
                 path: "/purchase/receipt", component: () => import("../views/purchase/receipt")
+            },
+            {
+                path: "/purchase/receipt/:id", component: () => import("../views/purchase/receipt/item")
+            },
+            {
+                path: "/purchase/statistics", component: () => import("../views/purchase/statistics")
+            },
+            {
+                path: "/purchase/statistics/result", component: () => import("../views/purchase/statistics/content")
             },
             {
                 path: "/review", component: () => import("../views/review")

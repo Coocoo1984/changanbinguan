@@ -55,6 +55,7 @@ app.get("*", (req, res) => {
         title: "Vue",
         cookies: req.cookies
     }
+    
     renderer.renderToString(context).then(html => {
         res.send(html)
     }).catch(err => {

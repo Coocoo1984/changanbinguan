@@ -1,12 +1,12 @@
 <template>
-    <a @click="click" class="weui-cell weui-cell_access" href="javascript:;">
-        <div class="weui-cell__bd">
-            <p>{{title}}</p>
-        </div>
-        <div class="weui-cell__ft">
-          <slot></slot>
-        </div>
-    </a>
+  <a @click="click" class="weui-cell link" :class="[leftStyle]" href="javascript:;">
+    <div class="weui-cell__bd">
+      <p>{{title}}</p>
+    </div>
+    <div class="weui-cell__ft" v-html="html">
+
+    </div>
+  </a>
 </template>
 
 <script>
@@ -15,6 +15,17 @@ export default {
     title: {
       type: String,
       required: true
+    },
+    desc: {
+      type: String,
+      default: ""
+    },
+    leftStyle: {
+      type: String
+    },
+    html: {
+      type: String,
+      default: ""
     }
   },
   methods: {

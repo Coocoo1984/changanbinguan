@@ -9,6 +9,7 @@ import { createRouter } from './router'
 import { RegisterComponents } from "./components";
 import { sync } from 'vuex-router-sync'
 
+
 export function createApp() {
     RegisterComponents(Vue)
     const store = createStore()

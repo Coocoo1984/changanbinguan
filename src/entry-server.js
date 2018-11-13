@@ -26,7 +26,6 @@ export default context => {
                         store,
                         route: router.currentRoute
                     });
-
                 }
             })).then(() => {
                 context.state = store.state;
