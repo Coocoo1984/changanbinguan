@@ -1,5 +1,5 @@
 import "@/assects/css/rest.css"
-import "weui/dist/style/weui.css";
+import "@/assects/css/weiui.css";
 
 
 import Vue from 'vue'

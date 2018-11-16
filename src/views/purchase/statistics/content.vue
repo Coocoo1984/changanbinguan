@@ -5,7 +5,6 @@
             <div class="weui-form-preview__hd">
                 <div class="weui-form-preview__item">
                     <label class="weui-form-preview__label">分类：<span class="categroy">食材</span></label>
-
                 </div>
             </div>
             <div class="weui-form-preview__bd">

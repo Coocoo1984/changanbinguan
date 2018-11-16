@@ -1,4 +1,6 @@
  <template>
+
+  <!-- content goes here -->
   <cells :datas="list" @item-click="click"></cells>
 </template>
 
@@ -18,15 +20,22 @@ export default {
     }
   },
   methods: {
+    refresh(done) {
+      done();
+    },
+    infinite(done) {
+      done();
+    },
     click(item) {
       if (this.status == 1)
         this.$router.push({
           path: "/adm/purchase/item",
           query: {
-            id: 1
+            id: 1,
+            status: this.$route.query.type
           }
         });
-      if (this.status == 2)
+      else if (this.status == 2)
         this.$router.push({
           path: "/adm/purchase/content",
           query: {

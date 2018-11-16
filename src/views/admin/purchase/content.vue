@@ -1,11 +1,12 @@
 <template>
     <div>
         <div class="weui-panel weui-panel_access">
+            <div class="weui-panel__hd">
+                蔬菜项目（3）
+                <div v-if="status>1">XXX供应商</div>
+            </div>
             <div class="weui-panel__bd">
-                <div class="weui-media-box weui-media-box_text">
-                    <h4 class="weui-media-box__title">蔬菜项目（3）</h4>
-                    <p class="weui-media-box__desc">XXX供应商</p>
-                </div>
+
                 <div class="weui-media-box weui-media-box_text">
                     <h4 class="weui-media-box__title">土豆</h4>
                     <p class="weui-media-box__desc">数量：35KG
@@ -27,11 +28,12 @@
             </div>
         </div>
         <div class="weui-panel weui-panel_access">
+            <div class="weui-panel__hd">
+                蔬菜项目（3）
+                <div v-if="status>1">XXX供应商</div>
+            </div>
             <div class="weui-panel__bd">
-                <div class="weui-media-box weui-media-box_text">
-                    <h4 class="weui-media-box__title">蔬菜项目（3）</h4>
-                    <p class="weui-media-box__desc" v-if="status>1">XXX供应商</p>
-                </div>
+
                 <div class="weui-media-box weui-media-box_text">
                     <h4 class="weui-media-box__title">土豆</h4>
                     <p class="weui-media-box__desc">数量：35KG

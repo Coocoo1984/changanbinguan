@@ -1,30 +1,25 @@
 <template>
-  <cells :datas="list" @item-click="click"></cells>
+  <div>
+    <div class="weui-cells__title">报价管理</div>
+    <div class="weui-grids">
+      <grid-item name="报价" @click="toSubmit()"></grid-item>
+      <grid-item name="订单" @click="toOrder()"></grid-item>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      list: [
-        {
-          title: "报价",
-          link: "add"
-        },
-        {
-          title: "历史报价",
-          link: "list"
-        }
-      ]
-    };
-  },
   methods: {
-    click(item) {
-      this.$router.push("/quote/" + item.link);
+    toSubmit() {
+      this.$router.push("/quote/submit");
+    },
+    toOrder() {
+      this.$router.push("/quote/order");
     }
   }
 };
 </script>
+
 <style>
 </style>
-

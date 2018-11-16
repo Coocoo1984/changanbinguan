@@ -27,7 +27,7 @@ export default {
   },
   watch: {
     $route(to, from) {
-      if (to.path != "/" ||to.path != "" ) {
+      if (to.path != "/" || to.path != "") {
         this.showBack = true;
       }
     }
@@ -97,6 +97,9 @@ export default {
   display: inline-block;
 }
 .body {
+  padding-top: 49px;
+}
+._v-container {
   padding-top: 49px;
 }
 </style>

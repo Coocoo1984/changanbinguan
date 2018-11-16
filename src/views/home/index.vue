@@ -20,23 +20,30 @@
     </div>
     <div class="weui-cells__title">采购管理</div>
     <div class="weui-grids">
-      <grid-item message name="初审采购" @click="toPurchase(1)"></grid-item>
+      <grid-item message name="初审采购" @click="toPurchase(1,2)"></grid-item>
       <grid-item message='1' name="报价管理" @click="toQuote"></grid-item>
-      <grid-item message='10' name="复审采购" @click="toPurchase(1)"></grid-item>
+      <grid-item message='10' name="复审采购" @click="toPurchase(1,1)"></grid-item>
       <grid-item name="采购进度" @click="toPurchase(2)"></grid-item>
       <grid-item name="统计查询" @click="toStatistics(1)"></grid-item>
       <grid-item name="报表下载" @click="toStatistics(2)"></grid-item>
+    </div>
+    <div class="weui-cells__title">基础设置</div>
+    <div class="weui-grids">
+      <grid-item name="采购类目" @click="toManager('commodity/category')"></grid-item>
+      <grid-item name="采购项目" @click="toManager('commodity')"></grid-item>
+      <grid-item name="供应商" @click="toManager('quote')"></grid-item>
     </div>
   </div>
 </template>
 <script>
 export default {
   methods: {
-    toPurchase(status) {
+    toPurchase(status, type) {
       this.$router.push({
         path: "/adm/purchase",
         query: {
-          status: status
+          status: status,
+          type: type
         }
       });
     },
@@ -52,8 +59,10 @@ export default {
         }
       });
     },
-    toStock() {
-      this.$router.push("/stock");
+    toManager(item) {
+      this.$router.push({
+        path: "/manager/" + item
+      });
     }
   }
 };

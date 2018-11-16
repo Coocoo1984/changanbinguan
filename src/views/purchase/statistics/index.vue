@@ -31,10 +31,10 @@
                 <div class="weui-cell__bd">
                     <div class="weui-flex">
                         <div class="weui-flex__item">
-                            <div class="placeholder"><input class="weui-input" style="width:88%" type="date" value="" placeholder="">到</div>
+                            <div class="placeholder" @click="selectStartDate()">{{startDate}} 到 </div>
                         </div>
                         <div class="weui-flex__item">
-                            <div class="placeholder"> <input class="weui-input" style="width:88%" type="date" value="" placeholder=""></div>
+                            <div class="placeholder" @click="selectEndDate()"> {{endDate}}</div>
                         </div>
                     </div>
 
@@ -54,7 +54,9 @@ export default {
     return {
       type: "1",
       name: "",
-      number: 0
+      number: 0,
+      startDate: "2018-11-11",
+      endDate: "2018-11-30"
     };
   },
   computed: {
@@ -66,6 +68,24 @@ export default {
     }
   },
   methods: {
+    selectStartDate() {
+      this.$picker.show({
+        type: "datePicker",
+        date: this.startDate,
+        onOk: date => {
+          this.startDate = date;
+        }
+      });
+    },
+    selectEndDate() {
+      this.$picker.show({
+        type: "datePicker",
+        date: this.endDate,
+        onOk: date => {
+          this.endDate = date;
+        }
+      });
+    },
     submit() {
       this.$router.push("/purchase/statistics/result");
     },

@@ -1,7 +1,11 @@
 import Vue from 'vue'
 import 'es6-promise/auto'
-
+import VueScroller from "vue-scroller";
+Vue.use(VueScroller)
+import Calendar from 'vue2-datepick';
+Vue.use(Calendar);
 import { createApp } from './app'
+
 
 Vue.mixin({
     beforeRouteUpdate(to, from, next) {

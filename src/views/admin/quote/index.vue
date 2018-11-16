@@ -27,10 +27,10 @@
                     <div class="weui-cell__bd">
                         <div class="weui-flex">
                             <div class="weui-flex__item">
-                                <div class="placeholder"><input class="weui-input" style="width:88%" type="date" value="" placeholder="">到</div>
+                                <div class="placeholder" @click="selectStartDate()">{{startDate}} 到 </div>
                             </div>
                             <div class="weui-flex__item">
-                                <div class="placeholder"> <input class="weui-input" style="width:88%" type="date" value="" placeholder=""></div>
+                                <div class="placeholder" @click="selectEndDate()"> {{endDate}}</div>
                             </div>
                         </div>
                     </div>
@@ -85,10 +85,30 @@ export default {
           title: "XXX供货商",
           slot: "2018-11-11 12:11:22"
         }
-      ]
+      ],
+      startDate: "2018-11-11",
+      endDate: "2018-11-30"
     };
   },
   methods: {
+    selectStartDate() {
+      this.$picker.show({
+        type: "datePicker",
+        date: this.startDate,
+        onOk: date => {
+          this.startDate = date;
+        }
+      });
+    },
+    selectEndDate() {
+      this.$picker.show({
+        type: "datePicker",
+        date: this.endDate,
+        onOk: date => {
+          this.endDate = date;
+        }
+      });
+    },
     submit() {},
     goContent() {
       this.$router.push({
@@ -110,17 +130,4 @@ export default {
 };
 </script>
  
- <style>
-.menmoy font {
-  font-size: 14px;
-  color: #000;
-  font-family: "黑体";
-} /* 
-.menmoy .red {
-  color: #ff0000;
-}
-.menmoy .greed {
-  color: green;
-} */
-</style>
  

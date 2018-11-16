@@ -1,8 +1,8 @@
 <template>
-    <div>
-        <cells :datas="list" @item-click="click"></cells>
-        
-    </div>
+  <div>
+    <cells :datas="list" @item-click="click"></cells>
+
+  </div>
 </template>
 <script>
 export default {
@@ -20,6 +20,9 @@ export default {
     click(item) {
       this.$router.push("/manager/quote/info");
     }
+  },
+  mounted() {
+    console.log(this.list);
   }
 };
 </script>
