@@ -1,18 +1,18 @@
  <template>
-  <cells :datas="list" @item-click="click"></cells>
+  <!-- <cells :datas="list" @item-click="click"></cells> -->
+  <purchase-list v-infinite-scroll="load" infinite-scroll-disabled="busy" infinite-scroll-distance="10" @click="click" :datas="datas"></purchase-list>
 </template>
 
  <script>
 export default {
   data() {
-    return {};
+    return {
+      datas: [],
+      page: 1,
+      busy: false
+    };
   },
   computed: {
-    list() {
-      if (this.status == 1) return this.$store.state.Admin.purchaseing;
-      if (this.status == 2) return this.$store.state.Admin.purchaseList;
-      return [];
-    },
     status() {
       return this.$route.query.status;
     }
@@ -34,8 +34,25 @@ export default {
             status: item.status
           }
         });
+    },
+    load() {
+      if (this.$route.path == "/adm/purchase") {
+        this.busy = true;
+        this.$loading(true);
+        setTimeout(() => {
+          for (var i = 0; i < 20; i++) {
+            this.datas.push({
+              title: "XXXXXXXX",
+              slot: "17个项目"
+            });
+          }
+          this.busy = false;
+          this.$loading(false);
+        }, 1000);
+      }
     }
-  }
+  },
+  mounted() {}
 };
 </script>
  
