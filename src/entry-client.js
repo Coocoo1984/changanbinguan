@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import 'es6-promise/auto'
-import VueScroller from "vue-scroller";
-Vue.use(VueScroller)
 import Calendar from 'vue2-datepick';
 Vue.use(Calendar);
+import infiniteScroll from "vue-infinite-scroll";
+Vue.use(infiniteScroll);
 import { createApp } from './app'
 
 
@@ -34,30 +34,15 @@ router.onReady(() => {
         const activated = matched.filter((c, i) => {
             return diffed || (diffed = (prevMatched[i] !== c))
         })
-        //app.$progress(10);
         const asyncDataHooks = activated.map(c => c.asyncData).filter(_ => _)
         if (!asyncDataHooks.length) {
-            //app.$progress(100);
             return next()
         }
         Promise.all(asyncDataHooks.map(hook => hook({ store, route: to })))
             .then(() => {
-                //app.$progress(100);
-                let timer = setInterval(() => {
-                    let osTop =
-                        document.documentElement.scrollTop || document.body.scrollTop;
-                    let ispeed = Math.floor(-osTop / 3);
-                    window.scrollTo(0, osTop + ispeed);
-                    if (osTop === 0) {
-                        clearInterval(timer);
-                        timer = null;
-                        window.scrollTo(0, 0);
-                    }
-                }, 30)
                 next()
             })
             .catch((e) => {
-                //app.$progress(100);
                 next(e);
             })
     })

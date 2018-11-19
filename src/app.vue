@@ -7,9 +7,9 @@
       <h1 class="vux-header-title"><span>采购管理系统</span></h1>
     </div>
     <div class="body">
-      <transition>
-        <router-view></router-view>
-      </transition>
+        <keep-alive>
+          <router-view></router-view>
+        </keep-alive>
     </div>
   </div>
 </template>
@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     Back() {
-      this.$router.go(-1);
+      history.back();
     }
   },
   watch: {

@@ -4,7 +4,7 @@
       <div class="weui-flex__item">
         <div class="weui-panel__bd">
           <div class="weui-media-box weui-media-box_text box">
-            <h4 class="weui-media-box__title title"><span>初审</span> 5 <span>复审</span> 5 </h4>
+            <h4 class="weui-media-box__title title"><span>初审</span> {{trial}} <span>复审</span> {{review}} </h4>
             <p class="weui-media-box__desc desc">待审计划</p>
           </div>
         </div>
@@ -12,7 +12,7 @@
       <div class="weui-flex__item">
         <div class="weui-panel__bd">
           <div class="weui-media-box weui-media-box_text box">
-            <h4 class="weui-media-box__title title">333</h4>
+            <h4 class="weui-media-box__title title">{{complete}}</h4>
             <p class="weui-media-box__desc desc">已完成计划</p>
           </div>
         </div>
@@ -20,9 +20,9 @@
     </div>
     <div class="weui-cells__title">采购管理</div>
     <div class="weui-grids">
-      <grid-item message name="初审采购" @click="toPurchase(1,2)"></grid-item>
-      <grid-item message='1' name="报价管理" @click="toQuote"></grid-item>
-      <grid-item message='10' name="复审采购" @click="toPurchase(1,1)"></grid-item>
+      <grid-item name="初审采购" @click="toPurchase(1,2)"></grid-item>
+      <grid-item name="报价管理" @click="toQuote"></grid-item>
+      <grid-item name="复审采购" @click="toPurchase(1,1)"></grid-item>
       <grid-item name="采购进度" @click="toPurchase(2)"></grid-item>
       <grid-item name="统计查询" @click="toStatistics(1)"></grid-item>
       <grid-item name="报表下载" @click="toStatistics(2)"></grid-item>
@@ -37,6 +37,21 @@
 </template>
 <script>
 export default {
+  computed: {
+    trial() {
+      return this.$store.state.Home.trial;
+    },
+    review() {
+      return this.$store.state.Home.review;
+    },
+    complete() {
+      return this.$store.state.Home.complete;
+    }
+  },
+  asyncData({ store, route }) {
+    return store.dispatch("loadHomeData");
+  },
+
   methods: {
     toPurchase(status, type) {
       this.$router.push({
