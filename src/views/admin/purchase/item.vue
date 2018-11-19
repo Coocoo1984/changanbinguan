@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="weui-panel weui-panel_access">
+    <div class="weui-panel weui-panel_access" style="padding-bottom:10px">
       <div class="weui-panel__bd">
         <div class="weui-media-box weui-media-box_text">
           <h4 class="weui-media-box__title" style="font-size:14px">XXX 部门采购单
@@ -13,7 +13,7 @@
         <div class="weui-flex">
           <div class="weui-flex__item">
             <div class="weui-btn-area">
-              <a class="weui-btn weui-btn_primary" href="javascript:">{{status==1?'复审确认':'初审通过'}}</a>
+              <a class="weui-btn weui-btn_primary" href="javascript:">{{status==2?'初审通过':'复审确认'}}</a>
             </div>
           </div>
           <div class="weui-flex__item">
@@ -24,7 +24,7 @@
         </div>
       </div>
     </div>
-    <preview static title="采购单项目（17）：食品" @handler="SelectQuoter(1)" :btnGray="btnGray" :btnText="btnText" :datas="previewDatas"></preview>
+    <preview style="margin-top:10px" static title="采购单项目（17）：食品" @handler="SelectQuoter(1)" :btnGray="btnGray" :btnText="btnText" :datas="previewDatas"></preview>
   </div>
 </template>
 
@@ -115,7 +115,7 @@ export default {
     }
   },
   mounted() {
-    if (this.status == 1) this.btnText = "确认供货商";
+    if (this.$route.query.status == 1) this.btnText = "确认供货商";
   }
 };
 </script>

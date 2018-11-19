@@ -1,13 +1,13 @@
  <template>
     <div class="weui-tab">
         <div class="weui-navbar">
-            <div class="weui-navbar__item" @click="status=1" :class="[status==1?'weui-bar__item_on':'']">
+            <div class="weui-navbar__item" @click="tabChange(1)" :class="[status==1?'weui-bar__item_on':'']">
                 报价筛选
             </div>
-            <div class="weui-navbar__item" @click="status=2" :class="[status==2?'weui-bar__item_on':'']">
+            <div class="weui-navbar__item" @click="tabChange(2)" :class="[status==2?'weui-bar__item_on':'']">
                 报价单
             </div>
-            <div class="weui-navbar__item" @click="status=3" :class="[status==3?'weui-bar__item_on':'']">
+            <div class="weui-navbar__item" @click="tabChange(3)" :class="[status==3?'weui-bar__item_on':'']">
                 报价记录
             </div>
         </div>
@@ -65,7 +65,7 @@
         </div>
         <div v-else class="weui-tab__panel">
             <div class="weui-cells__title">近3月供货商报价情况</div>
-            <cells :datas="quote" @item-click="goQuqter"></cells>
+            <purchase-list v-infinite-scroll="load" infinite-scroll-disabled="busy" infinite-scroll-distance="10" @click="goQuqter" :datas="quote"></purchase-list>
         </div>
     </div>
 </template>
@@ -76,6 +76,7 @@ export default {
     return {
       status: 1,
       type: "1",
+      busy: false,
       quote: [
         {
           title: "XXX供货商",
@@ -91,10 +92,29 @@ export default {
     };
   },
   methods: {
+    tabChange(status) {
+      this.status = status;
+      if (status == 3) this.load();
+    },
+    load() {
+      this.busy = false;
+      this.$loading(true);
+      setTimeout(() => {
+        for (var i = 0; i < 10; i++)
+          this.quote.push({
+            title: "XXX供货商",
+            slot: "2018-11-11 12:11:22"
+          });
+        this.$loading(false);
+        this.busy = true;
+      }, 500);
+    },
     selectStartDate() {
       this.$picker.show({
         type: "datePicker",
         date: this.startDate,
+        endTime: "3000-09-08",
+        startTime: "2000-06-09",
         onOk: date => {
           this.startDate = date;
         }
@@ -104,6 +124,8 @@ export default {
       this.$picker.show({
         type: "datePicker",
         date: this.endDate,
+        endTime: "3000-09-08",
+        startTime: this.startDate,
         onOk: date => {
           this.endDate = date;
         }

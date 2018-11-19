@@ -7,7 +7,6 @@
 export default {
   data() {
     return {
-      datas: [],
       page: 1,
       busy: false
     };
@@ -15,6 +14,10 @@ export default {
   computed: {
     status() {
       return this.$route.query.status;
+    },
+    datas() {
+      if (this.status == 1) return this.$store.state.Admin.purchaseing;
+      else return this.$store.state.Admin.purchaseList;
     }
   },
   methods: {
@@ -48,10 +51,17 @@ export default {
         this.$loading(true);
         setTimeout(() => {
           for (var i = 0; i < 20; i++) {
-            this.datas.push({
-              title: "XXXXXXXX",
-              slot: "17个项目"
-            });
+            if (this.status == 2) {
+              this.$store.commit("pushPurchaseList",{
+                title: "XXXXXXXX",
+                slot: "<span class='green'>完成</span>"
+              });
+            } else {
+              this.$store.commit("pushPurchase",{
+                title: "XXXXXXXX",
+                slot: "17个项目"
+              });
+            }
           }
           this.busy = false;
           this.$loading(false);

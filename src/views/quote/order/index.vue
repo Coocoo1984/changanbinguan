@@ -82,6 +82,8 @@ export default {
       this.$picker.show({
         type: "datePicker",
         date: this.startDate,
+        endTime: "3000-09-08",
+        startTime: "2000-06-09",
         onOk: date => {
           this.startDate = date;
         }
@@ -91,6 +93,8 @@ export default {
       this.$picker.show({
         type: "datePicker",
         date: this.endDate,
+        endTime: "3000-09-08",
+        startTime: this.startDate,
         onOk: date => {
           this.endDate = date;
         }
