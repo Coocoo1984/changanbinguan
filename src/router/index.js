@@ -2,17 +2,16 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 
 Vue.use(VueRouter);
-export function createRouter() {
-    return new VueRouter({
+export function createRouter(store) {
+    var router = new VueRouter({
         mode: 'history',
         fallback: false,
-        //scrollBehavior: () => ({ y: 0 }),
         routes: [
             {
                 path: "/", component: () => import("../views/home")
             },
             {
-                path: "/adm/purchase", component: () => import("../views/admin/purchase")
+                path: "/adm/purchase", name: "purchase", component: () => import("../views/admin/purchase")
             },
             {
                 path: "/adm/purchase/item", component: () => import("../views/admin/purchase/item")
@@ -109,4 +108,21 @@ export function createRouter() {
             },
         ]
     });
+    router.beforeEach((to, from, next) => {
+        // 记录上一个页面的scroll位置
+        if (from.name) {
+            let contentElem = document.querySelector('.page')
+            let scrollTop = contentElem ? contentElem.scrollTop : '0'
+            store.state.Common.scrollPos[from.name] = scrollTop
+        }
+        next()
+    });
+    router.beforeEach((to, from, next) => {
+        if (store.state.Common.scrollPos[to.name])
+            setTimeout(() => {
+                document.querySelector('.page').scrollTop = store.state.Common.scrollPos[to.name];
+            });
+        next()
+    });
+    return router;
 }

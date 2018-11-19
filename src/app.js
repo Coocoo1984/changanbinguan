@@ -1,5 +1,5 @@
 import "@/assects/css/rest.css"
-import "weui/dist/style/weui.css";
+import "@/assects/css/weiui.css";
 
 
 import Vue from 'vue'
@@ -13,7 +13,7 @@ import { sync } from 'vuex-router-sync'
 export function createApp() {
     RegisterComponents(Vue)
     const store = createStore()
-    const router = createRouter()
+    const router = createRouter(store)
 
     sync(store, router)
     const app = new Vue({
@@ -22,6 +22,7 @@ export function createApp() {
         render: h => h(App),
         mounted() {
             //this.$progressInit();
+            this.$loadingInit();
         }
     })
     return { app, router, store }
