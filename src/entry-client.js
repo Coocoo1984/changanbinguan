@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import 'es6-promise/auto'
+import Calendar from 'vue2-datepick';
+Vue.use(Calendar);
 import infiniteScroll from "vue-infinite-scroll";
-
 Vue.use(infiniteScroll);
 import { createApp } from './app'
+
 
 Vue.mixin({
     beforeRouteUpdate(to, from, next) {

@@ -5,7 +5,7 @@
                     <p>{{item.title}}</p>
                 </div>
                 <div class="weui-cell__ft">
-                    {{item.slot}}
+                    <div v-html="item.slot"></div>
                 </div>
             </a>
         </div>

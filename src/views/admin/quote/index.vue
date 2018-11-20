@@ -1,13 +1,13 @@
  <template>
     <div class="weui-tab">
         <div class="weui-navbar">
-            <div class="weui-navbar__item" @click="status=1" :class="[status==1?'weui-bar__item_on':'']">
+            <div class="weui-navbar__item" @click="tabChange(1)" :class="[status==1?'weui-bar__item_on':'']">
                 报价筛选
             </div>
-            <div class="weui-navbar__item" @click="status=2" :class="[status==2?'weui-bar__item_on':'']">
+            <div class="weui-navbar__item" @click="tabChange(2)" :class="[status==2?'weui-bar__item_on':'']">
                 报价单
             </div>
-            <div class="weui-navbar__item" @click="status=3" :class="[status==3?'weui-bar__item_on':'']">
+            <div class="weui-navbar__item" @click="tabChange(3)" :class="[status==3?'weui-bar__item_on':'']">
                 报价记录
             </div>
         </div>
@@ -27,10 +27,10 @@
                     <div class="weui-cell__bd">
                         <div class="weui-flex">
                             <div class="weui-flex__item">
-                                <div class="placeholder"><input class="weui-input" style="width:88%" type="date" value="" placeholder="">到</div>
+                                <div class="placeholder" @click="selectStartDate()">{{startDate}} 到 </div>
                             </div>
                             <div class="weui-flex__item">
-                                <div class="placeholder"> <input class="weui-input" style="width:88%" type="date" value="" placeholder=""></div>
+                                <div class="placeholder" @click="selectEndDate()"> {{endDate}}</div>
                             </div>
                         </div>
                     </div>
@@ -65,7 +65,7 @@
         </div>
         <div v-else class="weui-tab__panel">
             <div class="weui-cells__title">近3月供货商报价情况</div>
-            <cells :datas="quote" @item-click="goQuqter"></cells>
+            <purchase-list v-infinite-scroll="load" infinite-scroll-disabled="busy" infinite-scroll-distance="10" @click="goQuqter" :datas="quote"></purchase-list>
         </div>
     </div>
 </template>
@@ -76,6 +76,7 @@ export default {
     return {
       status: 1,
       type: "1",
+      busy: false,
       quote: [
         {
           title: "XXX供货商",
@@ -85,10 +86,51 @@ export default {
           title: "XXX供货商",
           slot: "2018-11-11 12:11:22"
         }
-      ]
+      ],
+      startDate: "2018-11-11",
+      endDate: "2018-11-30"
     };
   },
   methods: {
+    tabChange(status) {
+      this.status = status;
+      if (status == 3) this.load();
+    },
+    load() {
+      this.busy = false;
+      this.$loading(true);
+      setTimeout(() => {
+        for (var i = 0; i < 10; i++)
+          this.quote.push({
+            title: "XXX供货商",
+            slot: "2018-11-11 12:11:22"
+          });
+        this.$loading(false);
+        this.busy = true;
+      }, 500);
+    },
+    selectStartDate() {
+      this.$picker.show({
+        type: "datePicker",
+        date: this.startDate,
+        endTime: "3000-09-08",
+        startTime: "2000-06-09",
+        onOk: date => {
+          this.startDate = date;
+        }
+      });
+    },
+    selectEndDate() {
+      this.$picker.show({
+        type: "datePicker",
+        date: this.endDate,
+        endTime: "3000-09-08",
+        startTime: this.startDate,
+        onOk: date => {
+          this.endDate = date;
+        }
+      });
+    },
     submit() {},
     goContent() {
       this.$router.push({
@@ -110,17 +152,4 @@ export default {
 };
 </script>
  
- <style>
-.menmoy font {
-  font-size: 14px;
-  color: #000;
-  font-family: "黑体";
-} /* 
-.menmoy .red {
-  color: #ff0000;
-}
-.menmoy .greed {
-  color: green;
-} */
-</style>
  

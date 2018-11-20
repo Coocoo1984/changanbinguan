@@ -1,47 +1,33 @@
  <template>
     <div>
-        <div class="weui-cells__title">统计结果</div>
-        <div class="weui-form-preview">
-            <div class="weui-form-preview__hd">
-                <div class="weui-form-preview__item">
-                    <label class="weui-form-preview__label">分类：<span class="categroy">食材</span></label>
-
-                </div>
-            </div>
-            <div class="weui-form-preview__bd">
-                <div class="weui-form-preview__item">
-                    <label class="weui-form-preview__label">土豆</label>
-                    <span class="weui-form-preview__value">数量：50KG</span>
-                </div>
-                <div class="weui-form-preview__item">
-                    <label class="weui-form-preview__label">洋芋</label>
-                    <span class="weui-form-preview__value">数量：50KG</span>
-                </div>
-                <div class="weui-form-preview__item">
-                    <label class="weui-form-preview__label">番茄</label>
-                    <span class="weui-form-preview__value">数量：50KG</span>
+        <div class="weui-panel">
+            <div class="weui-panel__hd">统计结果</span></div>
+        </div>
+        <div class="weui-panel">
+            <div class="weui-panel__hd">分类：<span class="categroy">食材</span></div>
+            <div class="weui-panel__bd">
+                <div class="weui-media-box weui-media-box_small-appmsg">
+                    <div class="weui-cells">
+                        <a class="weui-cell weui-cell_access" href="javascript:;">
+                            <div class="weui-cell__bd weui-cell_primary">
+                                <p class="item">土豆</p><span class="number">数量：50KG</span>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="weui-form-preview">
-            <div class="weui-form-preview__hd">
-                <div class="weui-form-preview__item">
-                    <label class="weui-form-preview__label">分类：<span class="categroy">耗材</span></label>
-
-                </div>
-            </div>
-            <div class="weui-form-preview__bd">
-                <div class="weui-form-preview__item">
-                    <label class="weui-form-preview__label">纸</label>
-                    <span class="weui-form-preview__value">数量：100 份</span>
-                </div>
-                <div class="weui-form-preview__item">
-                    <label class="weui-form-preview__label">笔</label>
-                    <span class="weui-form-preview__value">数量：100 份</span>
-                </div>
-                <div class="weui-form-preview__item">
-                    <label class="weui-form-preview__label">记事本</label>
-                    <span class="weui-form-preview__value">数量：100 份</span>
+        <div class="weui-panel">
+            <div class="weui-panel__hd">分类：<span class="categroy">食材</span></div>
+            <div class="weui-panel__bd">
+                <div class="weui-media-box weui-media-box_small-appmsg">
+                    <div class="weui-cells">
+                        <a class="weui-cell weui-cell_access" href="javascript:;">
+                            <div class="weui-cell__bd weui-cell_primary">
+                                <p class="item">土豆</p><span class="number">数量：50KG</span>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -55,6 +41,15 @@ export default {};
  <style>
 .categroy {
   font-weight: bold;
+}
+.box {
+  margin-top: 10px;
+}
+.item {
+    float: left;
+}
+.number {
+    float: right;
 }
 </style>
  

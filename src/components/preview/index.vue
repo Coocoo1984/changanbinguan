@@ -78,7 +78,7 @@ export default {
 }
 .gray {
   background-color: gray;
-  color: #000;
+  color: #fff;
   border: none;
 }
 </style>

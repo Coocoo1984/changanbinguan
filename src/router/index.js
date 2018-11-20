@@ -92,13 +92,13 @@ export function createRouter(store) {
                 path: "/quote", component: () => import("../views/quote")
             },
             {
-                path: "/quote/add", component: () => import("../views/quote/add")
+                path: "/quote/submit", component: () => import("../views/quote/submit/")
             },
             {
-                path: "/quote/list", component: () => import("../views/quote/list")
+                path: "/quote/order", component: () => import("../views/quote/order/")
             },
             {
-                path: "/quote/content", component: () => import("../views/quote/content")
+                path: "/quote/order/item", component: () => import("../views/quote/order/item")
             },
             {
                 path: "/stock", component: () => import("../views/stock")

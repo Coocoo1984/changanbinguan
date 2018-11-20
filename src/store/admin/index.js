@@ -38,7 +38,10 @@ export default {
     },
     mutations: {
         pushPurchase(state, item) {
-            state.purchases.push(item);
+            state.purchaseing.push(item);
+        },
+        pushPurchaseList(state, item) {
+            state.purchaseList.push(item);
         },
         removePurchase(state, index) {
             Vue.delete(state.purchases, index)

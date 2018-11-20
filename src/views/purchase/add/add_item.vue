@@ -14,7 +14,7 @@
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">采购项：</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" v-model="name" type="text" pattern="[0-9]*" placeholder="请输入采购项">
+                    <v-autocomplete keep-open input-class="weui-input" :items="items" v-model="item" :get-label="getLabel" :component-item='template' @update-items="updateItems"></v-autocomplete>
                 </div>
             </div>
             <div class="weui-cell">
@@ -31,12 +31,16 @@
 </template>
 
 <script>
+import Temp from "./test.vue";
 export default {
   data() {
     return {
       type: "1",
       name: "",
-      number: 0
+      number: 0,
+      item: "",
+      items: ["苹果", "香蕉"],
+      template: Temp
     };
   },
   methods: {
@@ -48,6 +52,12 @@ export default {
         unit: "KG"
       });
       this.$router.go(-1);
+    },
+    updateItems() {
+      this.items = ["苹果", "香蕉"];
+    },
+    getLabel(item) {
+      return item;
     }
   }
 };

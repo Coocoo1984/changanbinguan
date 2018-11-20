@@ -8,7 +8,9 @@ import { createStore } from './store'
 import { createRouter } from './router'
 import { RegisterComponents } from "./components";
 import { sync } from 'vuex-router-sync'
-
+import Autocomplete from 'v-autocomplete'
+import 'v-autocomplete/dist/v-autocomplete.css'
+Vue.use(Autocomplete) 
 
 export function createApp() {
     RegisterComponents(Vue)

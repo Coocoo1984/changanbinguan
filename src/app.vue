@@ -99,5 +99,8 @@ export default {
 .body {
   padding-top: 49px;
 }
+._v-container {
+  padding-top: 49px;
+}
 </style>
 

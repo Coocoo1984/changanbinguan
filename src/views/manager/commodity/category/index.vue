@@ -56,12 +56,14 @@ export default {
       });
     },
     del(index) {
-      var _list = [];
-      for (var i in this.list) {
-        if (i == index) continue;
-        _list.push(this.list[i]);
-      }
-      this.list =_list;
+      this.$dialog("是否删除分类", "删除的数据不可恢复", () => {
+        var _list = [];
+        for (var i in this.list) {
+          if (i == index) continue;
+          _list.push(this.list[i]);
+        }
+        this.list = _list;
+      });
     }
   }
 };
