@@ -5,12 +5,12 @@
         <span class="add_btn" @click="addItems(0)">+新增采购项</span>
       </div>
       <div class="weui-panel__bd">
-        <a v-for="(item,index) in datas" :key="index" @click="addItems(1)" @touchstart="showDeleteButton(index)" @touchend="clearLoop" class="weui-cell weui-media-box weui-media-box_text" href="javascript:;">
+        <a v-for="(item,index) in datas" :key="index" @click="addItems(index)" @touchstart="showDeleteButton(index)" @touchend="clearLoop" class="weui-cell weui-media-box weui-media-box_text" href="javascript:;">
           <div class="weui-cell__bd">
-            <p>{{item.name}}</p>
+            <p>{{item.goods_name}}</p>
           </div>
           <div class="weui-cell__ft">
-            <p class="num">数量：{{item.value}}{{item.unit}}</p>
+            <p class="num">数量：{{item.count}}{{item.goods_unit_name}}</p>
           </div>
         </a>
       </div>
@@ -32,23 +32,42 @@ export default {
   computed: {
     datas() {
       return this.$store.state.Purchase.add_datas;
+    },
+    purchaseID() {
+      return this.$route.query["id"];
+    },
+    submitData() {
+      return this.datas.map(i => {
+        return {
+          GoodsID: i.goods_id,
+          PurocumentCount: i.count
+        };
+      });
     }
   },
   methods: {
     submit() {
-      var date = new Date();
-      this.$store.commit("pushQuoteData", {
-        title:
-          date.getFullYear() +
-          "-" +
-          (date.getMonth() + 1) +
-          "-" +
-          date.getDay() +
-          "XXX 采购计划 (1)",
-        status: 1,
-        slot: ""
-      });
-      this.$router.push("/purchase/list");
+      if (this.purchaseID) {
+        //更新
+        this.$UPDATE("PurchasingPlan/Update", {
+          ID: this.purchaseID,
+          UserID: 1,
+          Details: this.submitData
+        }).then(r => {
+          this.$router.push("/purchase/list");
+        });
+      } else {
+        this.$UPDATE("PurchasingPlan/Add", {
+          DepartmentID: 1,
+          BizTypeID: 1,
+          Details: this.submitData,
+          CreateUserID: 1
+        }).then(r => {
+          this.$router.push("/purchase/list");
+        });
+      }
+
+      //this.$router.push("/purchase/list");
     },
     addItems(id) {
       this.$router.push({
@@ -78,6 +97,17 @@ export default {
     },
     clearLoop() {
       clearTimeout(this.loop);
+    }
+  },
+  mounted() {
+    if (this.purchaseID) {
+      this.$GET(
+        "PurchasingPlanDetail?purchasingPlanId=" + this.purchaseID
+      ).then(r => {
+        for (var i of r.data) {
+          this.$store.commit("pushAddData", i);
+        }
+      });
     }
   }
 };

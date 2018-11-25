@@ -74,7 +74,8 @@ export default {
       type: "0",
       status: "0",
       startDate: "2018-11-11",
-      endDate: "2018-11-30"
+      endDate: "2018-11-30",
+      vendorID: 1
     };
   },
   methods: {
@@ -107,7 +108,17 @@ export default {
           status: status
         }
       });
+    },
+    load() {
+      this.$GET("PurchasingOrderVendorSubtotal?vendorID=" + this.vendorID).then(
+        r => {
+          console.log(r);
+        }
+      );
     }
+  },
+  mounted() {
+    this.load();
   }
 };
 </script>

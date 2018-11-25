@@ -2,7 +2,7 @@
   <div class="weui-form-preview">
     <div class="weui-form-preview__hd">
       <div class="weui-form-preview__item">
-        <label class="weui-form-preview__label">{{title}}
+        <label class="weui-form-preview__label" style="color:#000">{{title}}
         </label>
         <span v-if="status" class="">{{status}}</span>
         <button v-if="btnText" @click="btnHandler" class="weui-btn weui-btn_mini" :class="[btnGray?'gray':'weui-btn_primary']" style="right:0px;">{{btnText}}</button>
@@ -10,9 +10,9 @@
     </div>
     <transition name="fade">
       <div class="weui-form-preview__bd">
-        <div v-if="static||showContent" class="weui-form-preview__item" v-for="(item,index) in datas">
+        <div v-if="static||showContent" class="weui-form-preview__item" :key="index" v-for="(item,index) in datas">
           <label class="weui-form-preview__label">{{item.title}}</label>
-          <span class="weui-form-preview__value">{{item.content}}</span>
+          <span class="weui-form-preview__value" v-html="item.content"></span>
         </div>
       </div>
     </transition>
@@ -27,6 +27,7 @@ export default {
   },
   mounted() {
     this.showContent = this.show;
+    console.log(this.datas);
   },
   methods: {
     btnHandler() {

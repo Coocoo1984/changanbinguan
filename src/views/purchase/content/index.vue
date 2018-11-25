@@ -1,6 +1,6 @@
 <template>
   <div>
-    <preview static v-bind="previewData"></preview>
+    <preview static :datas="datas" :title="title" :status="count"></preview>
   </div>
 </template>
 
@@ -8,25 +8,34 @@
 export default {
   data() {
     return {
-      previewData: {
-        title: "2018-11-1 XXX采购计划",
-        datas: [],
-        status: "5个项目"
-      }
+      datas: []
     };
   },
   computed: {
-    status() {
-      return this.$route.query["status"];
+    id() {
+      return this.$route.query["id"];
+    },
+    title() {
+      return this.$route.query["title"];
+    },
+    count() {
+      return this.$route.query["count"] + "个项目";
+    }
+  },
+  methods: {
+    load() {
+      this.$GET("PurchasingPlanDetail?purchasingPlanId=" + this.id).then(r => {
+        this.datas = r.data.map(i => {
+          return {
+            title: i.goods_name,
+            content: i.count + i.goods_unit_name
+          };
+        });
+      });
     }
   },
   mounted() {
-    for (var i = 0; i < 5; i++) {
-      this.previewData.datas.push({
-        title: "商品1",
-        content: "15KG"
-      });
-    }
+    this.load();
   }
 };
 </script>

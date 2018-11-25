@@ -1,6 +1,8 @@
 const path = require('path')
 const express = require('express');
 const cookieParser = require("cookie-parser");
+var request = require('request');
+const bodyParser = require("body-parser");
 const fs = require("fs");
 const app = express();
 // 热加载
@@ -34,12 +36,25 @@ const middles = {
 }
 app.use(middles.dev.client, middles.hot.client)
 app.use(middles.dev.server)
+app.use(bodyParser.json());
 // 热加载END
 app.use(cookieParser())
 
 const { createBundleRenderer } = require('vue-server-renderer')
 const template = fs.readFileSync(path.resolve(__dirname, "./src/index-template.html"), 'utf-8');
 
+app.get("/weixin/*", (req, res) => {
+    request.get("https://qyapi.weixin.qq.com/cgi-bin/" + req.url.replace("/weixin/", ""), (error, response, body) => {
+        res.send(body);
+    });
+});
+app.post("/weixin/*", (req, res) => {
+    request.post("https://qyapi.weixin.qq.com/cgi-bin/" + req.url.replace("/weixin/", ""), {
+        body: JSON.stringify(req.body)
+    }, (error, response, body) => {
+        res.send(body);
+    });
+});
 app.get("*", (req, res) => {
     const clientManifest = complier.client.outputFileSystem.readFileSync(path.resolve(__dirname, 'dist', 'client', "vue-ssr-client-manifest.json"));
     const serverBunlder = complier.server.outputFileSystem.readFileSync(path.resolve(__dirname, 'dist', 'server', "vue-ssr-server-bundle.json"));
@@ -55,7 +70,7 @@ app.get("*", (req, res) => {
         title: "Vue",
         cookies: req.cookies
     }
-    
+
     renderer.renderToString(context).then(html => {
         res.send(html)
     }).catch(err => {

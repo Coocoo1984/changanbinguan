@@ -14,6 +14,9 @@ export function createRouter(store) {
                 path: "/adm/purchase", name: "purchase", component: () => import("../views/admin/purchase")
             },
             {
+                path: "/adm/purchase/list", component: () => import("../views/admin/purchase/list")
+            },
+            {
                 path: "/adm/purchase/item", component: () => import("../views/admin/purchase/item")
             },
             {

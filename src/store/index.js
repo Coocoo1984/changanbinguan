@@ -4,6 +4,7 @@ import Purchase from "./purchase";
 import Admin from "./admin"
 import Home from "./home";
 import Common from "./common";
+import WeiXin from "./weixin";
 Vue.use(Vuex)
 export function createStore() {
 
@@ -12,9 +13,9 @@ export function createStore() {
             Purchase,
             Admin,
             Home,
-            Common
+            Common,
+            WeiXin
         },
-
     })
     return store;
 }

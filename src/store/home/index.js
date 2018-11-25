@@ -3,7 +3,8 @@ export default {
     state: {
         trial: 0,
         review: 0,
-        complete: 0
+        complete: 0,
+        categoryList: []
     },
     mutations: {
         setTrial(state, count) {
@@ -14,15 +15,16 @@ export default {
         },
         setComplete(state, count) {
             state.complete = count || 11;
+        },
+        setCategory(state, list) {
+            state.categoryList = list;
         }
     },
     actions: {
         loadHomeData({ commit }) {
-            return APi.POST("/getCount", {}).then(data => {
-                commit("setTrial", data.trial);
-                commit("setReview", data.review);
-                commit("setComplete", data.complete);
-            })
+            return APi.GET("GoodsClasses", {}).then(r => {
+                commit("setCategory", r.data);
+            });
         }
     }
 }

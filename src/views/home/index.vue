@@ -20,10 +20,10 @@
     </div>
     <div class="weui-cells__title">采购管理</div>
     <div class="weui-grids">
-      <grid-item name="初审采购" @click="toPurchase(1,2)"></grid-item>
+      <grid-item name="初审采购" @click="toPurchase(1)"></grid-item>
       <grid-item name="报价管理" @click="toQuote"></grid-item>
-      <grid-item name="复审采购" @click="toPurchase(1,1)"></grid-item>
-      <grid-item name="采购进度" @click="toPurchase(2)"></grid-item>
+      <grid-item name="复审采购" @click="toPurchase(2)"></grid-item>
+      <grid-item name="采购进度" @click="toPurchaseList()"></grid-item>
       <grid-item name="统计查询" @click="toStatistics(1)"></grid-item>
       <grid-item name="报表下载" @click="toStatistics(2)"></grid-item>
     </div>
@@ -48,9 +48,6 @@ export default {
       return this.$store.state.Home.complete;
     }
   },
-  asyncData({ store, route }) {
-    return store.dispatch("loadHomeData");
-  },
 
   methods: {
     toPurchase(status, type) {
@@ -60,6 +57,11 @@ export default {
           status: status,
           type: type
         }
+      });
+    },
+    toPurchaseList() {
+      this.$router.push({
+        path: "/adm/purchase/list"
       });
     },
     toQuote() {

@@ -1,4 +1,5 @@
 import { createApp } from './app'
+import WeiXin from "@/common/weixin";
 
 const isDev = true //process.env.NODE_ENV !== 'production'
 
@@ -14,6 +15,7 @@ export default context => {
         } else {
             router.push(url)
         }
+        
         router.onReady(() => {
             const matchedComponents = router.getMatchedComponents()
             if (!matchedComponents.length) {

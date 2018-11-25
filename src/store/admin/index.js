@@ -3,11 +3,10 @@ import Vue from "vue";
 export default {
     state: {
         purchaseing: [
-            {
-                title: "XXX 采购单 201811220833",
-                desc: "",
-                slot: "17 个项目"
-            }
+
+        ],
+        purchases: [
+
         ],
         purchaseList: [
             {
@@ -39,6 +38,9 @@ export default {
     mutations: {
         pushPurchase(state, item) {
             state.purchaseing.push(item);
+        },
+        pushPurchases(state, item) {
+            state.purchases.push(item);
         },
         pushPurchaseList(state, item) {
             state.purchaseList.push(item);

@@ -15,6 +15,8 @@
     </div>
 </template>
 <script>
+import WeiXin from "@/common/weixin";
+
 export default {
   data() {
     return {
@@ -23,9 +25,50 @@ export default {
   },
   methods: {
     submit() {
-      this.$router.push({
-        path: "/adm/purchase"
-      });
+      var date = new Date();
+      this.$UPDATE("PurchasingPlan/SubmitFirst", {
+        IDs: [this.id],
+        UserID: 1,
+        Status: this.status - 1
+      })
+        .then(() => {
+          return WeiXin.SendMessageToUsers(
+            this.access_token,
+            "http://" + window.location.host + "/purchase",
+            this.userID,
+            "采购单已经被退回",
+            date.getFullYear() +
+              "年" +
+              (date.getMonth() + 1) +
+              "月" +
+              date.getDate(),
+            this.text
+          );
+        })
+        .then(r => {
+          this.$router.push({
+            path: "/adm/purchase"
+          });
+        });
+    }
+  },
+  computed: {
+    id() {
+      return this.$route.query.id;
+    },
+    status() {
+      return this.$route.query.status;
+    },
+    access_token() {
+      return this.$store.state.WeiXin.access_token;
+    },
+    userID() {
+      return this.$route.query.userID;
+    }
+  },
+  mounted() {
+    if (!this.access_token) {
+      this.$store.dispatch("getAccessToken").then(r => {});
     }
   }
 };

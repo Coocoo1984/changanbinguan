@@ -13,7 +13,17 @@
         </div>
       </div>
       <div class="weui-tab__panel">
-        <cells :datas="list" @item-click="click"></cells>
+        <!-- <purchase-list v-infinite-scroll="load" infinite-scroll-disabled="busy" infinite-scroll-distance="20" @click="click" :datas="list"></purchase-list> -->
+         <div class="weui-cells">
+            <a v-infinite-scroll="load" infinite-scroll-disabled="busy" infinite-scroll-distance="20" @click="click(item)" v-for="(item,index) in list" :key="index" class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__bd">
+                    <p>{{item.name|| "采购单"}}</p>
+                </div>
+                <div class="weui-cell__ft">
+                   {{item.item_count}}个项目
+                </div>
+            </a>
+        </div>
       </div>
     </div>
   </div>
@@ -28,21 +38,44 @@ export default {
       munes: [
         {
           name: "修改采购单",
-          handler: () => {
-            this.$router.push("/purchase/add");
+          handler: item => {
+            console.log(item);
+            this.$router.push({
+              path: "/purchase/add",
+              query: {
+                id: item.id
+              }
+            });
           },
           status: [1, 3]
         },
         {
           name: "查看采购单",
-          handler: () => {
-            this.$router.push("/purchase/content");
+          handler: item => {
+            this.$router.push({
+              path: "/purchase/content",
+              query: {
+                title: item.name || "采购单",
+                id: item.id,
+                count: item.item_count
+              }
+            });
           },
           status: [2]
         },
         {
           name: "确认采购单",
-          handler: () => {},
+          handler: item => {
+            this.$dialog("是否确认", "是否确认采购单", () => {
+              this.$UPDATE("PurchasingPlan/SubmitFirst", {
+                IDs: [item.id],
+                Status: 2,
+                UserID: 1
+              }).then(r => {
+                this.load();
+              });
+            });
+          },
           status: [1]
         },
         {
@@ -52,30 +85,56 @@ export default {
           },
           status: [1]
         }
-      ]
+      ],
+      datas: {
+        1: [],
+        2: [],
+        3: []
+      },
+      page: {
+        1: 1,
+        2: 1,
+        3: 1
+      }
     };
+  },
+  watch: {
+    status(s) {
+      this.load();
+    }
   },
   computed: {
     list() {
-      return this.$store.state.Purchase.quote_datas.filter(
-        i => i.status == this.status
-      );
+      return this.datas[this.status.toString()];
     }
   },
   methods: {
     click(item, index) {
-      console.log(index);
       this.$actionSheet(
         "操作",
         this.munes.filter(
           i => i.status.filter(k => k == this.status).length > 0
         ),
-        item => {
-          item.handler();
+        mune => {
+          mune.handler(item);
         }
       );
+    },
+    load() {
+      this.$GET(
+        "PurchasingPlanLists4Dept?state=" +
+          this.status +
+          "&PageIndex=" +
+          this.page[this.status.toString()] +
+          "&PageSize=10",
+        {}
+      ).then(r => {
+        this.datas[this.status.toString()] = r.data;
+      });
     }
   },
-  mounted() {}
+  activated() {
+    this.load();
+  }
 };
 </script>

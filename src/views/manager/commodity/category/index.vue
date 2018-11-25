@@ -11,11 +11,11 @@
         <div v-if="showTab==1" class="weui-tab__panel">
             <div class="weui-cells">
                 <div v-for="(item,index) in list" :key="index" class="weui-cell">
-                    <div class="weui-cell__bd">
-                        <p>{{item.title}}</p>
+                    <div @click="update(item)" class="weui-cell__bd">
+                        <p>{{item.name}}</p>
                     </div>
                     <div class="weui-cell__ft">
-                        <a class="weui-swiped-btn weui-swiped-btn_warn" @click="del(index)" style="color:#fff" href="javascript:">删除</a>
+                        <a class="weui-swiped-btn weui-swiped-btn_warn" @click="del(item.id)" style="color:#fff" href="javascript:">删除</a>
                     </div>
                 </div>
             </div>
@@ -25,7 +25,7 @@
                 <div class="weui-cell">
                     <div class="weui-cell__hd"><label class="weui-label">分类名称</label></div>
                     <div class="weui-cell__bd">
-                        <input class="weui-input" v-model="addInput" type="text" placeholder="请输入分类名称">
+                        <input class="weui-input" v-model="addInput.name" type="text" placeholder="请输入分类名称">
                     </div>
                 </div>
             </div>
@@ -41,30 +41,63 @@ export default {
   data() {
     return {
       showTab: 1,
-      addInput: "",
-      list: [
-        {
-          title: "分类1"
-        }
-      ]
+      addInput: {
+        id: 0,
+        name: ""
+      },
+      list: []
     };
   },
   methods: {
     submit() {
-      this.list.push({
-        title: this.addInput
+      var params = {
+        name: this.addInput.name,
+        desc: "",
+        code: "001",
+        BizTypeID: 1,
+        id: this.addInput.id
+      };
+      var api = "";
+      if (this.addInput.id == 0) {
+        api = "add";
+      } else {
+        api = "update";
+      }
+      this.$loading(true, "数据提交中");
+      this.$UPDATE("GoodsClass/" + api, params).then(r => {
+        this.load();
+        this.addInput = {
+          name: "",
+          id: 0
+        };
+        this.showTab = 1;
+        this.$loading(false);
       });
     },
-    del(index) {
+    update(item) {
+      this.addInput = item;
+      this.showTab = 2;
+    },
+    del(id) {
       this.$dialog("是否删除分类", "删除的数据不可恢复", () => {
-        var _list = [];
-        for (var i in this.list) {
-          if (i == index) continue;
-          _list.push(this.list[i]);
-        }
-        this.list = _list;
+        this.$UPDATE("GoodsClass/Disable", { ID: id }).then(r => {
+          var _list = [];
+          for (var i of this.list) {
+            if (i.id == id) continue;
+            _list.push(i);
+          }
+          this.list = _list;
+        });
+      });
+    },
+    load() {
+      this.$GET("GoodsClasses", {}).then(r => {
+        this.list = r.data;
       });
     }
+  },
+  mounted() {
+    this.load();
   }
 };
 </script>

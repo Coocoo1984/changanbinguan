@@ -5,16 +5,17 @@
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">采购类型：</label></div>
                 <div class="weui-cell__bd">
-                    <select v-model="type">
-                        <option value="1">食材</option>
-                        <option value="2">办公用品</option>
+                    <select v-model="good_class_id">
+                        <option v-for="(c,index) in categoryList" :key="index" :value="c.id">{{c.name}}</option>
                     </select>
                 </div>
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label">采购项：</label></div>
                 <div class="weui-cell__bd">
-                    <v-autocomplete keep-open input-class="weui-input" :items="items" v-model="item" :get-label="getLabel" :component-item='template' @update-items="updateItems"></v-autocomplete>
+                    <select v-model="good_id">
+                        <option v-for="(c,index) in goods" :key="index" :value="c.goods_id">{{c.goods_name}}</option>
+                    </select>
                 </div>
             </div>
             <div class="weui-cell">
@@ -31,34 +32,45 @@
 </template>
 
 <script>
-import Temp from "./test.vue";
 export default {
   data() {
     return {
-      type: "1",
-      name: "",
-      number: 0,
-      item: "",
-      items: ["苹果", "香蕉"],
-      template: Temp
+      good_class_id: 0,
+      good_id: 0,
+      datas: [],
+      good_class: [],
+      number: 0
     };
+  },
+  asyncData({ store, route }) {
+    return store.dispatch("loadHomeData");
+  },
+  computed: {
+    categoryList() {
+      return this.$store.state.Home.categoryList;
+    },
+    goods() {
+      if (this.good_class_id == 0) return this.datas;
+      return this.datas.filter(i => i.goods_class_id == this.good_class_id);
+    }
   },
   methods: {
     submit() {
       this.$store.commit("pushAddData", {
-        type: this.type,
-        name: this.name,
-        value: this.number,
-        unit: "KG"
+        goods_id: this.good_id,
+        goods_class_id: this.good_class_id,
+        count: this.number,
+        goods_unit_name: "KG",
+        goods_name: this.datas.filter(i => i.goods_id == this.good_id)[0]
+          .goods_name
       });
       this.$router.go(-1);
-    },
-    updateItems() {
-      this.items = ["苹果", "香蕉"];
-    },
-    getLabel(item) {
-      return item;
     }
+  },
+  mounted() {
+    this.$GET("Goods", {}).then(r => {
+      this.datas = r.data;
+    });
   }
 };
 </script>

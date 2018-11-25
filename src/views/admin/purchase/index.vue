@@ -7,69 +7,72 @@
 export default {
   data() {
     return {
-      page: 1,
-      busy: false
+      page: 0,
+      busy: false,
+      datas: []
     };
   },
   computed: {
     status() {
       return this.$route.query.status;
-    },
-    datas() {
-      if (this.status == 1) return this.$store.state.Admin.purchaseing;
-      else return this.$store.state.Admin.purchaseList;
+    }
+  },
+  watch: {
+    status() {
+      this.datas = [];
+      this.page = 0;
+      this.busy = false;
+      this.load();
     }
   },
   methods: {
-    refresh(done) {
-      done();
-    },
-    infinite(done) {
-      done();
-    },
     click(item) {
-      if (this.status == 1)
-        this.$router.push({
-          path: "/adm/purchase/item",
-          query: {
-            id: 1,
-            status: this.$route.query.type
-          }
-        });
-      else if (this.status == 2)
-        this.$router.push({
-          path: "/adm/purchase/content",
-          query: {
-            id: 1,
-            status: item.status
-          }
-        });
+      this.$router.push({
+        path: "/adm/purchase/item",
+        query: {
+          id: item.id,
+          status: this.status,
+          planStatus: item.purchasing_state_id,
+          count: item.item_count,
+          title: item.name || "采购单"
+        }
+      });
     },
     load() {
       if (this.$route.path == "/adm/purchase") {
         this.busy = true;
         this.$loading(true);
-        setTimeout(() => {
-          for (var i = 0; i < 20; i++) {
-            if (this.status == 2) {
-              this.$store.commit("pushPurchaseList",{
+        /* this.$store.commit("pushPurchaseList",{
                 title: "XXXXXXXX",
                 slot: "<span class='green'>完成</span>"
-              });
-            } else {
-              this.$store.commit("pushPurchase",{
-                title: "XXXXXXXX",
-                slot: "17个项目"
-              });
-            }
+              }); */
+        this.page = this.page + 1;
+        this.$GET(
+          "PurchasingPlanLists4Dept?state=" +
+            this.status +
+            "&PageIndex=" +
+            this.page +
+            "&PageSize=10"
+        ).then(r => {
+          for (var i of r.data) {
+            this.datas.push({
+              title: i.name || "采购单",
+              slot: i.item_count + "个项目",
+              status: i.purchasing_state_id,
+              item_count: i.item_count,
+              purchasing_state_id: i.purchasing_state_id,
+              id: i.id
+            });
           }
-          this.busy = false;
           this.$loading(false);
-        }, 1000);
+          if (r.data.lenght >= 10) this.busy = false;
+        });
       }
     }
   },
-  mounted() {}
+  mounted() {
+    this.load();
+  }
 };
 </script>
  

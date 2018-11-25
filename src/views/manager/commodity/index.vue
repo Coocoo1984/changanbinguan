@@ -11,11 +11,11 @@
         <div v-if="showTab==1" class="weui-tab__panel">
             <div class="weui-cells">
                 <div v-for="(item,index) in list" :key="index" class="weui-cell">
-                    <div class="weui-cell__bd">
-                        <p>{{item.title}}</p>
+                    <div @click="update(item)" class="weui-cell__bd">
+                        <p>{{item.goods_name}}</p>
                     </div>
                     <div class="weui-cell__ft">
-                        <a class="weui-swiped-btn weui-swiped-btn_warn" @click="del(index)" style="color:#fff" href="javascript:">删除</a>
+                        <a class="weui-swiped-btn weui-swiped-btn_warn" @click="del(item.goods_id)" style="color:#fff" href="javascript:">删除</a>
                     </div>
                 </div>
             </div>
@@ -25,14 +25,14 @@
                 <div class="weui-cell">
                     <div class="weui-cell__hd"><label class="weui-label">商品名称</label></div>
                     <div class="weui-cell__bd">
-                        <input class="weui-input" v-model="addInput" type="text" placeholder="请输入商品名称">
+                        <input class="weui-input" v-model="addInput.Name" type="text" placeholder="请输入商品名称">
                     </div>
                 </div>
                 <div class="weui-cell">
                     <div class="weui-cell__hd"><label class="weui-label">选择分类</label></div>
                     <div class="weui-cell__bd">
-                        <select name="" id="" class="weui-select">
-                            <option value="">分类1</option>
+                        <select name="" id="" class="weui-select" v-model="addInput.ClassID">
+                            <option v-for="(c,index) in  categoryList" :key="index" :value="c.id">{{c.name}}</option>
                         </select>
                     </div>
                 </div>
@@ -49,30 +49,68 @@ export default {
   data() {
     return {
       showTab: 1,
-      addInput: "",
-      list: [
-        {
-          title: "商品1"
-        }
-      ]
+      addInput: {
+        ID: 0,
+        Name: "",
+        ClassID: 0,
+        UnitID: 1
+      },
+      list: []
     };
   },
+  asyncData({ store, route }) {
+    return store.dispatch("loadHomeData");
+  },
+  computed: {
+    categoryList() {
+      return this.$store.state.Home.categoryList;
+    }
+  },
   methods: {
+    update(item) {
+      this.addInput.ID = item.goods_id;
+      this.addInput.Name = item.goods_name;
+      this.addInput.ClassID = item.goods_class_id;
+      this.showTab = 2;
+    },
     submit() {
-      this.list.push({
-        title: this.addInput
+      var api = "add";
+      if (this.addInput.ID) {
+        api = "update";
+      }
+      this.$loading(true, "数据提交中");
+      this.$UPDATE("Goods/" + api, this.addInput).then(r => {
+        this.load();
+        this.$loading(false);
+        this.addInput = {
+          ID: 0,
+          Name: "",
+          ClassID: 0,
+          UnitID: 1
+        };
       });
     },
-    del(index) {
+    del(id) {
       this.$dialog("是否删除分类", "删除的数据不可恢复", () => {
-        var _list = [];
-        for (var i in this.list) {
-          if (i == index) continue;
-          _list.push(this.list[i]);
-        }
-        this.list = _list;
+        this.$UPDATE("Goods/Disable", { GoodsID: [id] }).then(r => {
+          var _list = [];
+          for (var i of this.list) {
+            if (i.goods_id == id) continue;
+            _list.push(i);
+          }
+          this.list = _list;
+        });
+      });
+    },
+    load() {
+      this.$GET("Goods", { PageIndex: 1, PageSize: 20 }).then(r => {
+        this.list = r.data;
+        console.log(r.data);
       });
     }
+  },
+  mounted() {
+    this.load();
   }
 };
 </script>
