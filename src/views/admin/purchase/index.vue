@@ -1,6 +1,12 @@
  <template>
   <!-- <cells :datas="list" @item-click="click"></cells> -->
-  <purchase-list v-infinite-scroll="load" infinite-scroll-disabled="busy" infinite-scroll-distance="10" @click="click" :datas="datas"></purchase-list>
+  <purchase-list
+    v-infinite-scroll="load"
+    infinite-scroll-disabled="busy"
+    infinite-scroll-distance="10"
+    @click="click"
+    :datas="datas"
+  ></purchase-list>
 </template>
 
  <script>
@@ -39,21 +45,15 @@ export default {
       });
     },
     load() {
+      var url =
+        this.status == 2
+          ? "PurchasingPlanCount4Audit"
+          : "PurchasingPlanCount4Audit2";
       if (this.$route.path == "/adm/purchase") {
         this.busy = true;
         this.$loading(true);
-        /* this.$store.commit("pushPurchaseList",{
-                title: "XXXXXXXX",
-                slot: "<span class='green'>完成</span>"
-              }); */
         this.page = this.page + 1;
-        this.$GET(
-          "PurchasingPlanLists4Dept?state=" +
-            this.status +
-            "&PageIndex=" +
-            this.page +
-            "&PageSize=10"
-        ).then(r => {
+        this.$GET(url).then(r => {
           for (var i of r.data) {
             this.datas.push({
               title: i.name || "采购单",
@@ -61,7 +61,7 @@ export default {
               status: i.purchasing_state_id,
               item_count: i.item_count,
               purchasing_state_id: i.purchasing_state_id,
-              id: i.id
+              id: i.purchasing_plan_id || i.id
             });
           }
           this.$loading(false);

@@ -69,7 +69,6 @@ export default {
             this.$dialog("是否确认", "是否确认采购单", () => {
               this.$UPDATE("PurchasingPlan/SubmitFirst", {
                 IDs: [item.id],
-                Status: 2,
                 UserID: 1
               }).then(r => {
                 this.load();
