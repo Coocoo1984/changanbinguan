@@ -1,6 +1,12 @@
  <template>
   <!-- <cells :datas="list" @item-click="click"></cells> -->
-  <purchase-list v-infinite-scroll="load" infinite-scroll-disabled="busy" infinite-scroll-distance="10" @click="click" :datas="datas"></purchase-list>
+  <purchase-list
+    v-infinite-scroll="load"
+    infinite-scroll-disabled="busy"
+    infinite-scroll-distance="20"
+    @click="click"
+    :datas="datas"
+  ></purchase-list>
 </template>
 
  <script>
@@ -23,34 +29,51 @@ export default {
         path: "/adm/purchase/content",
         query: {
           id: item.id,
-          status: this.status
+          status: item.status,
+          department_name:item.department_name
         }
       });
+    },
+    getStatus(status) {
+      switch (status) {
+        case 1:
+          return "<span class='orgin'>采购已确认</span>";
+        case 2:
+          return "<span class='red'>供应商否定</span>";
+        case 3:
+          return "<span class='blur'>备货中</span>";
+        case 4:
+          return "<span class='blur'>已发货</span>";
+        case 5:
+          return "<span class='blur'>收货中</span>";
+        case 6:
+          return "<span class='green'>完成</span>";
+      }
     },
     load() {
       this.busy = true;
       this.$loading(true);
-      /* this.$store.commit("pushPurchaseList",{
-                title: "XXXXXXXX",
-                slot: "<span class='green'>完成</span>"
-              }); */
       this.page = this.page + 1;
       this.$GET(
-        "PurchasingOrderList?PageIndex=" + this.page + "&PageSize=10"
+        "PurchasingOrderList?PageIndex=" + this.page + "&PageSize=20"
       ).then(r => {
-        this.datas = r.data.map(i => {
-          return {
-            title: i.name || "采购单",
-            slot: i.item_count + "个项目",
-            status: i.purchasing_state_id
-          };
-        });
+        for (var i of r.data) {
+          this.datas.push({
+            title: i.department_name || "采购单" + i.po_code,
+            slot: this.getStatus(i.purchasing_state_id),
+            status: i.purchasing_state_id,
+            department_name: i.department_name,
+            id: i.po_id
+          });
+        }
         this.$loading(false);
-        if (r.data.lenght >= 10) this.busy = false;
+        if (r.data.length >= 10) this.busy = false;
       });
     }
   },
   activated() {
+    this.page = 0;
+    this.datas = [];
     this.load();
   }
 };

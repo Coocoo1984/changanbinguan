@@ -3,7 +3,8 @@
     <div class="weui-panel weui-panel_access" style="padding-bottom:10px">
       <div class="weui-panel__bd">
         <div class="weui-media-box weui-media-box_text">
-          <h4 class="weui-media-box__title" style="font-size:14px">{{title}}
+          <h4 class="weui-media-box__title" style="font-size:14px">
+            {{title}}
             <span class="count">{{count}}个项目</span>
           </h4>
           <p class="weui-media-box__desc">201828112312</p>
@@ -13,7 +14,11 @@
         <div class="weui-flex">
           <div class="weui-flex__item">
             <div class="weui-btn-area">
-              <a @click="Aduit" class="weui-btn weui-btn_primary" href="javascript:">{{status==1?'初审通过':'复审确认'}}</a>
+              <a
+                @click="Aduit"
+                class="weui-btn weui-btn_primary"
+                href="javascript:"
+              >{{status==1?'初审通过':'复审确认'}}</a>
             </div>
           </div>
           <div class="weui-flex__item">
@@ -24,14 +29,18 @@
         </div>
       </div>
     </div>
-    <template  v-for="gc in goods_class">
-      <preview v-if="getGoods(gc.id).length>0" :key="gc.name" style="margin-top:10px" 
-                static :title="'采购单项目（'+getGoods(gc.id).length+'）：'+gc.name" 
-                @handler="SelectQuoter(gc.id)" 
-                :btnGray="btnGray" 
-                :btnText="btnText" 
-                :datas="getGoods(gc.id)">
-      </preview>
+    <template v-for="gc in goods_class">
+      <preview
+        v-if="getGoods(gc.id).length>0"
+        :key="gc.name"
+        style="margin-top:10px"
+        static
+        :title="'采购单项目（'+getGoods(gc.id).length+'）：'+gc.name"
+        @handler="SelectQuoter(gc.id)"
+        :btnGray="btnGray"
+        :btnText="btnText"
+        :datas="getGoods(gc.id)"
+      ></preview>
     </template>
   </div>
 </template>
@@ -102,21 +111,21 @@ export default {
     Aduit() {
       if (this.status == 1) {
         //初审
-        this.$UPDATE("PurchasingPlan/SubmitFirst", {
-          IDs: [this.id],
-          Status: 5,
+        this.$UPDATE("PurchasingAudit/PlanAudit", {
+          PlanID: this.id,
+          Result: true,
           UserID: 1
         }).then(r => {
           this.$router.go(-1);
         });
       } else {
         //复审
-        this.$UPDATE("PurchasingPlan/SubmitFirst", {
-          IDs: [this.id],
-          Status: 9,
+        this.$UPDATE("PurchasingAudit2/PlanAudit", {
+          PlanID: this.id,
+          Result: true,
           UserID: 1
         }).then(r => {
-          this.$router.go(-1);
+          if (r.result == 1) this.$router.go(-1);
         });
       }
     },
@@ -131,19 +140,21 @@ export default {
         });
     },
     getGoods(class_id) {
-      return this.goods.filter(i => i.goods_class_id == class_id).map(i => {
-        console.log(this.goods);
-        var goods_price = this.goodsPrice.filter(
-          g => g.goods_id == i.goods_id
-        )[0];
+      return this.goods
+        .filter(i => i.goods_class_id == class_id)
+        .map(i => {
+          console.log(this.goods);
+          var goods_price = this.goodsPrice.filter(
+            g => g.goods_id == i.goods_id
+          )[0];
 
-        var max = goods_price ? goods_price.max_unit_price : "无";
-        var min = goods_price ? goods_price.min_unit_price : "无";
-        return {
-          title: i.goods_name,
-          content: i.count + i.goods_unit_name
-        };
-      });
+          var max = goods_price ? goods_price.max_unit_price : "无";
+          var min = goods_price ? goods_price.min_unit_price : "无";
+          return {
+            title: i.goods_name,
+            content: i.count + i.goods_unit_name
+          };
+        });
     }
   },
   computed: {
@@ -166,7 +177,7 @@ export default {
       return this.$route.query.plan;
     }
   },
-  mounted() {
+  activated() {
     if (this.$route.query.status == 2) this.btnText = "确认供货商";
     this.load();
   }
