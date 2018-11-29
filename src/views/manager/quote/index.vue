@@ -1,13 +1,23 @@
 <template>
-  <div class="weui-cells">
-    <a v-for="(item,index) in list" :key="index" @click="click(item)" class="weui-cell link" href="javascript:;">
-    <div class="weui-cell__bd">
-      <p>{{item.name}}</p>
+  <div class="weui-panel">
+    <div class="weui-panel__bd">
+      <div class="weui-media-box weui-media-box_small-appmsg">
+        <div class="weui-cells">
+          <a
+            v-for="(item,index) in list"
+            :key="index"
+            @click="click(item)"
+            class="weui-cell weui-cell_access"
+            href="javascript:;"
+          >
+            <div class="weui-cell__bd weui-cell_primary">
+              <p>{{item.name}}</p>
+            </div>
+            <div class="weui-cell__ft"></div>
+          </a>
+        </div>
+      </div>
     </div>
-    <div class="weui-cell__ft">
-      >
-    </div>
-  </a>
   </div>
 </template>
 <script>
@@ -25,22 +35,22 @@ export default {
   },
   methods: {
     click(item) {
-      this.$router.push("/manager/quote/info");
+      this.$router.push({
+        path: "/manager/quote/info",
+        query: {
+          id: item.id,
+          name: item.name
+        }
+      });
     },
-    getUser() {
-      WeiXin.GetUser(this.access_token, 5).then(r => {
-        this.list = r.data.userlist;
+    getDepartment() {
+      WeiXin.GetDepartment(5).then(r => {
+        this.list = r.data.department;
       });
     }
   },
   mounted() {
-    if (!this.access_token) {
-      this.$store.dispatch("getAccessToken").then(r => {
-        this.getUser();
-      });
-    } else {
-      this.getUser();
-    }
+    this.getDepartment();
   }
 };
 </script>

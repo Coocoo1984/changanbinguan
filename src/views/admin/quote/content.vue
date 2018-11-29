@@ -4,16 +4,18 @@
       <div class="weui-panel__hd">报价详情</div>
       <div class="weui-panel__bd">
         <div class="weui-media-box weui-media-box_text">
-          <h4 class="weui-media-box__title">土豆
+          <h4 class="weui-media-box__title">
+            {{goodName}}
             <span class="menmoy">
-              <font class="red">￥2.5</font> - <font class="greed">￥3.5</font>
+              <font class="red">￥{{min}}</font> -
+              <font class="greed">￥{{max}}</font>
             </span>
           </h4>
-          <p class="weui-media-box__desc" style="text-align:right">共 5 家供应商报价</p>
+          <p class="weui-media-box__desc" style="text-align:right">共 {{count}} 家供应商报价</p>
         </div>
       </div>
     </div>
-    <cells left-style="" :datas="list"></cells>
+    <cells left-style :datas="list"></cells>
   </div>
 </template>
 
@@ -21,33 +23,42 @@
 export default {
   data() {
     return {
-      list: [
-        {
-          title: "XXX供应商1",
-          slot: "￥2.5"
-        },
-
-        {
-          title: "XXX供应商2",
-          slot: "￥3.0"
-        },
-
-        {
-          title: "XXX供应商3",
-          slot: "￥3.5"
-        },
-
-        {
-          title: "XXX供应商4",
-          slot: "￥2.2"
-        },
-
-        {
-          title: "XXX供应商5",
-          slot: "￥2.7"
-        }
-      ]
+      list: []
     };
+  },
+  computed: {
+    goodsId() {
+      return this.$route.query.id;
+    },
+    min() {
+      return this.$route.query.min;
+    },
+    max() {
+      return this.$route.query.max;
+    },
+    goodName() {
+      return this.$route.query.name;
+    },
+    count() {
+      return this.$route.query.count;
+    }
+  },
+  methods: {
+    load() {
+      this.$GET("GoodsQuoteDetailVendorList?goodsid=" + this.goodsId).then(
+        r => {
+          this.list = r.data.map(i => {
+            return {
+              title: i.vendor_name,
+              slot: "￥" + i.pre_unit_price
+            };
+          });
+        }
+      );
+    }
+  },
+  activated() {
+    this.load();
   }
 };
 </script>

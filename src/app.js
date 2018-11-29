@@ -19,7 +19,8 @@ export function createApp() {
     const router = createRouter(store)
     Vue.prototype.$POST = api.POST;
     Vue.prototype.$GET = api.GET;
-    Vue.prototype.$UPDATE = api.UPDATE
+    Vue.prototype.$UPDATE = api.UPDATE;
+    Vue.prototype.$UPDATE_GET = api.UPDATE_GET;
     sync(store, router)
     const app = new Vue({
         router,
@@ -27,7 +28,8 @@ export function createApp() {
         render: h => h(App),
         mounted() {
             this.$loadingInit();
-            this.$store.dispatch("loadHomeData")
+            this.$store.dispatch("loadHomeData");
+            this.$store.dispatch("loadBizTypes");
         }
     })
     return { app, router, store }
