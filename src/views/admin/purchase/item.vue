@@ -109,7 +109,7 @@ export default {
         });
     },
     Aduit() {
-      if (this.status == 2) {
+      if (this.status == 1) {
         //初审
         this.$UPDATE("PurchasingAudit/PlanAudit", {
           PlanID: this.id,
@@ -140,10 +140,9 @@ export default {
         });
     },
     getGoods(class_id) {
-      return this.goods
+      var m = this.goods
         .filter(i => i.goods_class_id == class_id)
         .map(i => {
-          console.log(this.goods);
           var goods_price = this.goodsPrice.filter(
             g => g.goods_id == i.goods_id
           )[0];
@@ -155,6 +154,8 @@ export default {
             content: i.count + i.goods_unit_name
           };
         });
+      console.log(m);
+      return m;
     }
   },
   computed: {

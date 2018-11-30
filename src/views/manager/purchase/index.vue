@@ -5,6 +5,7 @@
     </div>
 </template>
 <script>
+import WeiXin from "@/common/weixin"
 export default {
   data() {
     return {
@@ -19,7 +20,11 @@ export default {
   methods: {
     click(item) {
       this.$router.push("/manager/purchase/info");
-    }
+    },
+
+  },
+  mounted(){
+    WeiXin
   }
 };
 </script>

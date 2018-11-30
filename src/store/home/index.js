@@ -9,13 +9,13 @@ export default {
     },
     mutations: {
         setTrial(state, count) {
-            state.trial = count || 1;
+            state.trial = count || 0;
         },
         setReview(state, count) {
-            state.review = count || 5;
+            state.review = count || 0;
         },
         setComplete(state, count) {
-            state.complete = count || 11;
+            state.complete = count || 0;
         },
         setCategory(state, list) {
             state.categoryList = list;
@@ -34,6 +34,13 @@ export default {
             return APi.GET("BizTypes", {}).then(r => {
                 commit("setBizTypes", r.data);
             })
+        },
+        loadHomeCount({ commit }) {
+            return APi.GET("PurchasingPlanCount4All", {}).then(r => {
+                commit("setComplete",r.data[0].count);
+                commit("setTrial",r.data[1].count);
+                commit("setReview",r.data[2].count);
+            });
         }
     }
 }

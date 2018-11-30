@@ -15,6 +15,7 @@
               type="number"
             >
           </div>
+          <div class="weui-cell__ft" style="padding-left:10px">    {{  item.goods_unit_name}}</div>
         </div>
       </div>
     </div>

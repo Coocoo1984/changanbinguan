@@ -54,12 +54,12 @@
         class="weui-media-box weui-media-box_text"
       >
         <h4 class="weui-media-box__title">
-          [{{getStatus(item.purchasing_state_id)}}] {{item.department_name||"订货单"}}
+          [{{getStatus(item.purchasing_order_state_id)}}] {{item.department_name||"订货单"}}
           <span
             class="desc"
-          >{{item.po_item_count}} 项</span>
+          >{{item.po_item_count||0}} 项</span>
         </h4>
-        <p class="weui-media-box__desc">{{item.po_create_time}}</p>
+        <p class="weui-media-box__desc">{{item.purchasing_order_create_time}}</p>
       </div>
     </div>
   </div>
@@ -73,7 +73,7 @@ export default {
       status: "0",
       startDate: "2018-11-11",
       endDate: "2018-11-30",
-      vendorID: 2,
+      vendorID: 3,
       datas: []
     };
   },
@@ -121,16 +121,17 @@ export default {
         path: "/quote/order/item",
         query: {
           id: item.po_id,
-          status: item.purchasing_state_id
+          status: item.purchasing_order_state_id
         }
       });
     },
     load() {
-      this.$GET("PurchasingOrderVendorSubtotal?vendorID=" + this.vendorID).then(
-        r => {
-          this.datas = r.data;
-        }
-      );
+      this.$GET(
+        "PurchasingOrderList/GetPurchasingOrderList4Vendor?vendorID=" +
+          this.vendorID
+      ).then(r => {
+        this.datas = r.data;
+      });
     }
   },
   mounted() {

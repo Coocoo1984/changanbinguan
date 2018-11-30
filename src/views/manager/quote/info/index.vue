@@ -91,16 +91,16 @@ export default {
         this.$UPDATE("Vendor/Update", {
           ID: this.vendor.id,
           Code: this.user.userid,
-          Name: this.vendor.name,
+          Name: this.name,
           Mobile: this.vendor.mobile,
           Address: this.vendor.address,
           GoodsClassIDs: this.select_ids
         }).then(this.callback);
       } else {
         this.$UPDATE("Vendor/Add", {
-          Name: this.vendor.name,
+          Name: this.name,
           Code: this.user.userid,
-          Mobile: this.vendor.mobile,
+          Mobile: this.user.mobile,
           Address: this.vendor.address,
           GoodsClassIDs: this.select_ids
         }).then(this.callback);
@@ -131,7 +131,11 @@ export default {
     this.select_ids = [];
     this.isAdd = false;
     this.user = {};
-    this.vendor = {};
+    this.vendor = {
+      name: "",
+      mobile: "",
+      address: ""
+    };
     this.getUser();
   }
 };

@@ -4,7 +4,12 @@
       <div class="weui-flex__item">
         <div class="weui-panel__bd">
           <div class="weui-media-box weui-media-box_text box">
-            <h4 class="weui-media-box__title title"><span>初审</span> {{trial}} <span>复审</span> {{review}} </h4>
+            <h4 class="weui-media-box__title title">
+              <span>初审</span>
+              {{trial}}
+              <span>复审</span>
+              {{review}}
+            </h4>
             <p class="weui-media-box__desc desc">待审计划</p>
           </div>
         </div>
@@ -20,9 +25,9 @@
     </div>
     <div class="weui-cells__title">采购管理</div>
     <div class="weui-grids">
-      <grid-item name="初审采购" @click="toPurchase(2)"></grid-item>
+      <grid-item name="初审采购" @click="toPurchase(1)"></grid-item>
       <grid-item name="报价管理" @click="toQuote"></grid-item>
-      <grid-item name="复审采购" @click="toPurchase(5)"></grid-item>
+      <grid-item name="复审采购" @click="toPurchase(2)"></grid-item>
       <grid-item name="采购进度" @click="toPurchaseList()"></grid-item>
       <grid-item name="统计查询" @click="toStatistics(1)"></grid-item>
       <grid-item name="报表下载" @click="toStatistics(2)"></grid-item>
@@ -48,7 +53,9 @@ export default {
       return this.$store.state.Home.complete;
     }
   },
-
+  asyncData({store}) {
+    return store.dispatch("loadHomeCount");
+  },
   methods: {
     toPurchase(status, type) {
       this.$router.push({

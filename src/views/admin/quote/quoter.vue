@@ -7,15 +7,7 @@
           <h4 class="weui-media-box__title">
             {{item.goods_name}}
             <span class="menmoy">
-              <font class="red">￥</font>
-            </span>
-          </h4>
-        </div>
-        <div class="weui-media-box weui-media-box_text">
-          <h4 class="weui-media-box__title">
-            番茄
-            <span class="menmoy">
-              <font>￥2.5</font>
+              <font class="red">￥{{item.unit_price}}</font>
             </span>
           </h4>
         </div>
@@ -32,22 +24,23 @@ export default {
     };
   },
   computed: {
-    venderID() {
+    quoteID() {
       return this.$route.query.id;
     }
   },
   methods: {
     load() {
-      this.$GET("QuoteDetailList4Vendor2Quote?vendorID=" + this.venderID).then(
-        r => {
-          for (var i of r.data) {
-            if (!this.datas[i.goods_class_name])
-              Vue.set(this.datas, i.goods_class_name, []);
-            this.datas[i.goods_class_name].push(i);
-          }
-          console.log(this.datas);
+      this.$GET(
+        "QuoteDetailList4Vendor2Quote/GetDetailByQuoteID?quoteID=" +
+          this.quoteID
+      ).then(r => {
+        for (var i of r.data) {
+          if (!this.datas[i.goods_class_name])
+            Vue.set(this.datas, i.goods_class_name, []);
+          this.datas[i.goods_class_name].push(i);
         }
-      );
+        console.log(this.datas);
+      });
     }
   },
   activated() {

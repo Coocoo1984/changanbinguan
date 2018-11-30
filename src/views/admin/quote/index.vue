@@ -138,13 +138,13 @@ export default {
       this.busy = true;
       this.$loading(true);
       this.$GET(
-        "GoodsQuoteDetailVendorList?PageIndex=" + this.page + "&PageSize=20"
+        "QuoteListAll?PageIndex=" + this.page + "&PageSize=20"
       ).then(r => {
         this.quote = r.data.map(r => {
           return {
             title: r.vendor_name,
             slot: r.quote_create_time,
-            id: r.vendor_id
+            id: r.quote_id
           };
         });
         this.$loading(false);
