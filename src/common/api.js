@@ -14,5 +14,8 @@ export default {
     },
     UPDATE(api, params) {
         return axios.post(config.updateURL + api, params);
+    },
+    UPDATE_GET(api, params) {
+        return axios.post(config.updateURL + api, params);
     }
 };

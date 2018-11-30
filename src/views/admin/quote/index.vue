@@ -1,113 +1,158 @@
  <template>
-    <div class="weui-tab">
-        <div class="weui-navbar">
-            <div class="weui-navbar__item" @click="tabChange(1)" :class="[status==1?'weui-bar__item_on':'']">
-                报价筛选
-            </div>
-            <div class="weui-navbar__item" @click="tabChange(2)" :class="[status==2?'weui-bar__item_on':'']">
-                报价单
-            </div>
-            <div class="weui-navbar__item" @click="tabChange(3)" :class="[status==3?'weui-bar__item_on':'']">
-                报价记录
-            </div>
-        </div>
-        <div v-if="status==1" class="weui-tab__panel">
-            <div class="weui-cells weui-cells_form">
-                <div class="weui-cell">
-                    <div class="weui-cell__hd"><label class="weui-label">类型：</label></div>
-                    <div class="weui-cell__bd">
-                        <select v-model="type">
-                            <option value="1">食材</option>
-                            <option value="2">办公用品</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="weui-cell">
-                    <div class="weui-cell__hd"><label class="weui-label">报价时间：</label></div>
-                    <div class="weui-cell__bd">
-                        <div class="weui-flex">
-                            <div class="weui-flex__item">
-                                <div class="placeholder" @click="selectStartDate()">{{startDate}} 到 </div>
-                            </div>
-                            <div class="weui-flex__item">
-                                <div class="placeholder" @click="selectEndDate()"> {{endDate}}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="weui-btn-area">
-                    <a class="weui-btn weui-btn_primary" @click="submit" href="javascript:">确定</a>
-                </div>
-            </div>
-        </div>
-        <div v-else-if="status==2" class="weui-tab__panel">
-            <div class="weui-panel weui-panel_access">
-                <div class="weui-panel__hd">蔬菜类（17）</div>
-                <div class="weui-panel__bd">
-                    <div @click="goContent" class="weui-media-box weui-media-box_text">
-                        <h4 class="weui-media-box__title">土豆
-                            <span class="menmoy">
-                                <font class="red">￥2.5</font> - <font class="greed">￥3.5</font>
-                            </span>
-                        </h4>
-                        <p class="weui-media-box__desc" style="text-align:right">共 5 家供应商报价</p>
-                    </div>
-                    <div class="weui-media-box weui-media-box_text">
-                        <h4 class="weui-media-box__title">番茄
-                            <span class="menmoy">
-                                <font>￥2.5</font> - <font>￥3.5</font>
-                            </span>
-                        </h4>
-                        <p class="weui-media-box__desc" style="text-align:right">共 5 家供应商报价</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div v-else class="weui-tab__panel">
-            <div class="weui-cells__title">近3月供货商报价情况</div>
-            <purchase-list v-infinite-scroll="load" infinite-scroll-disabled="busy" infinite-scroll-distance="10" @click="goQuqter" :datas="quote"></purchase-list>
-        </div>
+  <div class="weui-tab">
+    <div class="weui-navbar">
+      <div
+        class="weui-navbar__item"
+        @click="tabChange(1)"
+        :class="[status==1?'weui-bar__item_on':'']"
+      >报价筛选</div>
+      <div
+        class="weui-navbar__item"
+        @click="tabChange(2)"
+        :class="[status==2?'weui-bar__item_on':'']"
+      >报价单</div>
+      <div
+        class="weui-navbar__item"
+        @click="tabChange(3)"
+        :class="[status==3?'weui-bar__item_on':'']"
+      >报价记录</div>
     </div>
+    <div v-if="status==1" class="weui-tab__panel">
+      <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+          <div class="weui-cell__hd">
+            <label class="weui-label">类型：</label>
+          </div>
+          <div class="weui-cell__bd">
+            <select v-model="type">
+              <option
+                v-for="(b,index) in bizTypes"
+                :key="index"
+                :value="b.biz_type_id"
+              >{{b.biz_type_name}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="weui-cell">
+          <div class="weui-cell__hd">
+            <label class="weui-label">报价时间：</label>
+          </div>
+          <div class="weui-cell__bd">
+            <div class="weui-flex">
+              <div class="weui-flex__item">
+                <div class="placeholder" @click="selectStartDate()">{{startDate}} 到</div>
+              </div>
+              <div class="weui-flex__item">
+                <div class="placeholder" @click="selectEndDate()">{{endDate}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="weui-btn-area">
+          <a class="weui-btn weui-btn_primary" @click="loadList" href="javascript:">确定</a>
+        </div>
+      </div>
+    </div>
+    <div v-else-if="status==2" class="weui-tab__panel">
+      <div v-for="(q,k) in quote" :key="k" class="weui-panel weui-panel_access">
+        <div class="weui-panel__hd">{{k}}（{{q.length}}）</div>
+        <div class="weui-panel__bd">
+          <div
+            v-for="(item,index) in q"
+            :key="index"
+            @click="goContent(item)"
+            class="weui-media-box weui-media-box_text"
+          >
+            <h4 class="weui-media-box__title">
+              {{item.goods_name}}
+              <span class="menmoy">
+                <font class="red">￥{{item.min_unit_price}}</font> -
+                <font class="greed">￥{{item.max_unit_price}}</font>
+              </span>
+            </h4>
+            <p class="weui-media-box__desc" style="text-align:right">共 {{item.vendor_count}} 家供应商报价</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-else class="weui-tab__panel">
+      <div class="weui-cells__title">近3月供货商报价情况</div>
+      <purchase-list
+        v-infinite-scroll="load"
+        infinite-scroll-disabled="busy"
+        infinite-scroll-distance="10"
+        @click="goQuqter"
+        :datas="quote"
+      ></purchase-list>
+    </div>
+  </div>
 </template>
  
  <script>
+import Vue from "vue";
 export default {
   data() {
     return {
       status: 1,
       type: "1",
       busy: false,
-      quote: [
-        {
-          title: "XXX供货商",
-          slot: "2018-11-11 12:11:22"
-        },
-        {
-          title: "XXX供货商",
-          slot: "2018-11-11 12:11:22"
-        }
-      ],
+      quote: [],
+      quoteOld: {},
       startDate: "2018-11-11",
-      endDate: "2018-11-30"
+      endDate: "2018-11-30",
+      page: 1
     };
+  },
+  computed: {
+    bizTypes() {
+      return this.$store.state.Home.bizTypes;
+    }
   },
   methods: {
     tabChange(status) {
       this.status = status;
       if (status == 3) this.load();
     },
-    load() {
-      this.busy = false;
+    loadList() {
       this.$loading(true);
-      setTimeout(() => {
-        for (var i = 0; i < 10; i++)
-          this.quote.push({
-            title: "XXX供货商",
-            slot: "2018-11-11 12:11:22"
-          });
+      this.quote = {};
+      this.$GET(
+        "GoodsQuoteDetailVendorPriceRange?bizTypeID=" +
+          this.type +
+          "&startTime=" +
+          this.startDate +
+          "&endTime=" +
+          this.endDate
+      ).then(r => {
+        this.status = 2;
         this.$loading(false);
-        this.busy = true;
-      }, 500);
+
+        for (var i of r.data) {
+          if (!this.quote[i.goods_class_name])
+            Vue.set(this.quote, i.goods_class_name, []);
+          this.quote[i.goods_class_name].push(i);
+        }
+      });
+    },
+    load() {
+      this.busy = true;
+      this.$loading(true);
+      this.$GET(
+        "GoodsQuoteDetailVendorList?PageIndex=" + this.page + "&PageSize=20"
+      ).then(r => {
+        this.quote = r.data.map(r => {
+          return {
+            title: r.vendor_name,
+            slot: r.quote_create_time,
+            id: r.vendor_id
+          };
+        });
+        this.$loading(false);
+        if (r.data.length > 20) {
+          this.busy = false;
+          this.page++;
+        }
+      });
     },
     selectStartDate() {
       this.$picker.show({
@@ -132,11 +177,15 @@ export default {
       });
     },
     submit() {},
-    goContent() {
+    goContent(item) {
       this.$router.push({
         path: "/adm/quote/content",
         query: {
-          id: 1
+          id: item.goods_id,
+          max: item.max_unit_price,
+          min: item.min_unit_price,
+          name: item.goods_name,
+          count: item.vendor_count
         }
       });
     },
@@ -144,7 +193,7 @@ export default {
       this.$router.push({
         path: "/adm/quote/quoter",
         query: {
-          id: 1
+          id: item.id
         }
       });
     }

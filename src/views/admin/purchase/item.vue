@@ -18,7 +18,7 @@
                 @click="Aduit"
                 class="weui-btn weui-btn_primary"
                 href="javascript:"
-              >{{status==2?'初审通过':'复审确认'}}</a>
+              >{{status==1?'初审通过':'复审确认'}}</a>
             </div>
           </div>
           <div class="weui-flex__item">
@@ -113,6 +113,7 @@ export default {
         //初审
         this.$UPDATE("PurchasingAudit/PlanAudit", {
           PlanID: this.id,
+          Result: true,
           UserID: 1
         }).then(r => {
           if (r.data.result == 1) this.$router.go(-1);
@@ -121,9 +122,10 @@ export default {
         //复审
         this.$UPDATE("PurchasingAudit2/PlanAudit", {
           PlanID: this.id,
+          Result: true,
           UserID: 1
         }).then(r => {
-          this.$router.go(-1);
+          if (r.result == 1) this.$router.go(-1);
         });
       }
     },
@@ -175,8 +177,8 @@ export default {
       return this.$route.query.plan;
     }
   },
-  mounted() {
-    if (this.$route.query.status == 5) this.btnText = "确认供货商";
+  activated() {
+    if (this.$route.query.status == 2) this.btnText = "确认供货商";
     this.load();
   }
 };

@@ -4,7 +4,8 @@ export default {
         trial: 0,
         review: 0,
         complete: 0,
-        categoryList: []
+        categoryList: [],
+        bizTypes: []
     },
     mutations: {
         setTrial(state, count) {
@@ -18,6 +19,9 @@ export default {
         },
         setCategory(state, list) {
             state.categoryList = list;
+        },
+        setBizTypes(state, types) {
+            state.bizTypes = types;
         }
     },
     actions: {
@@ -25,6 +29,11 @@ export default {
             return APi.GET("GoodsClasses", {}).then(r => {
                 commit("setCategory", r.data);
             });
+        },
+        loadBizTypes({ commit }) {
+            return APi.GET("BizTypes", {}).then(r => {
+                commit("setBizTypes", r.data);
+            })
         }
     }
 }
