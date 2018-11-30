@@ -12,7 +12,7 @@ import api from "./common/api";
 import Autocomplete from 'v-autocomplete'
 import 'v-autocomplete/dist/v-autocomplete.css'
 Vue.use(Autocomplete)
-
+import WeiXin from "@/common/weixin";
 export function createApp() {
     RegisterComponents(Vue)
     const store = createStore()
@@ -28,8 +28,10 @@ export function createApp() {
         render: h => h(App),
         mounted() {
             this.$loadingInit();
+
             this.$store.dispatch("loadHomeData");
             this.$store.dispatch("loadBizTypes");
+            //WeiXin.GetDepartment(0);
         }
     })
     return { app, router, store }

@@ -1,0 +1,62 @@
+[
+    {
+        "id": 1,
+        "name": "重庆银谷酒店管理有限公司",
+        "parentid": 0,
+        "order": 100000000
+    },
+    {
+        "id": 2,
+        "name": "采购中心",
+        "parentid": 1,
+        "order": 100000000
+    },
+    {
+        "id": 5,
+        "name": "供应商",
+        "parentid": 1,
+        "order": 99995000
+    },
+    {
+        "id": 6,
+        "name": "批发商A",
+        "parentid": 5,
+        "order": 100000000
+    },
+    {
+        "id": 7,
+        "name": "酒店",
+        "parentid": 1,
+        "order": 99996000
+    },
+    {
+        "id": 8,
+        "name": "餐饮部",
+        "parentid": 1,
+        "order": 99999500
+    },
+    {
+        "id": 9,
+        "name": "食堂A",
+        "parentid": 8,
+        "order": 100000000
+    },
+    {
+        "id": 10,
+        "name": "食堂B",
+        "parentid": 8,
+        "order": 99999000
+    },
+    {
+        "id": 11,
+        "name": "食堂C",
+        "parentid": 8,
+        "order": 99998000
+    },
+    {
+        "id": 12,
+        "name": "经营管理部",
+        "parentid": 1,
+        "order": 100001000
+    }
+]

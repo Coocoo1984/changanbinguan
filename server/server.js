@@ -1,12 +1,16 @@
 const path = require('path')
 const express = require('express');
 const cookieParser = require("cookie-parser");
+var request = require('request');
+const bodyParser = require("body-parser");
+const depts = require("./depts.json");
 const fs = require("fs");
 const { createBundleRenderer } = require('vue-server-renderer')
 const app = express();
 
 app.use(express.static('../dist/client'))
 app.use(cookieParser())
+app.use(bodyParser.json());
 const root = path.resolve(__dirname);
 const dist = path.resolve(root, '../', 'dist');
 
@@ -22,41 +26,52 @@ function get_access_token(callback) {
     });
 }
 function getWeiXinBody(url, callback) {
-    if (access_token == "") {
-        get_access_token(() => {
-            request.get(url + "&access_token=" + access_token, callback)
-        })
-    } else {
-        request.get(url + "&access_token=" + access_token, (e, r, b) => {
-            var result = JSON.parse(b);
-            if (result.errcode == 40001 || result.errcode == 42001) {
-                access_token = "";
-                getWeiXinBody(url, callback)
-            } else {
-                callback(e, r, b);
-            }
-        })
+    try {
+        if (access_token == "") {
+            get_access_token(() => {
+                request.get(url + "&access_token=" + access_token, callback)
+            })
+        } else {
+            request.get(url + "&access_token=" + access_token, (e, r, b) => {
+                var result = JSON.parse(b);
+                if (result.errcode == 40001 || result.errcode == 42001) {
+                    access_token = "";
+                    getWeiXinBody(url, callback)
+                } else {
+                    callback(e, r, b);
+                }
+            })
+        }
+    } catch (e) {
+        console.log(e);
+        var err = { errcode: 159, errmsg: e };
+        callback(e, null, JSON.stringify(err));
     }
 }
 function postWeiXinBody(url, params, callback) {
-    if (!access_token) {
-        get_access_token(() => {
+    try {
+        if (!access_token) {
+            get_access_token(() => {
+                request.post(url + "?access_token=" + access_token, {
+                    body: params
+                }, callback)
+            })
+        } else {
             request.post(url + "?access_token=" + access_token, {
                 body: params
-            }, callback)
-        })
-    } else {
-        request.post(url + "?access_token=" + access_token, {
-            body: params
-        }, (e, r, b) => {
-            var result = JSON.parse(b);
-            if (result.errcode == 40001 || result.errcode == 42001) {
-                access_token = "";
-                getWeiXinBody(url, params, callback)
-            } else {
-                callback(b);
-            }
-        })
+            }, (e, r, b) => {
+                var result = JSON.parse(b);
+                if (result.errcode == 40001 || result.errcode == 42001) {
+                    access_token = "";
+                    getWeiXinBody(url, params, callback)
+                } else {
+                    callback(e, r, b);
+                }
+            })
+        }
+    } catch (e) {
+        var err = { errcode: 159, errmsg: e };
+        callback(e, null, JSON.stringify(err));
     }
 }
 app.get("/weixin/*", (req, res) => {
@@ -68,6 +83,47 @@ app.post("/weixin/*", (req, res) => {
     postWeiXinBody("https://qyapi.weixin.qq.com/cgi-bin/" + req.url.replace("/weixin/", ""), JSON.stringify(req.body), (error, response, body) => {
         res.send(body);
     })
+});
+app.get("/wx_login", (req, res) => {
+    var url = encodeURIComponent("http://changan.91ytt.com/wx_auth");
+    res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=ww3589f3907e9ad0e5&redirect_uri=" + url + "&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect")
+});
+app.get("/wx_auth", (req, res) => {
+    if (req.query.code) {
+        getWeiXinBody("https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo?code=" + req.query.code, (e, r, b) => {
+            var result = JSON.parse(b);
+            if (result.errcode != 0) {
+                res.send(result.errmsg);
+                return;
+            }
+            getWeiXinBody("https://qyapi.weixin.qq.com/cgi-bin/user/get?userid=" + result.UserId, (err, _res, body) => {
+                var dept_result = JSON.parse(body);
+                if (dept_result.errcode != 0) {
+                    res.send(dept_result.errmsg);
+                    return;
+                }
+                var dept_id = 0;
+                var dept_name = "";
+                var user_type = "";
+                for (var i in depts) {
+                    var _temp = depts[i];
+                    var _temp_id = dept_result.department.filter(d => d == _temp.id)[0];
+                    if (_temp_id) {
+                        dept_name = _temp.name
+                        dept_id = _temp_id;
+                        switch (_temp.parentid) {
+                            case 2: user_type = "purchase_center"; break;
+                            case 5: user_type = "vendor"; break;
+                            case 8: user_type = "department"; break;
+                        }
+                    }
+                }
+                res.redirect("/login?userID=" + result.UserId + "&deptID=" + dept_id + "&deptName=" + dept_name + "&userType=" + user_type);
+            });
+        })
+    } else {
+        res.send("登陆失败，认证未通过");
+    }
 });
 app.get("*", (req, res) => {
     const renderer = createBundleRenderer(serverBunlder, {
@@ -88,3 +144,4 @@ app.get("*", (req, res) => {
     })
 });
 app.listen(4000)
+app.listen(80)

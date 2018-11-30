@@ -109,6 +109,9 @@ export function createRouter(store) {
             {
                 path: "/stock/add", component: () => import("../views/stock/add")
             },
+            {
+                path: "/login", component: () => import("../views/login/")
+            }
         ]
     });
     router.beforeEach((to, from, next) => {

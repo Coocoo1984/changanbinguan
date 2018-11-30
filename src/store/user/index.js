@@ -1,18 +1,25 @@
+import APi from "../../common/api";
 export default {
     state: {
         userid: "",
         username: "",
-        openid: "",
         deptname: "",
-        deptid: ""
+        deptid: "",
+        userType: ""
     },
     mutations: {
-        updateUser(state, user) {
+        setUser(state, user) {
             state.userid = user.userid;
             state.username = user.username;
-            state.openid = user.openid;
             state.deptname = user.deptname;
             state.deptid = user.deptid;
+            state.userType = user.userType;
+        }
+    },
+    actions: {
+        updateUser({ state, commit }, user) {
+            commit("setUser", user);
+            
         }
     }
 }
