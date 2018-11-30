@@ -127,7 +127,7 @@ export default {
     },
     load() {
       this.$GET(
-        "PurchasingOrderList/GetPurchasingOrderList4Vendor?vendorID=" +
+        "PurchasingOrderList4Vendor?vendorID=" +
           this.vendorID
       ).then(r => {
         this.datas = r.data;

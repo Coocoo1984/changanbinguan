@@ -31,7 +31,7 @@ export default {
   methods: {
     load() {
       this.$GET(
-        "QuoteDetailList4Vendor2Quote/GetDetailByQuoteID?quoteID=" +
+        "GetDetailByQuoteID?quoteID=" +
           this.quoteID
       ).then(r => {
         for (var i of r.data) {

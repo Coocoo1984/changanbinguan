@@ -1,8 +1,8 @@
 import Axios from "axios";
 var axios = Axios.create()
 var config = {
-    getURL: "http://localhost:5000/api/",
-    updateURL: "http://localhost:50001/api/",
+    getURL: "http://149.28.86.210:5000/api/",
+    updateURL: "http://149.28.86.210:50001/api/",
 }
 
 export default {

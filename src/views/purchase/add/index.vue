@@ -52,7 +52,7 @@ export default {
         this.$UPDATE("PurchasingPlan/Update", {
           ID: this.purchaseID,
           UserID: 1,
-          Details: this.submitData
+          Details: this.submitData,
         }).then(r => {
           this.$router.push("/purchase/list");
         });
