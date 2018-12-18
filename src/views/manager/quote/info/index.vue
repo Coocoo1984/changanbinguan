@@ -35,20 +35,9 @@
       </div>
       <div class="weui-cells__title">提供商品</div>
       <div class="weui-cells weui-cells_checkbox">
-        <label
-          v-for="(item,index) in categoryList"
-          :key="index"
-          class="weui-cell weui-check__label"
-          :for="item.name"
-        >
+        <label v-for="(item,index) in categoryList" :key="index" class="weui-cell weui-check__label" :for="item.name">
           <div class="weui-cell__hd">
-            <input
-              type="checkbox"
-              class="weui-check"
-              :value="item.id"
-              v-model="select_ids"
-              :id="item.name"
-            >
+            <input type="checkbox" class="weui-check" :value="item.id" v-model="select_ids" :id="item.name">
             <i class="weui-icon-checked"></i>
           </div>
           <div class="weui-cell__bd">
@@ -90,7 +79,7 @@ export default {
       if (this.isAdd) {
         this.$UPDATE("Vendor/Update", {
           ID: this.vendor.id,
-          Code: this.user.userid,
+          Code: this.id,
           Name: this.name,
           Mobile: this.vendor.mobile,
           Address: this.vendor.address,
@@ -99,7 +88,7 @@ export default {
       } else {
         this.$UPDATE("Vendor/Add", {
           Name: this.name,
-          Code: this.user.userid,
+          Code: this.user.id,
           Mobile: this.user.mobile,
           Address: this.vendor.address,
           GoodsClassIDs: this.select_ids
@@ -116,7 +105,7 @@ export default {
       WeiXin.GetUser(this.id)
         .then(r => {
           this.user = r.data.userlist[0];
-          return this.$UPDATE_GET("Vendor/Get?id=" + this.user.userid);
+          return this.$UPDATE_GET("Vendor/Get?name=" + this.name);
         })
         .then(r => {
           if (r.data.data != null) {

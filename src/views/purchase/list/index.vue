@@ -2,27 +2,19 @@
   <div>
     <div class="weui-tab">
       <div class="weui-navbar">
-        <div class="weui-navbar__item" @click="status=1" :class="[status==1?'weui-bar__item_on':'']">
-          未确认
-        </div>
-        <div class="weui-navbar__item" @click="status=2" :class="[status==2?'weui-bar__item_on':'']">
-          已确认
-        </div>
-        <div class="weui-navbar__item" @click="status=3" :class="[status==3?'weui-bar__item_on':'']">
-          需修改
-        </div>
+        <div class="weui-navbar__item" @click="status=1" :class="[status==1?'weui-bar__item_on':'']">未确认</div>
+        <div class="weui-navbar__item" @click="status=2" :class="[status==2?'weui-bar__item_on':'']">已确认</div>
+        <div class="weui-navbar__item" @click="status=3" :class="[status==3?'weui-bar__item_on':'']">需修改</div>
       </div>
       <div class="weui-tab__panel">
         <!-- <purchase-list v-infinite-scroll="load" infinite-scroll-disabled="busy" infinite-scroll-distance="20" @click="click" :datas="list"></purchase-list> -->
-         <div class="weui-cells">
-            <a v-infinite-scroll="load" infinite-scroll-disabled="busy" infinite-scroll-distance="20" @click="click(item)" v-for="(item,index) in list" :key="index" class="weui-cell weui-cell_access" href="javascript:;">
-                <div class="weui-cell__bd">
-                    <p>{{item.name|| "采购单"}}</p>
-                </div>
-                <div class="weui-cell__ft">
-                   {{item.item_count}}个项目
-                </div>
-            </a>
+        <div class="weui-cells">
+          <a v-infinite-scroll="load" infinite-scroll-disabled="busy" infinite-scroll-distance="20" @click="click(item)" v-for="(item,index) in list" :key="index" class="weui-cell weui-cell_access" href="javascript:;">
+            <div class="weui-cell__bd">
+              <p>{{item.name|| "采购单"}}</p>
+            </div>
+            <div class="weui-cell__ft">{{item.item_count}}个项目</div>
+          </a>
         </div>
       </div>
     </div>
@@ -71,6 +63,10 @@ export default {
                 IDs: [item.id],
                 UserID: 1
               }).then(r => {
+                if (r.result == 1) {
+                  this.$succecs(true);
+                  this.$SendDeptMsg("http://changan.91ytt.com/", 2, "有新的采购订单需要初审", this.$Now(), "有新的采购订单需要初审");
+                }
                 this.load();
               });
             });

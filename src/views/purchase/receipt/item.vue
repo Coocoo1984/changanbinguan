@@ -8,14 +8,9 @@
             <p>{{item.goods_name}}</p>
           </div>
           <div class="weui-cell__ft">
-            <input
-              style="text-align:right;"
-              class="weui-input"
-              v-model="item.actual_count"
-              type="number"
-            >
+            <input style="text-align:right;" class="weui-input" v-model="item.actual_count" type="number">
           </div>
-          <div class="weui-cell__ft" style="padding-left:10px">    {{  item.goods_unit_name}}</div>
+          <div class="weui-cell__ft" style="padding-left:10px">{{ item.goods_unit_name}}</div>
         </div>
       </div>
     </div>
@@ -55,6 +50,8 @@ export default {
             ActualCount: e.actual_count
           };
         })
+      }).then(r => {
+        if (r.data.result == 1) this.$succecs(true);
       });
     },
     confim() {
@@ -64,6 +61,7 @@ export default {
         UserID: 1,
         Desc: ""
       }).then(r => {
+        if (r.data.result == 1) this.$succecs(true);
         this.$router.push("/purchase");
       });
     }

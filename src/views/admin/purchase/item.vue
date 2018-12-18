@@ -14,11 +14,7 @@
         <div class="weui-flex">
           <div class="weui-flex__item">
             <div class="weui-btn-area">
-              <a
-                @click="Aduit"
-                class="weui-btn weui-btn_primary"
-                href="javascript:"
-              >{{status==1?'初审通过':'复审确认'}}</a>
+              <a @click="Aduit" class="weui-btn weui-btn_primary" href="javascript:">{{status==1?'初审通过':'复审确认'}}</a>
             </div>
           </div>
           <div class="weui-flex__item">
@@ -30,17 +26,7 @@
       </div>
     </div>
     <template v-for="gc in goods_class">
-      <preview
-        v-if="getGoods(gc.id).length>0"
-        :key="gc.name"
-        style="margin-top:10px"
-        static
-        :title="'采购单项目（'+getGoods(gc.id).length+'）：'+gc.name"
-        @handler="SelectQuoter(gc.id)"
-        :btnGray="btnGray"
-        :btnText="btnText"
-        :datas="getGoods(gc.id)"
-      ></preview>
+      <preview v-if="getGoods(gc.id).length>0" :key="gc.name" style="margin-top:10px" static :title="'采购单项目（'+getGoods(gc.id).length+'）：'+gc.name" @handler="SelectQuoter(gc.id)" :btnGray="btnGray" :btnText="btnText" :datas="getGoods(gc.id)"></preview>
     </template>
   </div>
 </template>
@@ -63,7 +49,8 @@ export default {
         path: "/adm/purchase/back",
         query: {
           id: this.id,
-          status: this.planStatus
+          status: this.planStatus,
+          deptID: this.code
         }
       });
     },
@@ -116,6 +103,16 @@ export default {
           Result: true,
           UserID: 1
         }).then(r => {
+          if (r.data.result == 1) {
+            this.$succecs(true);
+            this.$SendDeptMsg(
+              "http://changan.91ytt.com/",
+              this.code,
+              "采购订单已通过初审",
+              this.$Now(),
+              "采购订单已通过初审"
+            );
+          }
           if (r.data.result == 1) this.$router.go(-1);
         });
       } else {
@@ -125,7 +122,18 @@ export default {
           Result: true,
           UserID: 1
         }).then(r => {
-          if (r.result == 1) this.$router.go(-1);
+          if (r.data.result == 1) {
+            this.$succecs(true);
+            this.$SendDeptMsg(
+              "http://changan.91ytt.com/",
+              this.code,
+              "采购订单已通过审核",
+              this.$Now(),
+              "采购订单已通过审核"
+            );
+          }
+
+          if (r.data.result == 1) this.$router.go(-1);
         });
       }
     },
@@ -176,6 +184,9 @@ export default {
     },
     planStatus() {
       return this.$route.query.plan;
+    },
+    code() {
+      return this.$route.query.code;
     }
   },
   activated() {

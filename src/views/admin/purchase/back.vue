@@ -1,18 +1,20 @@
 <template>
-    <div>
-        <div class="weui-cells__title">退回理由</div>
-        <div class="weui-cells weui-cells_form">
-            <div class="weui-cell">
-                <div class="weui-cell__bd">
-                    <textarea v-model="text" class="weui-textarea" placeholder="请输入文本" rows="3"></textarea>
-                    <div class="weui-textarea-counter"><span>{{text.length}}</span>/200</div>
-                </div>
-            </div>
+  <div>
+    <div class="weui-cells__title">退回理由</div>
+    <div class="weui-cells weui-cells_form">
+      <div class="weui-cell">
+        <div class="weui-cell__bd">
+          <textarea v-model="text" class="weui-textarea" placeholder="请输入文本" rows="3"></textarea>
+          <div class="weui-textarea-counter">
+            <span>{{text.length}}</span>/200
+          </div>
         </div>
-        <div class="weui-btn-area">
-            <a class="weui-btn weui-btn_primary" @click="submit" href="javascript:">确定</a>
-        </div>
+      </div>
     </div>
+    <div class="weui-btn-area">
+      <a class="weui-btn weui-btn_primary" @click="submit" href="javascript:">确定</a>
+    </div>
+  </div>
 </template>
 <script>
 import WeiXin from "@/common/weixin";
@@ -35,7 +37,7 @@ export default {
           return WeiXin.SendMessageToUsers(
             this.access_token,
             "http://" + window.location.host + "/purchase",
-            this.userID,
+            this.deptID,
             "采购单已经被退回",
             date.getFullYear() +
               "年" +
@@ -62,8 +64,8 @@ export default {
     access_token() {
       return this.$store.state.WeiXin.access_token;
     },
-    userID() {
-      return this.$route.query.userID;
+    deptID() {
+      return this.$route.query.deptID;
     }
   },
   mounted() {

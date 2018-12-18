@@ -1,15 +1,18 @@
 <template>
   <div id="app" class="page">
     <div class="vux-header" style="width: 100%; position: absolute; left: 0px; top: 0px; z-index: 100;">
-      <div v-if="showBack" class="vux-header-left" @click="Back"><a class="vux-header-back"></a>
+      <div v-if="showBack" class="vux-header-left" @click="Back">
+        <a class="vux-header-back"></a>
         <div class="left-arrow"></div>
       </div>
-      <h1 class="vux-header-title"><span>采购管理系统</span></h1>
+      <h1 class="vux-header-title">
+        <span>采购管理系统</span>
+      </h1>
     </div>
     <div class="body">
-        <keep-alive>
-          <router-view></router-view>
-        </keep-alive>
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
     </div>
   </div>
 </template>

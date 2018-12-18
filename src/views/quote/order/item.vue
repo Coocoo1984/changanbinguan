@@ -9,21 +9,21 @@
       <div class="weui-form-preview__bd">
         <div class="weui-form-preview__item">
           <label class="weui-form-preview__label">订单方：</label>
-          <span class="weui-form-preview__value text-left">XXXXX食堂</span>
+          <span class="weui-form-preview__value text-left">{{dept.name}}</span>
         </div>
         <div class="weui-form-preview__item">
           <label class="weui-form-preview__label">订单日期：</label>
-          <span class="weui-form-preview__value text-left">2018-11-13 12:23</span>
+          <span class="weui-form-preview__value text-left">{{time}}</span>
         </div>
         <div class="weui-form-preview__item">
           <label class="weui-form-preview__label">联系电话：</label>
           <span class="weui-form-preview__value text-left">
-            <a href="tel:13600000000">13600000000</a>
+            <a :href="'tel:'+dept.mobile">{{dept.mobile}}</a>
           </span>
         </div>
         <div class="weui-form-preview__item">
           <label class="weui-form-preview__label">地址：</label>
-          <span class="weui-form-preview__value text-left">XXXXXXXXXXXXXXXXXXX</span>
+          <span class="weui-form-preview__value text-left">{{dept.address}}</span>
         </div>
       </div>
     </div>
@@ -37,10 +37,7 @@
           <h4 class="weui-media-box__title">{{i.goods_name}}</h4>
           <p class="weui-media-box__desc">
             数量：{{i.count}}{{i.goods_unit_name}}
-            <span
-              v-if="status>3"
-              class="number red"
-            >实收：{{i.actual_count}}{{i.goods_unit_name}}</span>
+            <span v-if="status>3" class="number red">实收：{{i.actual_count}}{{i.goods_unit_name}}</span>
           </p>
         </div>
       </div>
@@ -55,7 +52,8 @@ import Vue from "vue";
 export default {
   data() {
     return {
-      datas: {}
+      datas: {},
+      dept: {}
     };
   },
   computed: {
@@ -64,6 +62,12 @@ export default {
     },
     id() {
       return this.$route.query.id;
+    },
+    deptID() {
+      return this.$route.query.deptID;
+    },
+    time() {
+      return this.$route.query.time;
     },
     btnText() {
       return this.status == 1 ? "确认订单" : this.status == 3 ? "确认发货" : "";
@@ -78,6 +82,7 @@ export default {
           UserID: 1,
           Desc: ""
         }).then(r => {
+          if (r.data.result == 1) this.$succecs(true);
           this.$router.go(-1);
         });
       } else if (this.status == 3) {
@@ -87,6 +92,7 @@ export default {
           UserID: 1,
           Desc: ""
         }).then(r => {
+          if (r.data.result == 1) this.$succecs(true);
           this.$router.go(-1);
         });
       }
@@ -102,6 +108,9 @@ export default {
           }
         }
       );
+      this.$UPDATE_GET("Department/Get?id=" + this.deptID).then(r => {
+        this.dept = r.data.data;
+      });
     }
   },
   activated() {

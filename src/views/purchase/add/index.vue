@@ -1,7 +1,8 @@
 <template>
   <div>
     <div class="weui-panel weui-panel_access">
-      <div class="weui-panel__hd">采购单 ({{datas.length}})项目：
+      <div class="weui-panel__hd">
+        采购单 ({{datas.length}})项目：
         <span class="add_btn" @click="addItems(0)">+新增采购项</span>
       </div>
       <div class="weui-panel__bd">
@@ -15,7 +16,9 @@
         </a>
       </div>
       <div class="weui-panel__ft">
-        <div style="padding:10px"><a href="javascript:;" @click="submit" class="weui-btn weui-btn_primary">新增采购单</a></div>
+        <div style="padding:10px">
+          <a href="javascript:;" @click="submit" class="weui-btn weui-btn_primary">新增采购单</a>
+        </div>
       </div>
     </div>
   </div>
@@ -51,18 +54,20 @@ export default {
         //更新
         this.$UPDATE("PurchasingPlan/Update", {
           ID: this.purchaseID,
-          UserID: 1,
-          Details: this.submitData,
+          UserID: this.$store.state.User.userid,
+          Details: this.submitData
         }).then(r => {
+          if (r.data.result == 1) this.$succecs(true);
           this.$router.push("/purchase/list");
         });
       } else {
         this.$UPDATE("PurchasingPlan/Add", {
-          DepartmentID: 1,
+          DepartmentID: this.$store.state.User.deptid,
           BizTypeID: 1,
           Details: this.submitData,
-          CreateUserID: 1
+          CreateUserID: this.$store.state.User.userid
         }).then(r => {
+          if (r.data.result == 1) this.$succecs(true);
           this.$router.push("/purchase/list");
         });
       }

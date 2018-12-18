@@ -53,6 +53,9 @@ export function createRouter(store) {
                 path: "/manager/quote", component: () => import("../views/manager/quote")
             },
             {
+                path: "/manager/statistics", component: () => import("../views/manager/statistics")
+            },
+            {
                 path: "/manager/quote/info", component: () => import("../views/manager/quote/info")
             },
             {

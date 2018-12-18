@@ -37,6 +37,7 @@
       <grid-item name="采购类目" @click="toManager('commodity/category')"></grid-item>
       <grid-item name="采购项目" @click="toManager('commodity')"></grid-item>
       <grid-item name="供应商" @click="toManager('quote')"></grid-item>
+      <grid-item name="采购部" @click="toManager('purchase')"></grid-item>
     </div>
   </div>
 </template>
@@ -76,10 +77,9 @@ export default {
     },
     toStatistics(style) {
       this.$router.push({
-        path: "/purchase/statistics",
+        path: "/manager/statistics",
         query: {
-          style: style,
-          show: 1
+
         }
       });
     },

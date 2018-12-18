@@ -2,7 +2,7 @@
     <div v-if="show">
         <div class="weui-mask_transparent"></div>
         <div class="weui-toast">
-            <i class="weui-loading weui-icon_toast"></i>
+            <i class="weui-icon_toast" :class="[cls]"></i>
             <p class="weui-toast__content">{{message}}</p>
         </div>
     </div>
@@ -18,6 +18,10 @@ export default {
     message: {
       type: String,
       default: "数据加载中"
+    },
+    cls:{
+      type:String,
+      default:"weui-loading" //weui-icon-success-no-circle 
     }
   }
 };

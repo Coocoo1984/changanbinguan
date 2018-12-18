@@ -9,8 +9,7 @@
         <div class="weui-cell__bd">
           <select v-model="type">
             <option value="0">全部</option>
-            <option value="1">食材</option>
-            <option value="2">办公用品</option>
+            <option v-for="(item,index) in bizTypes" :value="item.biz_type_id" :key="index">{{item.biz_type_name}}</option>
           </select>
         </div>
       </div>
@@ -29,35 +28,16 @@
           </div>
         </div>
       </div>
-      <div class="weui-cell">
-        <div class="weui-cell__hd">
-          <label class="weui-label">订单状态：</label>
-        </div>
-        <div class="weui-cell__bd">
-          <select v-model="status">
-            <option value="0">全部</option>
-            <option value="1">食材</option>
-            <option value="2">办公用品</option>
-          </select>
-        </div>
-      </div>
       <div class="weui-btn-area">
         <a class="weui-btn weui-btn_primary" href="javascript:" @click="load">查询筛选</a>
       </div>
     </div>
     <div class="weui-panel__hd">订单列表：</div>
     <div class="weui-panel__bd">
-      <div
-        v-for="(item,index) in datas"
-        :key="index"
-        @click="click(item)"
-        class="weui-media-box weui-media-box_text"
-      >
+      <div v-for="(item,index) in datas" :key="index" @click="click(item)" class="weui-media-box weui-media-box_text">
         <h4 class="weui-media-box__title">
           [{{getStatus(item.purchasing_order_state_id)}}] {{item.department_name||"订货单"}}
-          <span
-            class="desc"
-          >{{item.po_item_count||0}} 项</span>
+          <span class="desc">{{item.po_item_count||0}} 项</span>
         </h4>
         <p class="weui-media-box__desc">{{item.purchasing_order_create_time}}</p>
       </div>
@@ -73,9 +53,13 @@ export default {
       status: "0",
       startDate: "2018-11-11",
       endDate: "2018-11-30",
-      vendorID: 3,
       datas: []
     };
+  },
+  computed: {
+    bizTypes() {
+      return this.$store.state.Home.bizTypes;
+    }
   },
   methods: {
     selectStartDate() {
@@ -121,14 +105,21 @@ export default {
         path: "/quote/order/item",
         query: {
           id: item.po_id,
-          status: item.purchasing_order_state_id
+          status: item.purchasing_order_state_id,
+          deptID: item.department_id,
+          time:item.purchasing_order_create_time.split(".")[0]
         }
       });
     },
     load() {
       this.$GET(
         "PurchasingOrderList4Vendor?vendorID=" +
-          this.vendorID
+          this.$store.state.User.deptid +
+          (this.type == 0 ? "" : "&bizTypeID=" + this.type) +
+          "&startTime=" +
+          this.startDate +
+          "&endTime=" +
+          this.endDate
       ).then(r => {
         this.datas = r.data;
       });
@@ -136,6 +127,11 @@ export default {
   },
   mounted() {
     //this.load();
+    var date = new Date();
+    var year = date.getFullYear();
+    var mouth = date.getMonth() + 1;
+    this.startDate = year + "-" + (mouth - 2) + "-1";
+    this.endDate = year + "-" + mouth + "-30";
   }
 };
 </script>

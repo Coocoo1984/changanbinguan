@@ -64,8 +64,8 @@ export default {
         this.$UPDATE("Quote/Add", {
           BizTypeID: 1,
           Details: this.goods.filter(i => i.Price),
-          VendorID: this.vendorID,
-          Name: "供货商",
+          VendorID: this.$store.state.User.deptid,
+          Name: this.$store.state.User.username,
           Code: "xxx"
         }).then(r => {
           this.$loading(false);

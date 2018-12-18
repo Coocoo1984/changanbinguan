@@ -1,12 +1,6 @@
  <template>
   <!-- <cells :datas="list" @item-click="click"></cells> -->
-  <purchase-list
-    v-infinite-scroll="load"
-    infinite-scroll-disabled="busy"
-    infinite-scroll-distance="10"
-    @click="click"
-    :datas="datas"
-  ></purchase-list>
+  <purchase-list v-infinite-scroll="load" infinite-scroll-disabled="busy" infinite-scroll-distance="10" @click="click" :datas="datas"></purchase-list>
 </template>
 
  <script>
@@ -40,7 +34,8 @@ export default {
           status: this.status,
           planStatus: item.purchasing_state_id,
           count: item.item_count,
-          title: item.name || "采购单"
+          title: item.name || "采购单",
+          code: item.deptCode
         }
       });
     },
@@ -69,7 +64,8 @@ export default {
               status: i.purchasing_state_id,
               item_count: i.item_count,
               purchasing_state_id: i.purchasing_state_id,
-              id: i.purchasing_plan_id || i.id
+              id: i.purchasing_plan_id || i.id,
+              deptCode: i.department_code
             });
           }
           this.$loading(false);
