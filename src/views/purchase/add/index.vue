@@ -54,7 +54,7 @@ export default {
         //更新
         this.$UPDATE("PurchasingPlan/Update", {
           ID: this.purchaseID,
-          UserID: this.$store.state.User.userid,
+          UserID: 1,
           Details: this.submitData
         }).then(r => {
           if (r.data.result == 1) this.$succecs(true);
@@ -65,7 +65,7 @@ export default {
           DepartmentID: this.$store.state.User.deptid,
           BizTypeID: 1,
           Details: this.submitData,
-          CreateUserID: this.$store.state.User.userid
+          CreateUserID: 1
         }).then(r => {
           if (r.data.result == 1) this.$succecs(true);
           this.$router.push("/purchase/list");

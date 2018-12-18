@@ -116,15 +116,15 @@ app.get("/wx_login", (req, res) => {
   var url = encodeURIComponent("http://changan.91ytt.com/wx_auth");
   res.redirect(
     "https://open.weixin.qq.com/connect/oauth2/authorize?appid=ww3589f3907e9ad0e5&redirect_uri=" +
-      url +
-      "&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
+    url +
+    "&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
   );
 });
 app.get("/wx_auth", (req, res) => {
   if (req.query.code) {
     getWeiXinBody(
       "https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo?code=" +
-        req.query.code,
+      req.query.code,
       (e, r, b) => {
         var result = JSON.parse(b);
         if (result.errcode != 0) {
@@ -133,16 +133,16 @@ app.get("/wx_auth", (req, res) => {
         }
         getWeiXinBody(
           "https://qyapi.weixin.qq.com/cgi-bin/user/get?userid=" +
-            result.UserId,
+          result.UserId,
           (err, _res, body) => {
             var dept_result = JSON.parse(body);
             if (dept_result.errcode != 0) {
               res.send(dept_result.errmsg);
               return;
             }
-            var dept_id = 0;
-            var dept_name = "";
-            var user_type = "";
+            var dept_id = [];
+            var dept_name = [];
+            var user_type = [];
             var user_name = "";
             for (var i in depts) {
               var _temp = depts[i];
@@ -150,33 +150,33 @@ app.get("/wx_auth", (req, res) => {
                 d => d == _temp.id
               )[0];
               if (_temp_id) {
-                dept_name = _temp.name;
-                dept_id = _temp_id;
+                dept_name.push(_temp.name);
+                dept_id.push(_temp_id);
                 user_name = _temp.name;
                 switch (_temp.parentid) {
                   case 2:
-                    user_type = "purchase_center";
+                    user_type.push("purchase_center");
                     break;
                   case 5:
-                    user_type = "vendor";
+                    user_type.push("vendor");
                     break;
                   case 8:
-                    user_type = "department";
+                    user_type.push("department");
                     break;
                 }
               }
             }
             res.redirect(
               "/login?userID=" +
-                result.UserId +
-                "&deptID=" +
-                dept_id +
-                "&userName=" +
-                user_name +
-                "&deptName=" +
-                dept_name +
-                "&userType=" +
-                user_type
+              result.UserId +
+              "&deptID=" +
+              dept_id.join(",") +
+              "&userName=" +
+              user_name +
+              "&deptName=" +
+              dept_name.join(",") +
+              "&userType=" +
+              user_type.join(",")
             );
           }
         );
@@ -186,6 +186,9 @@ app.get("/wx_auth", (req, res) => {
     res.send("登陆失败，认证未通过");
   }
 });
+app.options("*",(req,res)=>{
+  res.sendStatus(204);
+})
 app.get("*.txt", (req, res) => {
   res.send("AO9QrssgBt1gs08q");
 });

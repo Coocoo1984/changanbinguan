@@ -66,7 +66,7 @@ export default {
   width: 30px;
   height: 30px;
   top: 8px;
-  left: -1px;
+  left: 10px;
 }
 .vux-header .vux-header-left .left-arrow:before {
   content: "";

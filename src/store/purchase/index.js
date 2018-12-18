@@ -23,7 +23,12 @@ export default {
     },
     mutations: {
         pushAddData(state, item) {
-            state.add_datas.push(item);
+            var m = state.add_datas.filter(i => i.goods_id == item.goods_id);
+            if (m.length > 0) {
+                m[0].count = parseInt(m[0].count) + parseInt(item.count);
+            } else {
+                state.add_datas.push(item);
+            }
         },
         removeAddData(state, index) {
             Vue.delete(state.add_datas, index);

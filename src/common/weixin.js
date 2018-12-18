@@ -1,5 +1,5 @@
 import Axios from "axios";
-var config = "http://changan.91ytt.com/weixin/";
+var config = "http://localhost:8080/weixin/";
 var apentid = "1000003"
 export default {
     GetAccessToken() {
@@ -26,7 +26,7 @@ export default {
     },
     SendMessageToDepartment(url, department_id, title, time, content) {
         return Axios.post(config + "message/send", {
-            "toparty": department_id,
+            "touser": department_id,
             "msgtype": "textcard",
             "agentid": apentid,
             "textcard": {

@@ -5,7 +5,7 @@ export default {
     username: "11",
     deptname: "aa",
     deptid: "1",
-    userType: "",
+    userType: "purchase_center",
     code: "1"
   },
   mutations: {
