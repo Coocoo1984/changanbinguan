@@ -69,6 +69,7 @@ export default {
           if (r.data.data && r.data.data.id) {
             return r.data;
           } else {
+            //this.$dialog("test",r.data.)
             return false;
           }
         })
@@ -158,7 +159,12 @@ export default {
       }
     }
   },
-  mounted() {}
+  mounted() {
+    
+    if (this.userType.length == 1 && this.deptName.length == 1) {
+      this.click(this.deptName[0], this.userType[0]);
+    }
+  }
 };
 </script>
 

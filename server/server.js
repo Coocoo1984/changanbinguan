@@ -1,4 +1,4 @@
-const path = require("path");
+﻿const path = require("path");
 const express = require("express");
 const cookieParser = require("cookie-parser");
 var request = require("request");
@@ -150,19 +150,24 @@ app.get("/wx_auth", (req, res) => {
                 d => d == _temp.id
               )[0];
               if (_temp_id) {
-                dept_name.push(_temp.name);
-                dept_id.push(_temp_id);
                 user_name = _temp.name;
-                switch (_temp.parentid) {
-                  case 2:
-                    user_type.push("purchase_center");
-                    break;
-                  case 5:
-                    user_type.push("vendor");
-                    break;
-                  case 8:
-                    user_type.push("department");
-                    break;
+                if (_temp_id == 2) {
+                  dept_name.push(_temp.name);
+                  dept_id.push(_temp_id);
+                  user_type.push("purchase_center");
+                } else {
+                  switch (_temp.parentid) {
+                    case 5:
+                      dept_name.push(_temp.name);
+                      dept_id.push(_temp_id);
+                      user_type.push("vendor");
+                      break;
+                    case 8:
+                      dept_name.push(_temp.name);
+                      dept_id.push(_temp_id);
+                      user_type.push("department");
+                      break;
+                  }
                 }
               }
             }
@@ -186,7 +191,7 @@ app.get("/wx_auth", (req, res) => {
     res.send("登陆失败，认证未通过");
   }
 });
-app.options("*",(req,res)=>{
+app.options("*", (req, res) => {
   res.sendStatus(204);
 })
 app.get("*.txt", (req, res) => {
@@ -214,4 +219,3 @@ app.get("*", (req, res) => {
     });
 });
 app.listen(4000);
-app.listen(80);

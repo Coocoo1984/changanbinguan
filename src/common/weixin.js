@@ -1,5 +1,5 @@
 import Axios from "axios";
-var config = "http://localhost:8080/weixin/";
+var config = "http://changan.91ytt.com/weixin/";
 var apentid = "1000003"
 export default {
     GetAccessToken() {
