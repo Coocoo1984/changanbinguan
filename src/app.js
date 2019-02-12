@@ -1,6 +1,6 @@
 import "@/assects/css/rest.css";
 import "@/assects/css/weiui.css";
-
+import "@/assects/fonts/iconfont.css";
 import Vue from "vue";
 import App from "./app.vue";
 import { createStore } from "./store";

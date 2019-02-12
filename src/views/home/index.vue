@@ -25,19 +25,19 @@
     </div>
     <div class="weui-cells__title">采购管理</div>
     <div class="weui-grids">
-      <grid-item name="初审采购" @click="toPurchase(1)"></grid-item>
-      <grid-item name="报价管理" @click="toQuote"></grid-item>
-      <grid-item name="复审采购" @click="toPurchase(2)"></grid-item>
-      <grid-item name="采购进度" @click="toPurchaseList()"></grid-item>
-      <grid-item name="统计查询" @click="toStatistics(1)"></grid-item>
-      <grid-item name="报表下载" @click="toStatistics(2)"></grid-item>
+      <grid-item name="初审采购" @click="toPurchase(1)" icon="ios-pricetags"></grid-item>
+      <grid-item name="报价管理" @click="toQuote" icon="ios-locate "></grid-item>
+      <grid-item name="复审采购" @click="toPurchase(2)" icon="ios-paper "></grid-item>
+      <grid-item name="采购进度" @click="toPurchaseList()" icon="ios-play "></grid-item>
+      <grid-item name="统计查询" @click="toStatistics(1)" icon="ios-podium "></grid-item>
+      <grid-item name="报表下载" @click="toStatistics(2)" icon="ios-cloud-download "></grid-item>
     </div>
     <div class="weui-cells__title">基础设置</div>
     <div class="weui-grids">
-      <grid-item name="采购类目" @click="toManager('commodity/category')"></grid-item>
-      <grid-item name="采购项目" @click="toManager('commodity')"></grid-item>
-      <grid-item name="供应商" @click="toManager('quote')"></grid-item>
-      <grid-item name="采购部" @click="toManager('purchase')"></grid-item>
+      <grid-item name="采购类目" @click="toManager('commodity/category')" icon="ios-list-box"></grid-item>
+      <grid-item name="采购项目" @click="toManager('commodity')" icon="ios-folder"></grid-item>
+      <grid-item name="供应商" @click="toManager('quote')" icon="ios-people"></grid-item>
+      <grid-item name="采购部" @click="toManager('purchase')" icon="ios-business "></grid-item>
     </div>
   </div>
 </template>
@@ -54,7 +54,7 @@ export default {
       return this.$store.state.Home.complete;
     }
   },
-  asyncData({store}) {
+  asyncData({ store }) {
     return store.dispatch("loadHomeCount");
   },
   methods: {
@@ -78,9 +78,7 @@ export default {
     toStatistics(style) {
       this.$router.push({
         path: "/manager/statistics",
-        query: {
-
-        }
+        query: {}
       });
     },
     toManager(item) {
