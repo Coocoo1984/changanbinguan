@@ -1,9 +1,9 @@
 import Axios from "axios";
 var axios = Axios.create();
 var config = {
-  getURL: "http://changan.91ytt.com:5000/api/",
-  updateURL: "http://changan.91ytt.com:50001/api/",
-  export: "http://changan.91ytt.com:5000/export/"
+  getURL: "http://localhost:5000/api/",
+  updateURL: "http://localhost:50001/api/",
+  export: "http://localhost:5000/export/"
 };
 
 export default {

@@ -1,20 +1,7 @@
 <template>
   <div>
     <div class="weui-panel weui-panel_access">
-      <div class="weui-panel__hd">
-        采购单 ({{datas.length}})项目：
-        <span class="add_btn" @click="addItems(0)">+新增采购项</span>
-      </div>
-      <div class="weui-panel__bd">
-        <a v-for="(item,index) in datas" :key="index" @click="addItems(index)" @touchstart="showDeleteButton(index)" @touchend="clearLoop" class="weui-cell weui-media-box weui-media-box_text" href="javascript:;">
-          <div class="weui-cell__bd">
-            <p>{{item.goods_name}}</p>
-          </div>
-          <div class="weui-cell__ft">
-            <p class="num">数量：{{item.count}}{{item.goods_unit_name}}</p>
-          </div>
-        </a>
-      </div>
+      <goods @change="change" :init-data="initData"></goods>
       <div class="weui-panel__ft">
         <div style="padding:10px">
           <a href="javascript:;" @click="submit" class="weui-btn weui-btn_primary">新增采购单</a>
@@ -24,28 +11,30 @@
   </div>
 </template>
 <script>
+import Vue from "vue";
 export default {
   data() {
     return {
       loop: null,
       showAddBox: true,
-      optIndex: -1
+      optIndex: -1,
+      datas: {},
+      initData: {}
     };
   },
   computed: {
-    datas() {
-      return this.$store.state.Purchase.add_datas;
-    },
     purchaseID() {
       return this.$route.query["id"];
     },
     submitData() {
-      return this.datas.map(i => {
-        return {
-          GoodsID: i.goods_id,
-          PurocumentCount: i.count
-        };
-      });
+      var sb = [];
+      for (var k in this.datas) {
+        sb.push({
+          GoodsID: k,
+          PurocumentCount: this.datas[k]
+        });
+      }
+      return sb;
     }
   },
   methods: {
@@ -55,7 +44,12 @@ export default {
         this.$UPDATE("PurchasingPlan/Update", {
           ID: this.purchaseID,
           UserID: 1,
-          Details: this.submitData
+          Details: this.submitData.map(i => {
+            return {
+              GoodsID: i.GoodsID,
+              PurchasingPlanCount: i.PurocumentCount
+            };
+          })
         }).then(r => {
           if (r.data.result == 1) this.$succecs(true);
           this.$router.push("/purchase/list");
@@ -71,8 +65,6 @@ export default {
           this.$router.push("/purchase/list");
         });
       }
-
-      //this.$router.push("/purchase/list");
     },
     addItems(id) {
       this.$router.push({
@@ -102,15 +94,18 @@ export default {
     },
     clearLoop() {
       clearTimeout(this.loop);
+    },
+    change(v) {
+      this.datas = v;
     }
   },
-  mounted() {
+  activated() {
     if (this.purchaseID) {
       this.$GET(
         "PurchasingPlanDetail?purchasingPlanId=" + this.purchaseID
       ).then(r => {
         for (var i of r.data) {
-          this.$store.commit("pushAddData", i);
+          Vue.set(this.initData, i.goods_id, i.count);
         }
       });
     }

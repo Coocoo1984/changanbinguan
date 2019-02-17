@@ -14,7 +14,11 @@
         <div class="weui-flex">
           <div class="weui-flex__item">
             <div class="weui-btn-area">
-              <a @click="Aduit" class="weui-btn weui-btn_primary" href="javascript:">{{status==1?'初审通过':'复审确认'}}</a>
+              <a
+                @click="Aduit"
+                class="weui-btn weui-btn_primary"
+                href="javascript:"
+              >{{status==1?'初审通过':'复审确认'}}</a>
             </div>
           </div>
           <div class="weui-flex__item">
@@ -25,9 +29,15 @@
         </div>
       </div>
     </div>
-    <template v-for="gc in goods_class">
-      <preview v-if="getGoods(gc.id).length>0" :key="gc.name" style="margin-top:10px" static :title="'采购单项目（'+getGoods(gc.id).length+'）：'+gc.name" @handler="SelectQuoter(gc.id)" :btnGray="btnGray" :btnText="btnText" :datas="getGoods(gc.id)"></preview>
-    </template>
+    <preview
+      style="margin-top:10px"
+      static
+      :title="'采购单项目（'+getGoods().length+'）：'"
+      @handler="SelectQuoter()"
+      :btnGray="btnGray"
+      :btnText="btnText"
+      :datas="getGoods()"
+    ></preview>
   </div>
 </template>
 
@@ -55,15 +65,10 @@ export default {
       });
     },
     SelectQuoter(id) {
-      var goods_ids = this.goods
-        .filter(i => i.goods_class_id == id)
-        .map(i => i.goods_id)
-        .join(",");
+      var goods_ids = this.goods.map(i => i.goods_id).join(",");
       this.$GET(
         "PurchasingPlanGoodsClassVendorQuetoSUM?purchasingPlanID=" +
           this.id +
-          "&goodsClassID=" +
-          id +
           "&listIntGoodsIds=" +
           goods_ids
       )
@@ -148,20 +153,18 @@ export default {
         });
     },
     getGoods(class_id) {
-      var m = this.goods
-        .filter(i => i.goods_class_id == class_id)
-        .map(i => {
-          var goods_price = this.goodsPrice.filter(
-            g => g.goods_id == i.goods_id
-          )[0];
+      var m = this.goods.map(i => {
+        var goods_price = this.goodsPrice.filter(
+          g => g.goods_id == i.goods_id
+        )[0];
 
-          var max = goods_price ? goods_price.max_unit_price : "无";
-          var min = goods_price ? goods_price.min_unit_price : "无";
-          return {
-            title: i.goods_name,
-            content: i.count + i.goods_unit_name
-          };
-        });
+        var max = goods_price ? goods_price.max_unit_price : "无";
+        var min = goods_price ? goods_price.min_unit_price : "无";
+        return {
+          title: i.goods_name,
+          content: i.count + i.goods_unit_name
+        };
+      });
       console.log(m);
       return m;
     }
