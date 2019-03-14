@@ -1,9 +1,21 @@
 <template>
   <div class="weui-tab">
     <div class="weui-navbar">
-      <div class="weui-navbar__item" @click="changeStatus(1)" :class="[status==1?'weui-bar__item_on':'']">统计报表</div>
-      <div class="weui-navbar__item" @click="changeStatus(2)" :class="[status==2?'weui-bar__item_on':'']">明细报表</div>
-      <div class="weui-navbar__item" @click="changeStatus(3)" :class="[status==31?'weui-bar__item_on':'']">供应商报表</div>
+      <div
+        class="weui-navbar__item"
+        @click="changeStatus(1)"
+        :class="[status==1?'weui-bar__item_on':'']"
+      >统计报表</div>
+      <div
+        class="weui-navbar__item"
+        @click="changeStatus(2)"
+        :class="[status==2?'weui-bar__item_on':'']"
+      >明细报表</div>
+      <div
+        class="weui-navbar__item"
+        @click="changeStatus(3)"
+        :class="[status==31?'weui-bar__item_on':'']"
+      >供应商报表</div>
     </div>
     <div v-if="status==1" class="weui-tab__panel">
       <div class="weui-cells weui-cells_form">
@@ -25,7 +37,10 @@
           <div class="weui-cell__bd">
             <div class="weui-flex">
               <div class="weui-flex__item">
-                <div class="placeholder" @click="selectStartDate(all.startDate,all)">{{all.startDate}} 到</div>
+                <div
+                  class="placeholder"
+                  @click="selectStartDate(all.startDate,all)"
+                >{{all.startDate}} 到</div>
               </div>
               <div class="weui-flex__item">
                 <div class="placeholder" @click="selectEndDate(all.endDate,all)">{{all.endDate}}</div>
@@ -46,7 +61,11 @@
           </div>
           <div class="weui-cell__bd">
             <select v-model="info.bType">
-              <option v-for="(b,index) in bizType" :value="b.biz_type_id" :key="index">{{b.biz_type_name}}</option>
+              <option
+                v-for="(b,index) in bizType"
+                :value="b.biz_type_id"
+                :key="index"
+              >{{b.biz_type_name}}</option>
             </select>
           </div>
         </div>
@@ -76,7 +95,10 @@
           <div class="weui-cell__bd">
             <div class="weui-flex">
               <div class="weui-flex__item">
-                <div class="placeholder" @click="selectStartDate(info.startDate,info)">{{info.startDate}} 到</div>
+                <div
+                  class="placeholder"
+                  @click="selectStartDate(info.startDate,info)"
+                >{{info.startDate}} 到</div>
               </div>
               <div class="weui-flex__item">
                 <div class="placeholder" @click="selectEndDate(info.endDate,info)">{{info.endDate}}</div>
@@ -97,7 +119,11 @@
           </div>
           <div class="weui-cell__bd">
             <select v-model="vendor.bType">
-              <option v-for="(b,index) in bizType" :value="b.biz_type_id" :key="index">{{b.biz_type_name}}</option>
+              <option
+                v-for="(b,index) in bizType"
+                :value="b.biz_type_id"
+                :key="index"
+              >{{b.biz_type_name}}</option>
             </select>
           </div>
         </div>
@@ -127,10 +153,16 @@
           <div class="weui-cell__bd">
             <div class="weui-flex">
               <div class="weui-flex__item">
-                <div class="placeholder" @click="selectStartDate(vendor.startDate,vendor)">{{vendor.startDate}} 到</div>
+                <div
+                  class="placeholder"
+                  @click="selectStartDate(vendor.startDate,vendor)"
+                >{{vendor.startDate}} 到</div>
               </div>
               <div class="weui-flex__item">
-                <div class="placeholder" @click="selectEndDate(vendor.endDate,vendor)">{{vendor.endDate}}</div>
+                <div
+                  class="placeholder"
+                  @click="selectEndDate(vendor.endDate,vendor)"
+                >{{vendor.endDate}}</div>
               </div>
             </div>
           </div>
@@ -247,10 +279,12 @@ export default {
       this.download(url);
     },
     download(url) {
-      var form = document.createElement("form");
-      form.action = url;
-      document.getElementsByTagName("body")[0].appendChild(form);
-      form.submit();
+      try {
+        var elemIF = document.createElement("iframe");
+        elemIF.src = url;
+        elemIF.style.display = "none";
+        document.body.appendChild(elemIF);
+      } catch (e) {}
     },
     selectStartDate(d, select) {
       this.$picker.show({

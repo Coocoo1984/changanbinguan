@@ -68,7 +68,10 @@ export default {
     }
   },
   mounted() {
-    this.$GET("PurchasingPlanCount4Dept", {}).then(r => {
+    this.$GET(
+      "PurchasingPlanCount4Dept?departmentID=" + this.$store.state.User.deptid,
+      {}
+    ).then(r => {
       this.unComplate = r.data[0].count;
       this.complate = r.data[1].count;
     });

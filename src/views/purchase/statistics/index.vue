@@ -126,13 +126,12 @@ export default {
     download() {
       var url =
         api.CONFIG.getURL +
-        "DepartmentExport/DataTableReport?listDepartmentIDs=" +
+        "export/DataTableReport?listDepartmentIDs=" +
         (this.showUser ? this.dType : this.$store.state.User.deptid) +
         "StartTime=" +
         this.startDate +
         "&EndTime=" +
         this.endDate;
-
       var form = document.createElement("form");
       form.action = url;
       document.getElementsByTagName("body")[0].appendChild(form);

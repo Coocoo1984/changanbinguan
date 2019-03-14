@@ -78,7 +78,7 @@ export default {
     toStatistics(style) {
       this.$router.push({
         path: "/manager/statistics",
-        query: {}
+        query: { s: style }
       });
     },
     toManager(item) {
