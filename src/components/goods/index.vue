@@ -5,7 +5,7 @@
         v-for="b in bizTypes"
         :key="b.biz_type_id"
         :class="b.biz_type_id==current.bizType?'weui-bar__item_on':''"
-        @click="current.bizType=b.biz_type_id"
+        @click="changeBiz(b.biz_type_id)"
         class="weui-navbar__item"
       >{{b.biz_type_name}}</div>
     </div>
@@ -29,7 +29,7 @@
               <input
                 @change="change(g.goods_id,$event.srcElement.value)"
                 type="number"
-                :value="orders[g.goods_id+'']"
+                :value="orders[g.goods_id+'']||0"
               >
               <i @click="changeNumber(g.goods_id,1)" class="iconfont icon-ios-add-circle"></i>
             </div>
@@ -67,6 +67,15 @@ export default {
         }
         this.$emit("change", JSON.parse(JSON.stringify(this.orders)));
       }
+    },
+    initData: {
+      deep: true,
+      handler() {
+        this.orders = JSON.parse(JSON.stringify(this.initData));
+      }
+    },
+    staticBizType() {
+      if (this.staticBizType) this.current.bizType = this.staticBizType;
     }
   },
   methods: {
@@ -81,12 +90,20 @@ export default {
           this.orders[good_id.toString()] ? this.orders[good_id.toString()] : 0
         ) + number
       );
+    },
+    changeBiz(i) {
+      if (this.staticBizType) return;
+      this.current.bizType = i;
     }
   },
   props: {
     initData: {
       type: Object,
       default: () => {}
+    },
+    staticBizType: {
+      type: Number | String,
+      default: ""
     }
   },
   computed: {
@@ -103,15 +120,17 @@ export default {
         i => i.goods_class_id == this.current.goodclass
       );
     }
-  },
-  mounted() {
-    this.orders = this.initData;
   }
 };
 </script>
 
 
 <style>
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0;
+}
 .categroy {
   flex: 1;
 }

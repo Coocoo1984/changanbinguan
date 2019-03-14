@@ -9,6 +9,7 @@ import SelectQuoter from "./select-quoter";
 import Loading from "./loading";
 import PurchaseList from "./purchaseList";
 import Goods from "./goods";
+import vScroll from "./scroll/scroll.vue";
 export function RegisterComponents(Vue) {
   Vue.component("grid-item", GridItem);
   Vue.component("cells", Cells);
@@ -17,6 +18,7 @@ export function RegisterComponents(Vue) {
   Vue.component("panel", Panel);
   Vue.component("purchase-list", PurchaseList);
   Vue.component("goods", Goods);
+  Vue.component("v-scroll", vScroll);
   Vue.use(ActionSheet);
   Vue.use(Dialog);
   Vue.use(Loading);

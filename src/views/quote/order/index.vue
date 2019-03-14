@@ -9,7 +9,11 @@
         <div class="weui-cell__bd">
           <select v-model="type">
             <option value="0">全部</option>
-            <option v-for="(item,index) in bizTypes" :value="item.biz_type_id" :key="index">{{item.biz_type_name}}</option>
+            <option
+              v-for="(item,index) in bizTypes"
+              :value="item.biz_type_id"
+              :key="index"
+            >{{item.biz_type_name}}</option>
           </select>
         </div>
       </div>
@@ -34,10 +38,17 @@
     </div>
     <div class="weui-panel__hd">订单列表：</div>
     <div class="weui-panel__bd">
-      <div v-for="(item,index) in datas" :key="index" @click="click(item)" class="weui-media-box weui-media-box_text">
+      <div
+        v-for="(item,index) in datas"
+        :key="index"
+        @click="click(item)"
+        class="weui-media-box weui-media-box_text"
+      >
         <h4 class="weui-media-box__title">
           [{{getStatus(item.purchasing_order_state_id)}}] {{item.department_name||"订货单"}}
-          <span class="desc">{{item.po_item_count||0}} 项</span>
+          <span
+            class="desc"
+          >{{item.po_item_count||0}} 项</span>
         </h4>
         <p class="weui-media-box__desc">{{item.purchasing_order_create_time}}</p>
       </div>
@@ -107,11 +118,12 @@ export default {
           id: item.po_id,
           status: item.purchasing_order_state_id,
           deptID: item.department_id,
-          time:item.purchasing_order_create_time.split(".")[0]
+          time: item.purchasing_order_create_time.split(".")[0]
         }
       });
     },
     load() {
+      this.$loading(true);
       this.$GET(
         "PurchasingOrderList4Vendor?vendorID=" +
           this.$store.state.User.deptid +
@@ -122,6 +134,7 @@ export default {
           this.endDate
       ).then(r => {
         this.datas = r.data;
+        this.$loading(false);
       });
     }
   },

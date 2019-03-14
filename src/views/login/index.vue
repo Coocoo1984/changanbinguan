@@ -69,7 +69,6 @@ export default {
           if (r.data.data && r.data.data.id) {
             return r.data;
           } else {
-            //this.$dialog("test",r.data.)
             return false;
           }
         })
@@ -77,7 +76,7 @@ export default {
           if (l) return l;
           return this.$UPDATE("Department/Add", {
             WechatID: this.userID,
-            //Code: this.userID,
+            Code: this.userID,
             Name: name,
             Tel: this.user.mobile
           }).then(r => {
@@ -160,7 +159,6 @@ export default {
     }
   },
   mounted() {
-    
     if (this.userType.length == 1 && this.deptName.length == 1) {
       this.click(this.deptName[0], this.userType[0]);
     }

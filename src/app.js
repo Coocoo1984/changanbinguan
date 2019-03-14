@@ -42,7 +42,6 @@ export function createApp() {
     render: h => h(App),
     mounted() {
       this.$loadingInit();
-
       this.$store.dispatch("loadHomeData");
       this.$store.dispatch("loadBizTypes");
       this.$store.dispatch("loadGoods");

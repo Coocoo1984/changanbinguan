@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="weui-panel weui-panel_access">
-      <goods @change="change" :init-data="initData"></goods>
+      <goods @change="change" :init-data="initData" :static-biz-type="staticBizType"></goods>
       <div class="weui-panel__ft">
         <div style="padding:10px">
-          <a href="javascript:;" @click="submit" class="weui-btn weui-btn_primary">新增采购单</a>
+          <a href="javascript:;" @click="submit" class="weui-btn weui-btn_primary">提交信息</a>
         </div>
       </div>
     </div>
@@ -19,8 +19,13 @@ export default {
       showAddBox: true,
       optIndex: -1,
       datas: {},
-      initData: {}
+      initData: {},
+      staticBizType: "",
+      isSubmit: false
     };
+  },
+  asyncData({ store }) {
+    return store.dispatch("loadHomeData");
   },
   computed: {
     purchaseID() {
@@ -35,10 +40,15 @@ export default {
         });
       }
       return sb;
+    },
+    categroys() {
+      return this.$store.state.Home.categoryList;
     }
   },
   methods: {
     submit() {
+      if (this.isSubmit) return;
+      this.isSubmit = true;
       if (this.purchaseID) {
         //更新
         this.$UPDATE("PurchasingPlan/Update", {
@@ -51,16 +61,22 @@ export default {
             };
           })
         }).then(r => {
+          this.isSubmit = false;
           if (r.data.result == 1) this.$succecs(true);
           this.$router.push("/purchase/list");
         });
       } else {
+        if (this.submitData.length <= 0) {
+          this.$warn(true, "不能提交空数据");
+          return;
+        }
         this.$UPDATE("PurchasingPlan/Add", {
           DepartmentID: this.$store.state.User.deptid,
           BizTypeID: 1,
           Details: this.submitData,
           CreateUserID: 1
         }).then(r => {
+          this.isSubmit = false;
           if (r.data.result == 1) this.$succecs(true);
           this.$router.push("/purchase/list");
         });
@@ -100,13 +116,20 @@ export default {
     }
   },
   activated() {
+    this.initData = {};
     if (this.purchaseID) {
       this.$GET(
         "PurchasingPlanDetail?purchasingPlanId=" + this.purchaseID
       ).then(r => {
-        for (var i of r.data) {
-          Vue.set(this.initData, i.goods_id, i.count);
-        }
+        this.$nextTick(() => {
+          for (var i of r.data) {
+            if (!this.staticBizType)
+              this.staticBizType = this.categroys
+                .filter(k => k.id == i.goods_class_id)[0]
+                .biz_type_id.toString();
+            Vue.set(this.initData, i.goods_id, i.count);
+          }
+        });
       });
     }
   }

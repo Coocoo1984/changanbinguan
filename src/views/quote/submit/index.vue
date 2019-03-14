@@ -1,36 +1,43 @@
 <template>
-    <div>
-        <div class="weui-cells__title">筛选项</div>
-        <div class="weui-cells weui-cells_form">
-            <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">采购类型：</label></div>
-                <div class="weui-cell__bd">
-                    <select v-model="goods_class_id">
-                        <option :value="0">全部</option>
-                        <option v-for="(i,index) in goods_class" :key="index" :value="i.id">{{i.name}}</option>
-                    </select>
-                </div>
-            </div>
+  <div>
+    <div class="weui-cells__title">筛选项</div>
+    <div class="weui-cells weui-cells_form">
+      <div class="weui-cell">
+        <div class="weui-cell__hd">
+          <label class="weui-label">采购类型：</label>
         </div>
-        <div class="weui-btn-area">
-            <a class="weui-btn weui-btn_primary" @click="search" href="javascript:">查询筛选</a>
+        <div class="weui-cell__bd">
+          <select v-model="goods_class_id">
+            <option :value="0">全部</option>
+            <option v-for="(i,index) in goods_class" :key="index" :value="i.id">{{i.name}}</option>
+          </select>
         </div>
-        <template v-for="(gc,index) in goods_class_list" v-if="getGoods(gc.id).length>0">
-        <div class="weui-cells__title" :key="'t'+index">采购入库项目({{getGoods(gc.id).length}}): {{gc.name}}</div>
-        <div class="weui-cells weui-cells_form" :key="'item'+index">
-            <div class="weui-cell" v-for="(g,index) in getGoods(gc.id)" :key="index">
-                <div class="weui-cell__hd"><label class="weui-label" style="width:200px">{{g.GoodsName}}</label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" v-model="g.Price" type="number" placeholder="0.00">
-                </div>
-            </div>
-        </div>
-        </template>
-        <div style="padding:55px"></div>
-        <div class="weui-btn-area flex">
-            <a class="weui-btn weui-btn_primary" @click="submit" href="javascript:">提交价格</a>
-        </div>
+      </div>
     </div>
+    <div class="weui-btn-area">
+      <a class="weui-btn weui-btn_primary" @click="search" href="javascript:">查询筛选</a>
+    </div>
+    <template v-for="(gc,index) in goods_class_list" v-if="getGoods(gc.id).length>0">
+      <div
+        class="weui-cells__title"
+        :key="'t'+index"
+      >采购入库项目({{getGoods(gc.id).length}}): {{gc.name}}</div>
+      <div class="weui-cells weui-cells_form" :key="'item'+index">
+        <div class="weui-cell" v-for="(g,index) in getGoods(gc.id)" :key="index">
+          <div class="weui-cell__hd">
+            <label class="weui-label" style="width:200px">{{g.GoodsName}}</label>
+          </div>
+          <div class="weui-cell__bd">
+            <input class="weui-input" v-model="g.Price" type="number" placeholder="0.00">
+          </div>
+        </div>
+      </div>
+    </template>
+    <div style="padding:55px"></div>
+    <div class="weui-btn-area flex">
+      <a class="weui-btn weui-btn_primary" @click="submit" href="javascript:">提交价格</a>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -78,7 +85,9 @@ export default {
     }
   },
   mounted() {
+    this.$loading(true);
     this.$GET("Goods", {}).then(r => {
+      this.$loading(false);
       this.goods = r.data.map(i => {
         return {
           goods_class_id: i.goods_class_id,

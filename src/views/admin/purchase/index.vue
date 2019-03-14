@@ -1,6 +1,9 @@
  <template>
   <!-- <cells :datas="list" @item-click="click"></cells> -->
-  <purchase-list v-infinite-scroll="load" infinite-scroll-disabled="busy" infinite-scroll-distance="10" @click="click" :datas="datas"></purchase-list>
+  <div>
+    <purchase-list @click="click" :datas="datas"></purchase-list>
+    <v-scroll :load="load" :busy="busy" :not-data="page<=1&&datas.length<=0" :more="more"></v-scroll>
+  </div>
 </template>
 
  <script>
@@ -9,7 +12,8 @@ export default {
     return {
       page: 0,
       busy: false,
-      datas: []
+      datas: [],
+      more: true
     };
   },
   computed: {
@@ -17,14 +21,7 @@ export default {
       return this.$route.query.status;
     }
   },
-  watch: {
-    status() {
-      this.datas = [];
-      this.page = 0;
-      this.busy = false;
-      this.load();
-    }
-  },
+  watch: {},
   methods: {
     click(item) {
       this.$router.push({
@@ -40,6 +37,7 @@ export default {
       });
     },
     load() {
+      if (this.busy) return;
       var url =
         this.status == 2
           ? "PurchasingPlanCount4Audit"
@@ -57,9 +55,8 @@ export default {
         this.$GET(url).then(r => {
           for (var i of r.data) {
             this.datas.push({
-              title:
-                i.department_name ||
-                "采购单" + (i.purchasing_plan_code || i.code),
+              title: i.department_name || "采购单",
+              code: i.purchasing_plan_code || i.code,
               slot: i.item_count + "个项目",
               status: i.purchasing_state_id,
               item_count: i.item_count,
@@ -70,6 +67,8 @@ export default {
           }
           this.$loading(false);
           if (r.data.lenght >= 10) this.busy = false;
+          else this.more = false;
+          console.log(this.datas, this.page);
         });
       }
     }

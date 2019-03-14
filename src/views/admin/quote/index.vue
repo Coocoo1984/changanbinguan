@@ -1,9 +1,21 @@
  <template>
   <div class="weui-tab">
     <div class="weui-navbar">
-      <div class="weui-navbar__item" @click="tabChange(1)" :class="[status==1?'weui-bar__item_on':'']">报价筛选</div>
-      <div class="weui-navbar__item" @click="tabChange(2)" :class="[status==2?'weui-bar__item_on':'']">报价单</div>
-      <div class="weui-navbar__item" @click="tabChange(3)" :class="[status==3?'weui-bar__item_on':'']">报价记录</div>
+      <div
+        class="weui-navbar__item"
+        @click="tabChange(1)"
+        :class="[status==1?'weui-bar__item_on':'']"
+      >报价筛选</div>
+      <div
+        class="weui-navbar__item"
+        @click="tabChange(2)"
+        :class="[status==2?'weui-bar__item_on':'']"
+      >报价单</div>
+      <div
+        class="weui-navbar__item"
+        @click="tabChange(3)"
+        :class="[status==3?'weui-bar__item_on':'']"
+      >报价记录</div>
     </div>
     <div v-if="status==1" class="weui-tab__panel">
       <div class="weui-cells weui-cells_form">
@@ -13,7 +25,11 @@
           </div>
           <div class="weui-cell__bd">
             <select v-model="type">
-              <option v-for="(b,index) in bizTypes" :key="index" :value="b.biz_type_id">{{b.biz_type_name}}</option>
+              <option
+                v-for="(b,index) in bizTypes"
+                :key="index"
+                :value="b.biz_type_id"
+              >{{b.biz_type_name}}</option>
             </select>
           </div>
         </div>
@@ -41,7 +57,12 @@
       <div v-for="(q,k) in quote" :key="k" class="weui-panel weui-panel_access">
         <div class="weui-panel__hd">{{k}}（{{q.length}}）</div>
         <div class="weui-panel__bd">
-          <div v-for="(item,index) in q" :key="index" @click="goContent(item)" class="weui-media-box weui-media-box_text">
+          <div
+            v-for="(item,index) in q"
+            :key="index"
+            @click="goContent(item)"
+            class="weui-media-box weui-media-box_text"
+          >
             <h4 class="weui-media-box__title">
               {{item.goods_name}}
               <span class="menmoy">
@@ -56,7 +77,13 @@
     </div>
     <div v-else class="weui-tab__panel">
       <div class="weui-cells__title">近3月供货商报价情况</div>
-      <purchase-list v-infinite-scroll="load" infinite-scroll-disabled="busy" infinite-scroll-distance="10" @click="goQuqter" :datas="quoteList"></purchase-list>
+      <purchase-list
+        v-infinite-scroll="load"
+        infinite-scroll-disabled="busy"
+        infinite-scroll-distance="10"
+        @click="goQuqter"
+        :datas="quoteList"
+      ></purchase-list>
     </div>
   </div>
 </template>
@@ -119,6 +146,7 @@ export default {
             return {
               title: r.vendor_name,
               slot: r.quote_create_time,
+              code: "",
               id: r.quote_id
             };
           });

@@ -32,7 +32,6 @@ export default {
       this.$GET(
         "PurchasingOrderLists4Dept?departmentID=1&PageIndex=1&PageSize=5"
       ).then(r => {
-        console.log(r);
         this.list = r.data;
       });
     }

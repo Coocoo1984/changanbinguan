@@ -37,7 +37,10 @@
           <h4 class="weui-media-box__title">{{i.goods_name}}</h4>
           <p class="weui-media-box__desc">
             数量：{{i.count}}{{i.goods_unit_name}}
-            <span v-if="status>3" class="number red">实收：{{i.actual_count}}{{i.goods_unit_name}}</span>
+            <span
+              v-if="status>3"
+              class="number red"
+            >实收：{{i.actual_count}}{{i.goods_unit_name}}</span>
           </p>
         </div>
       </div>
@@ -98,6 +101,7 @@ export default {
       }
     },
     load() {
+      this.$loading(true);
       this.$GET("PurchasingOrderDetailList?purchasingOrderID=" + this.id).then(
         r => {
           for (var i of r.data) {
@@ -110,6 +114,7 @@ export default {
       );
       this.$UPDATE_GET("Department/Get?id=" + this.deptID).then(r => {
         this.dept = r.data.data;
+        this.$loading(false);
       });
     }
   },

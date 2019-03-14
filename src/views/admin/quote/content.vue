@@ -45,6 +45,7 @@ export default {
   },
   methods: {
     load() {
+      this.$loading(true);
       this.$GET("GoodsQuoteDetailVendorList?goodsid=" + this.goodsId).then(
         r => {
           this.list = r.data.map(i => {
@@ -53,6 +54,7 @@ export default {
               slot: "￥" + i.pre_unit_price
             };
           });
+          this.$loading(false);
         }
       );
     }

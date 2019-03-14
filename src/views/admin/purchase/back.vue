@@ -28,10 +28,16 @@ export default {
   methods: {
     submit() {
       var date = new Date();
-      this.$UPDATE("PurchasingPlan/SubmitFirst", {
-        IDs: [this.id],
-        UserID: 1,
-        Status: this.status - 1
+      var url = "PurchasingAudit/PlanAudit";
+      if (this.status == 2) {
+        url = "PurchasingAudit2/PlanAudit";
+      }
+      this.$loading(true, "提交数据中");
+      this.$UPDATE(url, {
+        PlanID: this.id,
+        Result: false,
+        UserID: this.$store.state.User.userid,
+        Desc: this.text
       })
         .then(() => {
           return WeiXin.SendMessageToUsers(
@@ -48,9 +54,8 @@ export default {
           );
         })
         .then(r => {
-          this.$router.push({
-            path: "/adm/purchase"
-          });
+          this.$loading(false);
+          this.$router.go(-2);
         });
     }
   },

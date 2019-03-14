@@ -30,16 +30,14 @@ export default {
   },
   methods: {
     load() {
-      this.$GET(
-        "GetDetailByQuoteID?quoteID=" +
-          this.quoteID
-      ).then(r => {
+      this.$loading(true);
+      this.$GET("GetDetailByQuoteID?quoteID=" + this.quoteID).then(r => {
         for (var i of r.data) {
           if (!this.datas[i.goods_class_name])
             Vue.set(this.datas, i.goods_class_name, []);
           this.datas[i.goods_class_name].push(i);
         }
-        console.log(this.datas);
+        this.$loading(false);
       });
     }
   },

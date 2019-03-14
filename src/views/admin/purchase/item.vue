@@ -59,13 +59,14 @@ export default {
         path: "/adm/purchase/back",
         query: {
           id: this.id,
-          status: this.planStatus,
+          status: this.status,
           deptID: this.code
         }
       });
     },
     SelectQuoter(id) {
       var goods_ids = this.goods.map(i => i.goods_id).join(",");
+      this.$loading(true);
       this.$GET(
         "PurchasingPlanGoodsClassVendorQuetoSUM?purchasingPlanID=" +
           this.id +
@@ -82,6 +83,7 @@ export default {
           });
         })
         .then(r => {
+          this.$loading(false);
           this.$selectQuoter(
             "选择供货商",
             r,
@@ -91,16 +93,20 @@ export default {
             },
             () => {
               this.btnGray = false;
+              this.$loading(true, "提交数据中");
               this.$UPDATE("PurchasingPlan/ConfirmVendor", {
                 PlanID: this.id,
                 VendorID: this.select,
                 GoodsClassID: id
+              }).then(r => {
+                this.$loading(false);
               });
             }
           );
         });
     },
     Aduit() {
+      this.$loading(true, "提交数据中");
       if (this.status == 1) {
         //初审
         this.$UPDATE("PurchasingAudit/PlanAudit", {
@@ -118,6 +124,7 @@ export default {
               "采购订单已通过初审"
             );
           }
+          this.$loading(false);
           if (r.data.result == 1) this.$router.go(-1);
         });
       } else {
@@ -137,12 +144,13 @@ export default {
               "采购订单已通过审核"
             );
           }
-
+          this.$loading(false);
           if (r.data.result == 1) this.$router.go(-1);
         });
       }
     },
     load() {
+      this.$loading(true);
       this.$GET("PurchasingPlanDetail?purchasingPlanId=" + this.id)
         .then(r => {
           this.goods = r.data;
@@ -150,6 +158,7 @@ export default {
         })
         .then(r => {
           this.goodsPrice = r.data;
+          this.$loading(false);
         });
     },
     getGoods(class_id) {

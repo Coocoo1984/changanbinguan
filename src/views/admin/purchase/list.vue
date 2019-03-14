@@ -1,12 +1,9 @@
  <template>
   <!-- <cells :datas="list" @item-click="click"></cells> -->
-  <purchase-list
-    v-infinite-scroll="load"
-    infinite-scroll-disabled="busy"
-    infinite-scroll-distance="20"
-    @click="click"
-    :datas="datas"
-  ></purchase-list>
+  <div>
+    <purchase-list @click="click" :datas="datas"></purchase-list>
+    <v-scroll :load="load" :busy="busy" :not-data="page>1&&datas.length<=0" :more="more"></v-scroll>
+  </div>
 </template>
 
  <script>
@@ -15,6 +12,7 @@ export default {
     return {
       page: 0,
       busy: false,
+      more: true,
       datas: []
     };
   },
@@ -30,7 +28,7 @@ export default {
         query: {
           id: item.id,
           status: item.status,
-          department_name:item.department_name
+          department_name: item.department_name
         }
       });
     },
@@ -51,6 +49,7 @@ export default {
       }
     },
     load() {
+      if (this.busy) return;
       this.busy = true;
       this.$loading(true);
       this.page = this.page + 1;
@@ -59,7 +58,8 @@ export default {
       ).then(r => {
         for (var i of r.data) {
           this.datas.push({
-            title: i.department_name || "采购单" + i.po_code,
+            title: i.department_name || "采购单",
+            code: i.po_code,
             slot: this.getStatus(i.purchasing_state_id),
             status: i.purchasing_state_id,
             department_name: i.department_name,
@@ -67,7 +67,9 @@ export default {
           });
         }
         this.$loading(false);
-        if (r.data.length >= 10) this.busy = false;
+        if (r.data.length >= 10) {
+          this.busy = false;
+        } else this.more = false;
       });
     }
   },

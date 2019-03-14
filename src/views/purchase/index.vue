@@ -22,11 +22,11 @@
       <div class="weui-panel__hd">管理</div>
       <div class="weui-panel__bd">
         <div class="weui-grids">
-          <grid-item name="新建采购" @click="toAdd"></grid-item>
-          <grid-item name="采购单" @click="toList"></grid-item>
-          <grid-item name="收货单" @click="toReceipt"></grid-item>
-          <grid-item name="采购统计" @click="toStatistics"></grid-item>
-          <grid-item name="报表下载" @click="toStatisticsDownload"></grid-item>
+          <grid-item name="新建采购" @click="toAdd" icon="ios-pricetags"></grid-item>
+          <grid-item name="采购单" @click="toList" icon="ios-podium "></grid-item>
+          <grid-item name="收货单" @click="toReceipt" icon="ios-paper "></grid-item>
+          <grid-item name="采购统计" @click="toStatistics" icon="ios-podium "></grid-item>
+          <grid-item name="报表下载" @click="toStatisticsDownload" icon="ios-cloud-download "></grid-item>
         </div>
       </div>
     </div>

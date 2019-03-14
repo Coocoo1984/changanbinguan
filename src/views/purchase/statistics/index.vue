@@ -8,7 +8,11 @@
         </div>
         <div class="weui-cell__bd">
           <select v-model="bType">
-            <option v-for="(b,index) in bizType" :value="b.biz_type_id" :key="index">{{b.biz_type_name}}</option>
+            <option
+              v-for="(b,index) in bizType"
+              :value="b.biz_type_id"
+              :key="index"
+            >{{b.biz_type_name}}</option>
           </select>
         </div>
       </div>
@@ -47,7 +51,12 @@
         </div>
       </div>
       <div class="weui-btn-area">
-        <a v-if="btnStyle==1" class="weui-btn weui-btn_primary" @click="submit" href="javascript:">确定</a>
+        <a
+          v-if="btnStyle==1"
+          class="weui-btn weui-btn_primary"
+          @click="submit"
+          href="javascript:"
+        >确定</a>
         <a v-else class="weui-btn weui-btn_primary" @click="download" href="javascript:">下载文件</a>
       </div>
     </div>
@@ -117,10 +126,13 @@ export default {
     download() {
       var url =
         api.CONFIG.getURL +
-        "DepartmentExport?StartTime=" +
+        "DepartmentExport/DataTableReport?listDepartmentIDs=" +
+        (this.showUser ? this.dType : this.$store.state.User.deptid) +
+        "StartTime=" +
         this.startDate +
         "&EndTime=" +
         this.endDate;
+
       var form = document.createElement("form");
       form.action = url;
       document.getElementsByTagName("body")[0].appendChild(form);
