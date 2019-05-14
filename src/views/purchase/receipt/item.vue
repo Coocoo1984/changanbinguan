@@ -1,14 +1,22 @@
 <template>
   <div>
-    <div class="weui-cells__title">XXX采购计划</div>
+    <div class="weui-cells__title">采购计划</div>
     <div class="weui-cell weui-cell_swiped">
       <div class="weui-cell__bd">
         <div v-for="(item,index) in datas" :key="index" class="weui-cell">
           <div class="weui-cell__bd">
             <p>{{item.goods_name}}</p>
           </div>
+          <div class="weui-cell__bd">
+            <p>计划收货：{{item.count}}{{item.goods_unit_name}}</p>
+          </div>
           <div class="weui-cell__ft">
-            <input style="text-align:right;" class="weui-input" v-model="item.actual_count" type="number">
+            <input
+              style="text-align:right;width:50px"
+              class="weui-input"
+              v-model="item.actual_count"
+              type="number"
+            >
           </div>
           <div class="weui-cell__ft" style="padding-left:10px">{{ item.goods_unit_name}}</div>
         </div>
@@ -39,19 +47,21 @@ export default {
   },
   methods: {
     submit() {
-      this.$UPDATE("Order/CheckIn", {
-        OrderID: this.id,
-        Result: true,
-        UserID: 1,
-        Desc: "",
-        ListOrderDetailIDAndActualCount: this.datas.map(e => {
-          return {
-            id: e.purchasing_order_detail_id,
-            ActualCount: e.actual_count
-          };
-        })
-      }).then(r => {
-        if (r.data.result == 1) this.$succecs(true);
+      this.$dialog("提示", "确认收货", () => {
+        this.$UPDATE("Order/CheckIn", {
+          OrderID: this.id,
+          Result: true,
+          UserID: 1,
+          Desc: "",
+          ListOrderDetailIDAndActualCount: this.datas.map(e => {
+            return {
+              id: e.purchasing_order_detail_id,
+              ActualCount: e.actual_count
+            };
+          })
+        }).then(r => {
+          if (r.data.result == 1) this.$succecs(true);
+        });
       });
     },
     confim() {
@@ -66,7 +76,7 @@ export default {
       });
     }
   },
-  activated() {
+  mounted() {
     this.$GET("PurchasingOrderDetailList?purchasingOrderID=" + this.id).then(
       r => {
         this.datas = r.data.map(i => {

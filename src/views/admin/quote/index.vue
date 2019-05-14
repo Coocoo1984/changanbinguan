@@ -201,6 +201,13 @@ export default {
         }
       });
     }
+  },
+  mounted() {
+    var date = new Date();
+    var year = date.getFullYear();
+    var mouth = date.getMonth() + 1;
+    this.startDate = year + "-" + (mouth - 2) + "-1";
+    this.endDate = year + "-" + mouth + "-30";
   }
 };
 </script>

@@ -35,9 +35,20 @@
       </div>
       <div class="weui-cells__title">提供商品</div>
       <div class="weui-cells weui-cells_checkbox">
-        <label v-for="(item,index) in categoryList" :key="index" class="weui-cell weui-check__label" :for="item.name">
+        <label
+          v-for="(item,index) in categoryList"
+          :key="index"
+          class="weui-cell weui-check__label"
+          :for="item.name"
+        >
           <div class="weui-cell__hd">
-            <input type="checkbox" class="weui-check" :value="item.id" v-model="select_ids" :id="item.name">
+            <input
+              type="checkbox"
+              class="weui-check"
+              :value="item.id"
+              v-model="select_ids"
+              :id="item.name"
+            >
             <i class="weui-icon-checked"></i>
           </div>
           <div class="weui-cell__bd">
@@ -54,6 +65,7 @@
 
 <script>
 import WeiXin from "@/common/weixin";
+import User from "@/common/user";
 export default {
   data() {
     return {
@@ -102,9 +114,13 @@ export default {
       }
     },
     getUser() {
-      WeiXin.GetUser(this.id)
+      WeiXin.GetDepatmentUser(this.id)
         .then(r => {
           this.user = r.data.userlist[0];
+          return User(this.user.userid);
+        })
+        .then(r => {
+          this.user = r;
           return this.$UPDATE_GET("Vendor/Get?name=" + this.name);
         })
         .then(r => {
@@ -116,7 +132,7 @@ export default {
         });
     }
   },
-  activated() {
+  mounted() {
     this.select_ids = [];
     this.isAdd = false;
     this.user = {};

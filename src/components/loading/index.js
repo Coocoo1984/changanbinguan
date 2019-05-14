@@ -34,12 +34,15 @@ loading.install = function(Vue) {
 
   Vue.prototype.$warn = function(show, message) {
     if (!loading.context) Vue.prototype.$loadintInit();
-    loading.context.show = show;
-    loading.context.message = message;
-    loading.context.cls = "weui-icon-warn";
-    setTimeout(() => {
-      loading.context.show = false;
-    }, 1000);
+    if (loading.context.show)
+      setTimeout(() => {
+        loading.context.show = show;
+        loading.context.message = message;
+        loading.context.cls = "weui-icon-warn";
+        setTimeout(() => {
+          loading.context.show = false;
+        }, 3000);
+      }, 500);
   };
 };
 

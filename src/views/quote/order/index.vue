@@ -8,7 +8,6 @@
         </div>
         <div class="weui-cell__bd">
           <select v-model="type">
-            <option value="0">全部</option>
             <option
               v-for="(item,index) in bizTypes"
               :value="item.biz_type_id"
@@ -60,7 +59,7 @@
 export default {
   data() {
     return {
-      type: "0",
+      type: "1",
       status: "0",
       startDate: "2018-11-11",
       endDate: "2018-11-30",
@@ -127,7 +126,8 @@ export default {
       this.$GET(
         "PurchasingOrderList4Vendor?vendorID=" +
           this.$store.state.User.deptid +
-          (this.type == 0 ? "" : "&bizTypeID=" + this.type) +
+          "&bizTypeID=" +
+          this.type +
           "&startTime=" +
           this.startDate +
           "&endTime=" +

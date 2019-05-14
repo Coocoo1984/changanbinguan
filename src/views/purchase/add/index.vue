@@ -47,40 +47,42 @@ export default {
   },
   methods: {
     submit() {
-      if (this.isSubmit) return;
-      this.isSubmit = true;
-      if (this.purchaseID) {
-        //更新
-        this.$UPDATE("PurchasingPlan/Update", {
-          ID: this.purchaseID,
-          UserID: 1,
-          Details: this.submitData.map(i => {
-            return {
-              GoodsID: i.GoodsID,
-              PurchasingPlanCount: i.PurocumentCount
-            };
-          })
-        }).then(r => {
-          this.isSubmit = false;
-          if (r.data.result == 1) this.$succecs(true);
-          this.$router.push("/purchase/list");
-        });
-      } else {
-        if (this.submitData.length <= 0) {
-          this.$warn(true, "不能提交空数据");
-          return;
+      this.$dialog("提示", "是否提交计划", () => {
+        if (this.isSubmit) return;
+        this.isSubmit = true;
+        if (this.purchaseID) {
+          //更新
+          this.$UPDATE("PurchasingPlan/Update", {
+            ID: this.purchaseID,
+            UserID: this.$store.state.User.userid,
+            Details: this.submitData.map(i => {
+              return {
+                GoodsID: i.GoodsID,
+                PurchasingPlanCount: i.PurocumentCount
+              };
+            })
+          }).then(r => {
+            this.isSubmit = false;
+            if (r.data.result == 1) this.$succecs(true);
+            this.$router.push("/purchase/list");
+          });
+        } else {
+          if (this.submitData.length <= 0) {
+            this.$warn(true, "不能提交空数据");
+            return;
+          }
+          this.$UPDATE("PurchasingPlan/Add", {
+            DepartmentID: this.$store.state.User.deptid,
+            BizTypeID: 1,
+            Details: this.submitData,
+            CreateUserID: this.$store.state.User.userid
+          }).then(r => {
+            this.isSubmit = false;
+            if (r.data.result == 1) this.$succecs(true);
+            this.$router.push("/purchase/list");
+          });
         }
-        this.$UPDATE("PurchasingPlan/Add", {
-          DepartmentID: this.$store.state.User.deptid,
-          BizTypeID: 1,
-          Details: this.submitData,
-          CreateUserID: 1
-        }).then(r => {
-          this.isSubmit = false;
-          if (r.data.result == 1) this.$succecs(true);
-          this.$router.push("/purchase/list");
-        });
-      }
+      });
     },
     addItems(id) {
       this.$router.push({
@@ -115,7 +117,7 @@ export default {
       this.datas = v;
     }
   },
-  activated() {
+  mounted() {
     this.initData = {};
     if (this.purchaseID) {
       this.$GET(

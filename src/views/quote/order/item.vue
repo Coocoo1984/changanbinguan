@@ -118,7 +118,7 @@ export default {
       });
     }
   },
-  activated() {
+  mounted() {
     this.datas = {};
     this.load();
   }

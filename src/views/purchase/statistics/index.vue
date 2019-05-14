@@ -125,17 +125,53 @@ export default {
     },
     download() {
       var url =
-        api.CONFIG.getURL +
-        "export/DataTableReport?listDepartmentIDs=" +
+        "PurchasingOrderGoodsCountStatics?listBizTypeIDs=" +
+        this.bType +
+        "&listDepartmentIDs=" +
         (this.showUser ? this.dType : this.$store.state.User.deptid) +
-        "StartTime=" +
+        "&StartTime=" +
         this.startDate +
         "&EndTime=" +
         this.endDate;
-      var form = document.createElement("form");
-      form.action = url;
-      document.getElementsByTagName("body")[0].appendChild(form);
-      form.submit();
+      var title = "分类,采购项,需求数量,收货数量,单位";
+      this.$Local(
+        "/wx_jdk?url=" + encodeURIComponent(window.location.href),
+        {}
+      ).then(r => {
+        var m = wx.config({
+          beta: true, // 必须这么写，否则wx.invoke调用形式的jsapi会有问题
+          debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+          appId: "ww3589f3907e9ad0e5", // 必填，企业微信的corpID
+          timestamp: r.data.time_span, // 必填，生成签名的时间戳
+          nonceStr: r.data.noncestr, // 必填，生成签名的随机串
+          signature: r.data.sign.toLocaleLowerCase(), // 必填，签名，见 附录-JS-SDK使用权限签名算法
+          jsApiList: ["previewFile"] // 必填，需要使用的JS接口列表，凡是要调用的接口都需要传进来
+        });
+
+        wx.ready(() => {
+          this.$Local(
+            "/file?url=" +
+              encodeURI(api.CONFIG.getURL + url) +
+              "&title=" +
+              title
+          ).then(r => {
+            wx.previewFile({
+              url:
+                "http://" +
+                window.location.host +
+                "/file?url=" +
+                encodeURI(api.CONFIG.getURL + url) +
+                "&title=" +
+                title, // 需要预览文件的地址(必填，可以使用相对路径)
+              name: "export.xls", // 需要预览文件的文件名(不填的话取url的最后部分)
+              size: r.headers["content-length"] // 需要预览文件的字节大小(必填)
+            });
+          });
+        });
+      });
+    },
+    base64(s) {
+      return window.btoa(unescape(encodeURIComponent(s)));
     }
   },
   mounted() {

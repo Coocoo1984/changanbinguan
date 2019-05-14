@@ -92,62 +92,66 @@ export default {
               this.select = item;
             },
             () => {
-              this.btnGray = false;
-              this.$loading(true, "提交数据中");
-              this.$UPDATE("PurchasingPlan/ConfirmVendor", {
-                PlanID: this.id,
-                VendorID: this.select,
-                GoodsClassID: id
-              }).then(r => {
-                this.$loading(false);
+              this.$dialog("提示", "是否确认", () => {
+                this.btnGray = false;
+                this.$loading(true, "提交数据中");
+                this.$UPDATE("PurchasingPlan/ConfirmVendor", {
+                  PlanID: this.id,
+                  VendorID: this.select,
+                  GoodsClassID: id
+                }).then(r => {
+                  this.$loading(false);
+                });
               });
             }
           );
         });
     },
     Aduit() {
-      this.$loading(true, "提交数据中");
-      if (this.status == 1) {
-        //初审
-        this.$UPDATE("PurchasingAudit/PlanAudit", {
-          PlanID: this.id,
-          Result: true,
-          UserID: 1
-        }).then(r => {
-          if (r.data.result == 1) {
-            this.$succecs(true);
-            this.$SendDeptMsg(
-              "http://changan.91ytt.com/",
-              this.code,
-              "采购订单已通过初审",
-              this.$Now(),
-              "采购订单已通过初审"
-            );
-          }
-          this.$loading(false);
-          if (r.data.result == 1) this.$router.go(-1);
-        });
-      } else {
-        //复审
-        this.$UPDATE("PurchasingAudit2/PlanAudit", {
-          PlanID: this.id,
-          Result: true,
-          UserID: 1
-        }).then(r => {
-          if (r.data.result == 1) {
-            this.$succecs(true);
-            this.$SendDeptMsg(
-              "http://changan.91ytt.com/",
-              this.code,
-              "采购订单已通过审核",
-              this.$Now(),
-              "采购订单已通过审核"
-            );
-          }
-          this.$loading(false);
-          if (r.data.result == 1) this.$router.go(-1);
-        });
-      }
+      this.$dialog("提示", "是否通过审核", () => {
+        this.$loading(true, "提交数据中");
+        if (this.status == 1) {
+          //初审
+          this.$UPDATE("PurchasingAudit/PlanAudit", {
+            PlanID: this.id,
+            Result: true,
+            UserID: 1
+          }).then(r => {
+            if (r.data.result == 1) {
+              this.$succecs(true);
+              this.$SendDeptMsg(
+                "http://changan.91ytt.com/",
+                this.code,
+                "采购订单已通过初审",
+                this.$Now(),
+                "采购订单已通过初审"
+              );
+            }
+            this.$loading(false);
+            if (r.data.result == 1) this.$router.go(-1);
+          });
+        } else {
+          //复审
+          this.$UPDATE("PurchasingAudit2/PlanAudit", {
+            PlanID: this.id,
+            Result: true,
+            UserID: 1
+          }).then(r => {
+            if (r.data.result == 1) {
+              this.$succecs(true);
+              this.$SendDeptMsg(
+                "http://changan.91ytt.com/",
+                this.code,
+                "采购订单已通过审核",
+                this.$Now(),
+                "采购订单已通过审核"
+              );
+            }
+            this.$loading(false);
+            if (r.data.result == 1) this.$router.go(-1);
+          });
+        }
+      });
     },
     load() {
       this.$loading(true);
@@ -201,7 +205,7 @@ export default {
       return this.$route.query.code;
     }
   },
-  activated() {
+  mounted() {
     if (this.$route.query.status == 2) this.btnText = "确认供货商";
     this.load();
   }

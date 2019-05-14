@@ -32,7 +32,8 @@ export default {
       errmsg: "",
       deptID: "",
       code: "",
-      user: {}
+      user: {},
+      c_user: {}
     };
   },
   computed: {
@@ -59,9 +60,58 @@ export default {
   },
   methods: {
     getUser() {
-      return WeiXin.GetUser(this.id).then(r => {
-        this.user = r.data.userlist[0] || {};
-      });
+      return WeiXin.GetUser(this.userID)
+        .then(r => {
+          this.user = r.data || {};
+        })
+        .then(() => {
+          return this.$UPDATE_GET(
+            "Usr/GetByWechat?wechatid=" + this.user.userid,
+            {}
+          );
+        })
+        .then(r => {
+          this.c_user = r.data.data;
+          if (this.c_user == null) {
+            return this.$UPDATE("Usr/Add", {
+              WechatID: this.user.userid,
+              code: this.user.userid,
+              Name: this.user.name,
+              Tel: this.user.mobile,
+              Mobile: this.user.mobile,
+              Tel1: this.user.mobile,
+              Mobile1: this.user.mobile,
+              Desc: "",
+              Addr: "",
+              Addr1: ""
+            });
+          } else if (
+            this.c_user.name != this.user.name ||
+            this.c_user.tel != this.user.mobile ||
+            this.c_user.mobile != this.user.mobile ||
+            this.c_user.addr != this.user.addr
+          ) {
+            return this.$UPDATE("Usr/Update", {
+              ID: this.c_user.id,
+              WechatID: this.user.userid,
+              code: this.user.userid,
+              Name: this.user.name,
+              Tel: this.user.mobile,
+              Mobile: this.user.mobile,
+              address: this.user.mobile
+            });
+          }
+          return null;
+        })
+        .then(r => {
+          return this.$UPDATE_GET(
+            "Usr/GetByWechat?wechatid=" + this.user.userid,
+            {}
+          );
+        })
+        .then(r => {
+          this.c_user = r.data.data;
+        });
     },
     getDept(name) {
       return this.$UPDATE_GET("Department/GetByName?name=" + name)
@@ -128,14 +178,14 @@ export default {
     },
     goto(name, type) {
       this.$store.commit("setUser", {
-        userid: this.userID,
+        userid: this.c_user.id,
         username: this.userName,
         deptname: name,
         deptid: this.deptID,
         userType: type,
-        code: this.code
+        code: this.code,
+        weichatID: this.userID
       });
-      console.log(name, type);
       var path = "";
       switch (type) {
         case "purchase_center":
@@ -150,7 +200,6 @@ export default {
         default:
           path = "";
       }
-      console.log(type);
       if (path) {
         this.$router.push(path);
       } else {
@@ -159,9 +208,12 @@ export default {
     }
   },
   mounted() {
-    if (this.userType.length == 1 && this.deptName.length == 1) {
-      this.click(this.deptName[0], this.userType[0]);
-    }
+    window.userID = this.userID;
+    this.getUser().then(r => {
+      if (this.userType.length == 1 && this.deptName.length == 1) {
+        this.click(this.deptName[0], this.userType[0]);
+      }
+    });
   }
 };
 </script>

@@ -18,6 +18,7 @@ export function createApp() {
   const router = createRouter(store);
   Vue.prototype.$POST = api.POST;
   Vue.prototype.$GET = api.GET;
+  Vue.prototype.$Local = api.Local;
   Vue.prototype.$UPDATE = api.UPDATE;
   Vue.prototype.$UPDATE_GET = api.UPDATE_GET;
   Vue.prototype.$SendDeptMsg = WeiXin.SendMessageToDepartment;
@@ -45,7 +46,7 @@ export function createApp() {
       this.$store.dispatch("loadHomeData");
       this.$store.dispatch("loadBizTypes");
       this.$store.dispatch("loadGoods");
-      //WeiXin.GetDepartment(0);
+      window.userID = this.$route.query.weichatID;
     }
   });
   return { app, router, store };

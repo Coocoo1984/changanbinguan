@@ -73,7 +73,7 @@ export default {
       }
     }
   },
-  activated() {
+  mounted() {
     this.page = 0;
     this.datas = [];
     this.load();

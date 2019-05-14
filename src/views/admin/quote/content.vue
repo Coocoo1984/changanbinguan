@@ -51,7 +51,7 @@ export default {
           this.list = r.data.map(i => {
             return {
               title: i.vendor_name,
-              slot: "￥" + i.pre_unit_price
+              slot: "￥" + i.up_down
             };
           });
           this.$loading(false);
@@ -59,7 +59,7 @@ export default {
       );
     }
   },
-  activated() {
+  mounted() {
     this.load();
   }
 };

@@ -71,10 +71,18 @@ export default {
       });
     },
     load() {
-      WeiXin.GetUser(this.id).then(r => {
-        this.user = r.data.userlist[0] || {};
-        return this.loadDept();
-      });
+      WeiXin.GetDepatmentUser(this.id)
+        .then(r => {
+          this.user = r.data.userlist[0] || {};
+          return this.$UPDATE_GET(
+            "Usr/GetByWechat?wechatid=" + this.user.userid,
+            {}
+          );
+        })
+        .then(r => {
+          this.user = r.data.data;
+          return this.loadDept();
+        });
     },
     submit() {
       if (!this.isAdd) {
@@ -99,7 +107,7 @@ export default {
       }
     }
   },
-  activated() {
+  mounted() {
     this.dept = {};
     this.user = {};
     this.load();

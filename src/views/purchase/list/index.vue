@@ -22,9 +22,6 @@
         <!-- <purchase-list v-infinite-scroll="load" infinite-scroll-disabled="busy" infinite-scroll-distance="20" @click="click" :datas="list"></purchase-list> -->
         <div class="weui-cells">
           <a
-            v-infinite-scroll="load"
-            infinite-scroll-disabled="busy"
-            infinite-scroll-distance="20"
             @click="click(item)"
             v-for="(item,index) in list"
             :key="index"
@@ -32,11 +29,13 @@
             href="javascript:;"
           >
             <div class="weui-cell__bd">
-              <p>{{item.name|| "采购单"}}</p>
+              <p>{{item.name|| "采购单"}}：{{item.code}}</p>
+              <p class="code">{{item.create_time}}</p>
             </div>
             <div class="weui-cell__ft">{{item.item_count}}个项目</div>
           </a>
         </div>
+        <div v-infinite-scroll="load" infinite-scroll-disabled="busy" infinite-scroll-distance="20"></div>
       </div>
     </div>
   </div>
@@ -155,14 +154,16 @@ export default {
           this.status +
           "&PageIndex=" +
           this.page[this.status.toString()] +
-          "&PageSize=10",
+          "&PageSize=10" +
+          "&departmentID=" +
+          this.$store.state.User.deptid,
         {}
       ).then(r => {
         this.datas[this.status.toString()] = r.data;
       });
     }
   },
-  activated() {
+  mounted() {
     this.load();
   }
 };

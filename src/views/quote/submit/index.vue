@@ -7,9 +7,12 @@
           <label class="weui-label">采购类型：</label>
         </div>
         <div class="weui-cell__bd">
-          <select v-model="goods_class_id">
-            <option :value="0">全部</option>
-            <option v-for="(i,index) in goods_class" :key="index" :value="i.id">{{i.name}}</option>
+          <select v-model="BizTypeID">
+            <option
+              v-for="(i,index) in bizTypes"
+              :key="index"
+              :value="i.biz_type_id"
+            >{{i.biz_type_name}}</option>
           </select>
         </div>
       </div>
@@ -17,8 +20,9 @@
     <div class="weui-btn-area">
       <a class="weui-btn weui-btn_primary" @click="search" href="javascript:">查询筛选</a>
     </div>
-    <template v-for="(gc,index) in goods_class_list" v-if="getGoods(gc.id).length>0">
+    <template v-for="(gc,index) in goods_class_list">
       <div
+        v-if="gc.length>=0"
         class="weui-cells__title"
         :key="'t'+index"
       >采购入库项目({{getGoods(gc.id).length}}): {{gc.name}}</div>
@@ -44,20 +48,22 @@
 export default {
   data() {
     return {
-      goods_class_id: 0,
+      BizTypeID: 1,
       goods: [],
       vendorID: 1
     };
   },
   computed: {
     goods_class_list() {
-      if (this.goods_class_id == 0) return this.$store.state.Home.categoryList;
       return this.$store.state.Home.categoryList.filter(
-        i => i.id == this.goods_class_id
+        i => i.biz_type_id == this.BizTypeID
       );
     },
     goods_class() {
       return this.$store.state.Home.categoryList;
+    },
+    bizTypes() {
+      return this.$store.state.Home.bizTypes;
     }
   },
   methods: {
@@ -69,11 +75,20 @@ export default {
       this.$dialog("是否提交", "是否提交报价", () => {
         this.$loading(true, "数据提交中");
         this.$UPDATE("Quote/Add", {
-          BizTypeID: 1,
-          Details: this.goods.filter(i => i.Price),
+          BizTypeID: this.BizTypeID,
+          Details: this.goods
+            .filter(i => i.Price)
+            .map(i => {
+              return {
+                GoodsID: i.GoodsID,
+                GoodsName: i.GoodsName,
+                Price: i.Price
+              };
+            }),
           VendorID: this.$store.state.User.deptid,
-          Name: this.$store.state.User.username,
-          Code: "xxx"
+          CreateUserID: this.$store.state.User.userid,
+          Name: this.$store.state.User.deptname,
+          Code: this.$store.state.User.code
         }).then(r => {
           this.$loading(false);
         });

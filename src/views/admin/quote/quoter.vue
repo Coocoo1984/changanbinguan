@@ -41,7 +41,7 @@ export default {
       });
     }
   },
-  activated() {
+  mounted() {
     this.load();
   }
 };

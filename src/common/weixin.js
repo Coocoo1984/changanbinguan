@@ -1,5 +1,5 @@
 import Axios from "axios";
-var config = "http://changan.91ytt.com/weixin/";
+var config = "/weixin/";
 var apentid = "1000003";
 export default {
   GetAccessToken() {
@@ -13,9 +13,10 @@ export default {
     return Axios.get(config + "department/list?id=" + department_id);
   },
   GetUser(department_id) {
-    return Axios.get(
-      config + "user/list?department_id=" + department_id + "&fetch_child=true"
-    );
+    return Axios.get(config + "user/get?userid=" + department_id);
+  },
+  GetDepatmentUser(dept_id) {
+    return Axios.get(config + "user/simplelist?department_id=" + dept_id);
   },
   SendMessageToUsers(url, userids, title, time, content) {
     return Axios.post(config + "message/send", {

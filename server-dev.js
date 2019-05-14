@@ -2,6 +2,7 @@ const path = require("path");
 const express = require("express");
 const cookieParser = require("cookie-parser");
 var request = require("request");
+var Excel = require("exceljs");
 const bodyParser = require("body-parser");
 const fs = require("fs");
 const app = express();
@@ -11,6 +12,9 @@ const devMiddle = require("webpack-dev-middleware");
 const hotMiddle = require("webpack-hot-middleware");
 const client = require("./webpack.client");
 const depts = require("./depts.json");
+
+var crypto = require("crypto");
+
 client.entry.webpack = "webpack-hot-middleware/client?noInfo=true&reload=true";
 client.plugins.push(new webpack.HotModuleReplacementPlugin());
 const complier = {
@@ -44,6 +48,9 @@ const template = fs.readFileSync(
   "utf-8"
 );
 var access_token = "";
+var ticket = "";
+var ticket_time = Date.now();
+
 function get_access_token(callback) {
   request.get(
     "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=ww3589f3907e9ad0e5&corpsecret=lOV7xbGrbLKK7k1YgoHln50LSvlIi4Icy3zSH9nrjMQ",
@@ -53,6 +60,22 @@ function get_access_token(callback) {
     }
   );
 }
+function get_ticket(callback) {
+  if (Date.now() - ticket_time > 70000000 || ticket == "") {
+    getWeiXinBody(
+      "https://qyapi.weixin.qq.com/cgi-bin/get_jsapi_ticket?a=1",
+      (e, r, b) => {
+        var result = JSON.parse(b);
+        ticket = result.ticket;
+        ticket_time = Date.now();
+        callback(ticket);
+      }
+    );
+  } else {
+    callback(ticket);
+  }
+}
+
 function getWeiXinBody(url, callback) {
   try {
     if (access_token == "") {
@@ -117,7 +140,7 @@ app.get("/weixin/*", (req, res) => {
 });
 app.options("*", (req, res) => {
   res.sendStatus(204);
-})
+});
 app.post("/weixin/*", (req, res) => {
   postWeiXinBody(
     "https://qyapi.weixin.qq.com/cgi-bin/" + req.url.replace("/weixin/", ""),
@@ -131,15 +154,40 @@ app.get("/wx_login", (req, res) => {
   var url = encodeURIComponent("http://changan.91ytt.com/wx_auth");
   res.redirect(
     "https://open.weixin.qq.com/connect/oauth2/authorize?appid=ww3589f3907e9ad0e5&redirect_uri=" +
-    url +
-    "&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
+      url +
+      "&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
   );
+});
+app.get("/wx_jdk", (req, res) => {
+  get_ticket(t => {
+    var time_span = Date.now();
+    var noncestr = "liuqingxin";
+    var str =
+      "jsapi_ticket=" +
+      t +
+      "&noncestr=" +
+      noncestr +
+      "&timestamp=" +
+      time_span +
+      "&url=" +
+      req.query["url"];
+    var sign = crypto
+      .createHash("sha1")
+      .update(str)
+      .digest("hex")
+      .toUpperCase();
+    res.send({
+      noncestr: noncestr,
+      time_span: time_span,
+      sign: sign.toLocaleLowerCase()
+    });
+  });
 });
 app.get("/wx_auth", (req, res) => {
   if (req.query.code) {
     getWeiXinBody(
       "https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo?code=" +
-      req.query.code,
+        req.query.code,
       (e, r, b) => {
         var result = JSON.parse(b);
         if (result.errcode != 0) {
@@ -148,7 +196,7 @@ app.get("/wx_auth", (req, res) => {
         }
         getWeiXinBody(
           "https://qyapi.weixin.qq.com/cgi-bin/user/get?userid=" +
-          result.UserId,
+            result.UserId,
           (err, _res, body) => {
             var dept_result = JSON.parse(body);
             if (dept_result.errcode != 0) {
@@ -158,45 +206,52 @@ app.get("/wx_auth", (req, res) => {
             var dept_id = [];
             var dept_name = [];
             var user_type = [];
-            var user_name = "";
-            for (var i in depts) {
-              var _temp = depts[i];
-              var _temp_id = dept_result.department.filter(
-                d => d == _temp.id
-              )[0];
-              if (_temp_id) {
-                user_name = _temp.name;
-                if (_temp_id == 2) {
-                  dept_name.push(_temp.name);
-                  dept_id.push(_temp_id);
-                  user_type.push("purchase_center");
-                } else {
-                  switch (_temp.parentid) {
-                    case 5:
+            var user_name = dept_result.name;
+            getWeiXinBody(
+              "https://qyapi.weixin.qq.com/cgi-bin/department/list?id=",
+              (err, _res, body) => {
+                var depts_result = JSON.parse(body);
+                var depts = depts_result.department;
+                for (var i in depts) {
+                  var _temp = depts[i];
+                  var _temp_id = dept_result.department.filter(
+                    d => d == _temp.id
+                  )[0];
+                  if (_temp_id) {
+                    if (_temp_id == 2) {
                       dept_name.push(_temp.name);
                       dept_id.push(_temp_id);
-                      user_type.push("vendor");
-                      break;
-                    case 8:
-                      dept_name.push(_temp.name);
-                      dept_id.push(_temp_id);
-                      user_type.push("department");
-                      break;
+                      user_type.push("purchase_center");
+                    } else {
+                      switch (_temp.parentid) {
+                        case 5:
+                          dept_name.push(_temp.name);
+                          dept_id.push(_temp_id);
+                          user_type.push("vendor");
+                          break;
+                        case 8:
+                          dept_name.push(_temp.name);
+                          dept_id.push(_temp_id);
+                          user_type.push("department");
+                          break;
+                      }
+                    }
                   }
                 }
+                res.cookie("weichatID", result.UserId);
+                res.redirect(
+                  "/login?userID=" +
+                    result.UserId +
+                    "&deptID=" +
+                    dept_id.join(",") +
+                    "&userName=" +
+                    user_name +
+                    "&deptName=" +
+                    dept_name.join(",") +
+                    "&userType=" +
+                    user_type.join(",")
+                );
               }
-            }
-            res.redirect(
-              "/login?userID=" +
-              result.UserId +
-              "&deptID=" +
-              dept_id.join(",") +
-              "&userName=" +
-              user_name +
-              "&deptName=" +
-              dept_name.join(",") +
-              "&userType=" +
-              user_type.join(",")
             );
           }
         );
@@ -208,6 +263,40 @@ app.get("/wx_auth", (req, res) => {
 });
 app.get("WW_verify_AO9QrssgBt1gs08q.txt", (req, res) => {
   res.send("AO9QrssgBt1gs08q");
+});
+app.get("/file", (req, res) => {
+  request.get(req.query.url, (e, r, b) => {
+    var title = req.query.title;
+    const workbook = new Excel.Workbook();
+    workbook.creator = "test";
+    workbook.lastModifiedBy = "test";
+    var now = new Date();
+    workbook.created = new Date();
+    workbook.modified = new Date();
+    let sheet = workbook.addWorksheet("sheet1");
+    var result = JSON.parse(b);
+    var titles = title.split(",");
+    var cols = [];
+    var i = 0;
+    for (var key in result[0]) {
+      cols.push({
+        header: titles.length > i ? titles[i] : "",
+        key: key
+      });
+      i++;
+    }
+    sheet.columns = cols;
+    sheet.addRows(result);
+    workbook.xlsx.writeBuffer().then(r => {
+      res.set({
+        "Content-Type":
+          "applicationnd.openxmlformats-officedocument.spreadsheetml.sheet", //告诉浏览器这是一个二进制文件
+        "Content-Disposition": "attachment; filename=export.xlsx", //告诉浏览器这是一个需要下载的文件
+        "Content-Length": r.length
+      });
+      res.send(r);
+    });
+  });
 });
 app.get("*", (req, res) => {
   const clientManifest = complier.client.outputFileSystem.readFileSync(

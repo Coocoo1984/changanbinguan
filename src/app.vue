@@ -1,6 +1,9 @@
 <template>
   <div id="app" class="page">
-    <div class="vux-header" style="width: 100%; position: absolute; left: 0px; top: 0px; z-index: 100;">
+    <div
+      class="vux-header"
+      style="width: 100%; position: absolute; left: 0px; top: 0px; z-index: 100;"
+    >
       <div v-if="showBack" class="vux-header-left" @click="Back">
         <a class="vux-header-back"></a>
         <div class="left-arrow"></div>
@@ -10,9 +13,7 @@
       </h1>
     </div>
     <div class="body">
-      <keep-alive>
-        <router-view></router-view>
-      </keep-alive>
+      <router-view></router-view>
     </div>
   </div>
 </template>

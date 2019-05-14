@@ -28,35 +28,37 @@ export default {
   methods: {
     submit() {
       var date = new Date();
-      var url = "PurchasingAudit/PlanAudit";
-      if (this.status == 2) {
-        url = "PurchasingAudit2/PlanAudit";
-      }
-      this.$loading(true, "提交数据中");
-      this.$UPDATE(url, {
-        PlanID: this.id,
-        Result: false,
-        UserID: this.$store.state.User.userid,
-        Desc: this.text
-      })
-        .then(() => {
-          return WeiXin.SendMessageToUsers(
-            this.access_token,
-            "http://" + window.location.host + "/purchase",
-            this.deptID,
-            "采购单已经被退回",
-            date.getFullYear() +
-              "年" +
-              (date.getMonth() + 1) +
-              "月" +
-              date.getDate(),
-            this.text
-          );
+      this.$dialog("提示", "是否退回", () => {
+        var url = "PurchasingAudit/PlanAudit";
+        if (this.status == 2) {
+          url = "PurchasingAudit2/PlanAudit";
+        }
+        this.$loading(true, "提交数据中");
+        this.$UPDATE(url, {
+          PlanID: this.id,
+          Result: false,
+          UserID: this.$store.state.User.userid,
+          Desc: this.text
         })
-        .then(r => {
-          this.$loading(false);
-          this.$router.go(-2);
-        });
+          .then(() => {
+            return WeiXin.SendMessageToUsers(
+              this.access_token,
+              "http://" + window.location.host + "/purchase",
+              this.deptID,
+              "采购单已经被退回",
+              date.getFullYear() +
+                "年" +
+                (date.getMonth() + 1) +
+                "月" +
+                date.getDate(),
+              this.text
+            );
+          })
+          .then(r => {
+            this.$loading(false);
+            this.$router.go(-2);
+          });
+      });
     }
   },
   computed: {

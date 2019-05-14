@@ -6,7 +6,8 @@ export default {
     deptname: "aa",
     deptid: "1",
     userType: "purchase_center",
-    code: "1"
+    code: "1",
+    weichatID: ""
   },
   mutations: {
     setUser(state, user) {
@@ -16,6 +17,7 @@ export default {
       state.deptid = user.deptid;
       state.userType = user.userType;
       state.code = user.code;
+      state.weichatID = user.weichatID;
     }
   },
   actions: {

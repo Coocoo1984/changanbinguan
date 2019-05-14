@@ -16,7 +16,7 @@
             <a class="weui-cell weui-cell_access" href="javascript:;">
               <div class="weui-cell__bd weui-cell_primary">
                 <p class="item">{{item.goods_name}}</p>
-                <span class="number">数量：{{item.count}}{{item.goods_unit_name}}</span>
+                <span class="number">数量：{{item['SUM( actual_count )']}}{{item.goods_unit_name}}</span>
               </div>
             </a>
           </div>
@@ -55,7 +55,7 @@ export default {
       return this.$store.state.Home.goods;
     }
   },
-  activated() {
+  mounted() {
     var k_reg = new RegExp("[" + this.keyword + "]+");
     var goods_ids = this.goods
       .filter(i => k_reg.test(i.goods_name))
