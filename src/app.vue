@@ -41,6 +41,9 @@ export default {
 </script>
 
 <style>
+body{
+  overflow-x: hidden;
+}
 .vux-header {
   position: relative;
   padding: 3px 0;

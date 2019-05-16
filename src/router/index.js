@@ -112,13 +112,30 @@ export function createRouter(store) {
         path: "/purchase/statistics",
         component: () => import("../views/purchase/statistics")
       },
+
+      {
+        path: "/purchase/stock",
+        component: () => import("../views/purchase/stock")
+      },
       {
         path: "/purchase/statistics/result",
         component: () => import("../views/purchase/statistics/content")
       },
       {
         path: "/review",
-        component: () => import("../views/review")
+        component: () => import("../views/review"),
+        children: [
+          {
+            path: "purchase",
+            props: (route) => ({ state: route.query.state }),
+            component: () => import("../views/review/purchase")
+          },
+          {
+            path: "qoute",
+            props: (route) => ({ state: route.query.state }),
+            component: () => import("../views/review/quote")
+          }
+        ]
       },
       {
         path: "/review/list",

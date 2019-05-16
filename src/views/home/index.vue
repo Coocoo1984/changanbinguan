@@ -25,11 +25,9 @@
     </div>
     <div class="weui-cells__title">采购管理</div>
     <div class="weui-grids">
-      <grid-item name="初审采购" @click="toPurchase(1)" icon="ios-pricetags"></grid-item>
+      <grid-item name="审核管理" @click="toPurchase(1)" icon="ios-pricetags"></grid-item>
       <grid-item name="报价管理" @click="toQuote" icon="ios-locate "></grid-item>
-      <grid-item name="复审采购" @click="toPurchase(2)" icon="ios-paper "></grid-item>
       <grid-item name="采购进度" @click="toPurchaseList()" icon="ios-play "></grid-item>
-      <grid-item name="统计查询" @click="toStatistics(1)" icon="ios-podium "></grid-item>
       <grid-item name="报表下载" @click="toStatistics(2)" icon="ios-cloud-download "></grid-item>
     </div>
     <div class="weui-cells__title">基础设置</div>
@@ -60,7 +58,7 @@ export default {
   methods: {
     toPurchase(status, type) {
       this.$router.push({
-        path: "/adm/purchase",
+        path: "/review",
         query: {
           status: status,
           type: type

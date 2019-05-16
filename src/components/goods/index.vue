@@ -1,5 +1,5 @@
 <template>
-  <div class="weui-tab">
+  <div class="weui-tab main">
     <div class="weui-navbar">
       <div
         v-for="b in bizTypes"
@@ -10,6 +10,22 @@
       >{{b.biz_type_name}}</div>
     </div>
     <div class="weui-tab__panel">
+      <div class="weui-cell search">
+        <div class="weui-cell__hd">
+          <label class="weui-label">搜索：</label>
+        </div>
+        <div class="weui-cell__bd">
+          <autocomplete
+            url="0"
+            :onShouldGetData="getData"
+            class="weui-input"
+            anchor="goods_name"
+            label="writer"
+            :options="options"
+            :onSelect="onSelect"
+          ></autocomplete>
+        </div>
+      </div>
       <div class="weui-flex box">
         <div class="categroy">
           <ul>
@@ -22,7 +38,7 @@
           </ul>
         </div>
         <div class="commodity">
-          <div class="item" v-for="g in goods" :key="g.goods_id">
+          <div :id="'g_'+g.goods_id" class="item" v-for="g in goods" :key="g.goods_id">
             <span>{{g.goods_name}}（{{g.goods_unit_name}}）</span>
             <div class="number">
               <i @click="changeNumber(g.goods_id,-1)" class="iconfont icon-ios-remove-circle"></i>
@@ -42,14 +58,20 @@
 
 <script>
 import Vue from "vue";
+import Autocomplete from "vue2-autocomplete-js";
 export default {
+  components: {
+    Autocomplete
+  },
   data() {
     return {
       current: {
         bizType: 1,
         goodclass: null
       },
-      orders: {}
+      orders: {},
+      options: [],
+      height: 100
     };
   },
   watch: {
@@ -82,6 +104,21 @@ export default {
     change(good_id, number) {
       Vue.set(this.orders, good_id + "", number);
     },
+    getData(v) {
+      if (v)
+        this.options = this.allGoods.filter(g => g.goods_name.indexOf(v) >= 0);
+      else this.options = [];
+    },
+    onSelect(v) {
+      if (v) {
+        this.current.goodclass = v.goods_class_id;
+        this.$nextTick(() => {
+          window.setTimeout(() => {
+            this.scroller(v.goods_id, 300);
+          }, 200);
+        });
+      }
+    },
     changeNumber(good_id, number) {
       Vue.set(
         this.orders,
@@ -94,6 +131,13 @@ export default {
     changeBiz(i) {
       if (this.staticBizType) return;
       this.current.bizType = i;
+    },
+    scroller(el, duration) {
+      if (typeof el != "object") {
+        el = document.getElementById("g_" + el);
+      }
+      if (!el) return;
+      el.scrollIntoView();
     }
   },
   props: {
@@ -105,6 +149,9 @@ export default {
       type: Number | String,
       default: ""
     }
+  },
+  mounted() {
+    this.height = document.body.scrollHeight - 100;
   },
   computed: {
     bizTypes() {
@@ -119,6 +166,9 @@ export default {
       return this.$store.state.Home.goods.filter(
         i => i.goods_class_id == this.current.goodclass
       );
+    },
+    allGoods() {
+      return this.$store.state.Home.goods;
     }
   }
 };
@@ -130,6 +180,19 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none !important;
   margin: 0;
+}
+.autocomplete {
+  background-color: #ffffff;
+  border: 1px #c7c7c7 solid;
+}
+.autocomplete-anchor-text {
+  color: #000;
+  font-weight: normal;
+}
+.main {
+  height: 527px;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 .categroy {
   flex: 1;
@@ -159,6 +222,9 @@ input::-webkit-inner-spin-button {
 .commodity .item i {
   color: #467db9;
   font-size: 20px;
+}
+.search {
+  background-color: #f8f8f8;
 }
 .commodity .item input {
   width: 20px;

@@ -23,6 +23,7 @@
       <div class="weui-panel__bd">
         <div class="weui-grids">
           <grid-item name="新建采购" @click="toAdd" icon="ios-pricetags"></grid-item>
+          <grid-item name="录入库存" @click="toStock" icon="ios-podium "></grid-item>
           <grid-item name="采购单" @click="toList" icon="ios-podium "></grid-item>
           <grid-item name="收货单" @click="toReceipt" icon="ios-paper "></grid-item>
           <grid-item name="采购统计" @click="toStatistics" icon="ios-podium "></grid-item>
@@ -49,6 +50,9 @@ export default {
     },
     toReceipt() {
       this.$router.push("/purchase/receipt");
+    },
+    toStock(){
+      this.$router.push("/purchase/stock");
     },
     toStatistics() {
       this.$router.push({

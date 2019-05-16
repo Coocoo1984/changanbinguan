@@ -18,7 +18,7 @@
                 @click="Aduit"
                 class="weui-btn weui-btn_primary"
                 href="javascript:"
-              >{{status==1?'初审通过':'复审确认'}}</a>
+              >{{status==1?'初审通过': status == 2 ?'复审确认' : '终审确认'}}</a>
             </div>
           </div>
           <div class="weui-flex__item">
@@ -115,7 +115,8 @@ export default {
           this.$UPDATE("PurchasingAudit/PlanAudit", {
             PlanID: this.id,
             Result: true,
-            UserID: 1
+            UserID: this.userID,
+            WechatID: this.wechatID
           }).then(r => {
             if (r.data.result == 1) {
               this.$succecs(true);
@@ -130,12 +131,33 @@ export default {
             this.$loading(false);
             if (r.data.result == 1) this.$router.go(-1);
           });
-        } else {
+        } else if (this.status == 2) {
           //复审
-          this.$UPDATE("PurchasingAudit2/PlanAudit", {
+          this.$UPDATE("PurchasingAudit/PlanAudit2", {
             PlanID: this.id,
             Result: true,
-            UserID: 1
+            UserID: this.userID,
+            WechatID: this.wechatID
+          }).then(r => {
+            if (r.data.result == 1) {
+              this.$succecs(true);
+              this.$SendDeptMsg(
+                "http://changan.91ytt.com/",
+                this.code,
+                "采购订单已通过审核",
+                this.$Now(),
+                "采购订单已通过审核"
+              );
+            }
+            this.$loading(false);
+            if (r.data.result == 1) this.$router.go(-1);
+          });
+        } else {
+          this.$UPDATE("PurchasingAudit/PlanAudit3", {
+            PlanID: this.id,
+            Result: true,
+            UserID: this.userID,
+            WechatID: this.wechatID
           }).then(r => {
             if (r.data.result == 1) {
               this.$succecs(true);
@@ -178,7 +200,6 @@ export default {
           content: i.count + i.goods_unit_name
         };
       });
-      console.log(m);
       return m;
     }
   },
@@ -203,6 +224,12 @@ export default {
     },
     code() {
       return this.$route.query.code;
+    },
+    userID() {
+      return this.$store.state.User.userid;
+    },
+    wechatID() {
+      return this.$store.state.User.weichatID;
     }
   },
   mounted() {
