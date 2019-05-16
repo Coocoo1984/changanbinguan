@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="weui-panel weui-panel_access" style="padding-bottom:10px">
+    <div v-if="notPer" class="weui-panel weui-panel_access" style="padding-bottom:10px">
       <div class="weui-panel__bd">
         <div class="weui-flex">
           <div class="weui-flex__item">
@@ -70,7 +70,8 @@ export default {
     return {
       datas: {},
       show: false,
-      backTxt: ""
+      backTxt: "",
+      notPer:false
     };
   },
   computed: {
@@ -93,6 +94,7 @@ export default {
             Vue.set(this.datas, i.goods_class_name, []);
           this.datas[i.goods_class_name].push(i);
         }
+        this.notPer = true;
         this.$loading(false);
       });
     },
