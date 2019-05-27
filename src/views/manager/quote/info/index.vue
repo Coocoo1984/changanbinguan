@@ -117,7 +117,6 @@ export default {
       WeiXin.GetDepatmentUser(this.id)
         .then(r => {
           this.user = r.data.userlist[0];
-          return User(this.user.userid);
         })
         .then(r => {
           this.user = r;

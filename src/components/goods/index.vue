@@ -131,6 +131,7 @@ export default {
     changeBiz(i) {
       if (this.staticBizType) return;
       this.current.bizType = i;
+      this.$emit("change-biz",i);
     },
     scroller(el, duration) {
       if (typeof el != "object") {

@@ -1,7 +1,12 @@
 <template>
   <div>
     <div class="weui-panel weui-panel_access">
-      <goods @change="change" :init-data="initData" :static-biz-type="staticBizType"></goods>
+      <goods
+        @change-biz="changeBiz"
+        @change="change"
+        :init-data="initData"
+        :static-biz-type="staticBizType"
+      ></goods>
       <div class="weui-panel__ft">
         <div style="padding:10px">
           <a href="javascript:;" @click="submit" class="weui-btn weui-btn_primary">提交信息</a>
@@ -21,7 +26,8 @@ export default {
       datas: {},
       initData: {},
       staticBizType: "",
-      isSubmit: false
+      isSubmit: false,
+      bizTypeID: 1
     };
   },
   asyncData({ store }) {
@@ -46,6 +52,9 @@ export default {
     }
   },
   methods: {
+    changeBiz(i) {
+      this.bizTypeID = i;
+    },
     submit() {
       this.$dialog("提示", "是否提交计划", () => {
         if (this.isSubmit) return;
@@ -73,7 +82,7 @@ export default {
           }
           this.$UPDATE("PurchasingPlan/Add", {
             DepartmentID: this.$store.state.User.deptid,
-            BizTypeID: 1,
+            BizTypeID: this.bizTypeID,
             Details: this.submitData,
             CreateUserID: this.$store.state.User.userid
           }).then(r => {
@@ -125,10 +134,15 @@ export default {
       ).then(r => {
         this.$nextTick(() => {
           for (var i of r.data) {
-            if (!this.staticBizType)
+            if (!this.staticBizType) {
               this.staticBizType = this.categroys
                 .filter(k => k.id == i.goods_class_id)[0]
                 .biz_type_id.toString();
+              this.bizTypeID = this.categroys.filter(
+                k => k.id == i.goods_class_id
+              )[0].biz_type_id;
+            }
+
             Vue.set(this.initData, i.goods_id, i.count);
           }
         });

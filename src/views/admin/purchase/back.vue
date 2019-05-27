@@ -31,7 +31,10 @@ export default {
       this.$dialog("提示", "是否退回", () => {
         var url = "PurchasingAudit/PlanAudit";
         if (this.status == 2) {
-          url = "PurchasingAudit2/PlanAudit";
+          url = "PurchasingAudit/PlanAudit2";
+        }
+        if (this.status == 3) {
+          url = "PurchasingAudit/PlanAudit3";
         }
         this.$loading(true, "提交数据中");
         this.$UPDATE(url, {

@@ -9,6 +9,8 @@
               {{trial}}
               <span>复审</span>
               {{review}}
+              <span>三审</span>
+              {{end}}
             </h4>
             <p class="weui-media-box__desc desc">待审计划</p>
           </div>
@@ -48,6 +50,9 @@ export default {
     review() {
       return this.$store.state.Home.review;
     },
+    end(){
+      return this.$store.state.Home.end;
+    },
     complete() {
       return this.$store.state.Home.complete;
     }
@@ -58,10 +63,10 @@ export default {
   methods: {
     toPurchase(status, type) {
       this.$router.push({
-        path: "/review",
+        path: "/review/purchase",
         query: {
-          status: status,
-          type: type
+          state: 1,
+          
         }
       });
     },

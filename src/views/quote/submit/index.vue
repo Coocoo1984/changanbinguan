@@ -22,7 +22,6 @@
     </div>
     <template v-for="(gc,index) in goods_class_list">
       <div
-        v-if="gc.length>=0"
         class="weui-cells__title"
         :key="'t'+index"
       >采购入库项目({{getGoods(gc.id).length}}): {{gc.name}}</div>
@@ -33,6 +32,9 @@
           </div>
           <div class="weui-cell__bd">
             <input class="weui-input" v-model="g.Price" type="number" placeholder="0.00">
+          </div>
+          <div class="weui-cell__bd">
+            <label for> / {{g.UnitName}}</label>
           </div>
         </div>
       </div>
@@ -108,7 +110,8 @@ export default {
           goods_class_id: i.goods_class_id,
           GoodsID: i.goods_id,
           GoodsName: i.goods_name,
-          Price: ""
+          Price: "",
+          UnitName: i.goods_unit_name
         };
       });
     });
