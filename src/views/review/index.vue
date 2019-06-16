@@ -57,7 +57,7 @@ export default {
           this.$router.push({ path: "/review/qoute", query: { state: 4 } });
           break;
         case "退货审核":
-          this.$router.push({ path: "/review/qoute", query: { state: 3 } });
+          this.$router.push({ path: "/review/back", query: { state: 3 } });
           break;
         default:
           break;

@@ -122,6 +122,18 @@ export function createRouter(store) {
         component: () => import("../views/purchase/statistics/content")
       },
       {
+        path: "/purchase/back",
+        component: () => import("../views/purchase/back/list")
+      },
+      {
+        path: "/purchase/back_add",
+        component: () => import("../views/purchase/back/add")
+      },
+      {
+        path: "/purchase/back/:id",
+        component: () => import("../views/purchase/back/item")
+      },
+      {
         path: "/review",
         component: () => import("../views/review"),
         children: [
@@ -134,8 +146,17 @@ export function createRouter(store) {
             path: "qoute",
             props: (route) => ({ state: route.query.state }),
             component: () => import("../views/review/quote")
-          }
+          },
+          {
+            path: "back",
+            //props: (route) => ({ state: route.query.state }),
+            component: () => import("../views/review/back")
+          },
         ]
+      },
+      {
+        path: "/back/item/:id",
+        component: () => import("../views/review/back_item")
       },
       {
         path: "/review/list",
@@ -152,6 +173,14 @@ export function createRouter(store) {
       {
         path: "/quote/submit",
         component: () => import("../views/quote/submit/")
+      },
+      {
+        path: "/quote/back",
+        component: () => import("../views/quote/back/back")
+      },
+      {
+        path: "/quote/back/:id",
+        component: () => import("../views/quote/back/item")
       },
       {
         path: "/quote/order",

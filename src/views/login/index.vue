@@ -71,6 +71,7 @@ export default {
           );
         })
         .then(r => {
+          console.log(r);
           this.c_user = r.data.data;
           if (this.c_user == null) {
             return this.$UPDATE("Usr/Add", {

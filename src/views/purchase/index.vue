@@ -26,7 +26,7 @@
           <grid-item name="录入库存" @click="toStock" icon="ios-podium "></grid-item>
           <grid-item name="采购单" @click="toList" icon="ios-podium "></grid-item>
           <grid-item name="收货单" @click="toReceipt" icon="ios-paper "></grid-item>
-          <grid-item name="采购统计" @click="toStatistics" icon="ios-podium "></grid-item>
+          <grid-item name="退货" @click="toBack" icon="ios-podium "></grid-item>
           <grid-item name="报表下载" @click="toStatisticsDownload" icon="ios-cloud-download "></grid-item>
         </div>
       </div>
@@ -51,15 +51,12 @@ export default {
     toReceipt() {
       this.$router.push("/purchase/receipt");
     },
-    toStock(){
+    toStock() {
       this.$router.push("/purchase/stock");
     },
-    toStatistics() {
+    toBack() {
       this.$router.push({
-        path: "/purchase/statistics",
-        query: {
-          style: 1
-        }
+        path: "/purchase/back"
       });
     },
     toStatisticsDownload() {
