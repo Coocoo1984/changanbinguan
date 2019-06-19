@@ -50,7 +50,7 @@ export default {
       this.busy = true;
       this.$loading(true);
       this.page = this.page + 1;
-      url = url + "?listStateIds=11&PageSize=10&PageIndex=" + this.page;
+      url = url + "?listStateIds=7&PageSize=10&PageIndex=" + this.page;
       this.$GET(url).then(r => {
         for (var i of r.data) {
           this.datas.push({
