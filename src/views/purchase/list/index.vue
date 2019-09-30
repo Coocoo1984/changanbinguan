@@ -86,7 +86,7 @@ export default {
                 if (r.result == 1) {
                   this.$succecs(true);
                   this.$SendDeptMsg(
-                    "http://changan.91ytt.com/",
+                    "http://wxadmin.changan-hotel.cn/",
                     2,
                     "有新的采购订单需要初审",
                     this.$Now(),
