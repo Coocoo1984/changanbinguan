@@ -36,3 +36,9 @@ dist
 
 # Optional REPL history
 .node_repl_history
+/.vscode/launch.json
+/.vs/VSWorkspaceState.json
+/.vs/slnx.sqlite
+/.vs/ProjectSettings.json
+/.vs/config/applicationhost.config
+/.vs/changanbinguan/v15/.suo
