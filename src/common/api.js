@@ -1,9 +1,9 @@
 import Axios from "axios";
 var axios = Axios.create({});
 var config = {
-  getURL: "http://changan.91ytt.com:5000/api/",
-  updateURL: "http://changan.91ytt.com:50001/api/",
-  export: "http://changan.91ytt.com:5000/export/"
+    getURL: "http://wx.changan-hotel.cn:5000/api/",
+    updateURL: "http://wx.changan-hotel.cn:50001/api/",
+    export: "http://wx.changan-hotel.cn:5000/export/"
 };
 axios.interceptors.request.use(config => {
   if (window.app.$store.state.User.weichatID || window.userID) {
