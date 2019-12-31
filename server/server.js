@@ -134,7 +134,7 @@ app.post("/weixin/*", (req, res) => {
   );
 });
 app.get("/wx_login", (req, res) => {
-  var url = encodeURIComponent("http://changan.91ytt.com/wx_auth");
+    var url = encodeURIComponent("http://wxadmin.changan-hotel.cn/wx_auth");
   res.redirect(
     "https://open.weixin.qq.com/connect/oauth2/authorize?appid=ww3589f3907e9ad0e5&redirect_uri=" +
       url +

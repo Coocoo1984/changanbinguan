@@ -121,7 +121,7 @@ export default {
             if (r.data.result == 1) {
               this.$succecs(true);
               this.$SendDeptMsg(
-                "http://changan.91ytt.com/",
+                "http://wxadmin.changan-hotel.cn/",
                 this.code,
                 "采购订单已通过初审",
                 this.$Now(),
@@ -142,7 +142,7 @@ export default {
             if (r.data.result == 1) {
               this.$succecs(true);
               this.$SendDeptMsg(
-                "http://changan.91ytt.com/",
+                "http://wxadmin.changan-hotel.cn/",
                 this.code,
                 "采购订单已通过审核",
                 this.$Now(),
@@ -162,7 +162,7 @@ export default {
             if (r.data.result == 1) {
               this.$succecs(true);
               this.$SendDeptMsg(
-                "http://changan.91ytt.com/",
+                "http://wxadmin.changan-hotel.cn/",
                 this.code,
                 "采购订单已通过审核",
                 this.$Now(),
