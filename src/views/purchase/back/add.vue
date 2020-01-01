@@ -1,17 +1,17 @@
 <template>
   <div>
-    <div class="weui-cells__title">采购计划</div>
+    <div class="weui-cells__title">采购订单明细</div>
     <div class="weui-cell weui-cell_swiped">
       <div class="weui-cell__bd">
         <div v-for="(item,index) in datas" :key="index" class="weui-cell">
           <div class="weui-cell__bd">
-            <p>{{item.goods_name}}</p>
+              <p>{{item.goods_name}} 规格:{{item.goods_specification}}</p>
           </div>
           <div class="weui-cell__bd">
-            <p>收货：{{item.count}}{{item.goods_unit_name}}</p>
+            <p>收:{{item.count}}{{item.goods_unit_name}}</p>
           </div>
           <div class="weui-cell__bd">
-            退货：
+            退:
             <input
               style="text-align:right;width:50px"
               class="weui-input"
@@ -25,7 +25,7 @@
     </div>
     <div style="padding:55px"></div>
     <div class="weui-btn-area flex">
-      <a class="weui-btn weui-btn_primary" @click="submit" href="javascript:">收货提交</a>
+      <a class="weui-btn weui-btn_primary" @click="submit" href="javascript:">退货提交</a>
     </div>
   </div>
 </template>
