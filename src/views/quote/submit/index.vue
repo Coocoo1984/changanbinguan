@@ -24,11 +24,11 @@
       <div
         class="weui-cells__title"
         :key="'t'+index"
-      >采购入库项目({{getGoods(gc.id).length}}): {{gc.name}}</div>
+      >采购品类: {{gc.name}}({{getGoods(gc.id).length}}种)</div>
       <div class="weui-cells weui-cells_form" :key="'item'+index">
         <div class="weui-cell" v-for="(g,index) in getGoods(gc.id)" :key="index">
           <div class="weui-cell__hd">
-            <label class="weui-label" style="width:200px">{{g.GoodsName}}</label>
+              <label class="weui-label" style="width:200px">{{g.GoodsName}} 规格:{{g.GoodsSpecification}}</label>
           </div>
           <div class="weui-cell__bd">
             <input class="weui-input" v-model="g.Price" type="number" placeholder="0.00">
@@ -110,6 +110,7 @@ export default {
           goods_class_id: i.goods_class_id,
           GoodsID: i.goods_id,
           GoodsName: i.goods_name,
+          GoodsSpecification: i.goods_specification,//新增
           Price: "",
           UnitName: i.goods_unit_name
         };

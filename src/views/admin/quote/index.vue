@@ -202,13 +202,30 @@ export default {
       });
     }
   },
-  mounted() {
-    var date = new Date();
-    var year = date.getFullYear();
-    var mouth = date.getMonth() + 1;
-    this.startDate = year + "-" + (mouth - 2) + "-1";
-    this.endDate = year + "-" + mouth + "-30";
-  }
+         mounted() {
+             var date = new Date();
+             var year = date.getFullYear();
+             var month = date.getMonth();
+             if (month == 1) {
+                 this.startDate = (year - 1) + "-" + 11 + "-1";//当前月份1 从去年11月、去年12、今年1月
+             }
+             else if (month == 2) {
+                 this.startDate = (year - 1) + "-" + 12 + "-1";//当前月份2 从去年12月、今年1月、今年2月
+             }
+             else {
+                 this.startDate = year + "-" + (mouth - 2) + "-1";//当前月份3 从今年3、4、5月;当前月份12 今年10、11、12
+             }
+
+             var day = 30;
+             if (month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
+                 //大月 31日结束
+                 day = 31;
+             }
+             else if (month == 2) {
+                 day = 28;//闰年1天差别忽略不计
+             }
+             this.endDate = year + "-" + mouth + "-" + day;
+         }
 };
 </script>
  

@@ -24,12 +24,12 @@
       <div class="weui-panel__hd">{{k}}（{{v.length}}）</div>
       <div class="weui-panel__bd">
         <div v-for="(item,index) in v" :key="index" class="weui-media-box weui-media-box_text">
-          <h4 class="weui-media-box__title">
-            {{item.goods_name}}
-            <span class="menmoy">
-              <font class="red">￥{{item.unit_price}}</font>
-            </span>
-          </h4>
+            <h4 class="weui-media-box__title">
+                {{item.goods_name}}  规格:{{item.goods_specification}}
+                <span class="menmoy">
+                    <font class="red">{{item.unit_price}} 元/{{item.goods_unit}}</font>
+                </span>
+            </h4>
         </div>
       </div>
     </div>
