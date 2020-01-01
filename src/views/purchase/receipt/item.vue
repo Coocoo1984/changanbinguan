@@ -3,23 +3,22 @@
     <div class="weui-cells__title">采购计划</div>
     <div class="weui-cell weui-cell_swiped">
       <div class="weui-cell__bd">
-        <div v-for="(item,index) in datas" :key="index" class="weui-cell">
-          <div class="weui-cell__bd">
-            <p>{{item.goods_name}}</p>
+          <div v-for="(item,index) in datas" :key="index" class="weui-cell">
+              <div class="weui-cell__bd">
+                  <p>{{item.goods_name}} 规格:{{item.goods_specification}}</p>
+              </div>
+              <div class="weui-cell__bd">
+                  <p>计收:{{item.count}}{{item.goods_unit_name}} </p>
+              </div>
+               实收:
+              <div class="weui-cell__ft">
+                  <input style="text-align:right;width:50px"
+                         class="weui-input"
+                         v-model="item.actual_count"
+                         type="number">
+              </div>
+              <div class="weui-cell__ft" style="padding-left:10px">{{ item.goods_unit_name}}</div>
           </div>
-          <div class="weui-cell__bd">
-            <p>计划收货：{{item.count}}{{item.goods_unit_name}}</p>
-          </div>
-          <div class="weui-cell__ft">
-            <input
-              style="text-align:right;width:50px"
-              class="weui-input"
-              v-model="item.actual_count"
-              type="number"
-            >
-          </div>
-          <div class="weui-cell__ft" style="padding-left:10px">{{ item.goods_unit_name}}</div>
-        </div>
       </div>
     </div>
     <div style="padding:55px"></div>

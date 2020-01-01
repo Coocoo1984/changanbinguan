@@ -27,7 +27,7 @@ export default {
       this.$GET("PurchasingPlanDetail?purchasingPlanId=" + this.id).then(r => {
         this.datas = r.data.map(i => {
           return {
-            title: i.goods_name,
+            title: i.goods_name + ' 规格:' + i.specification,
             content: i.count + i.goods_unit_name
           };
         });

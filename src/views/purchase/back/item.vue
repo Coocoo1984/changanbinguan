@@ -20,7 +20,7 @@ export default {
       this.$GET("ChargeBackDetailList?ChargeBackID=" + this.id).then(r => {
         this.goods = r.data.map(i => {
           return {
-            title: i.goods_name,
+              title: i.goods_name + '规格:' + i.goods_specification,
             content: i.count + i.goods_unit_name
           };
         });
