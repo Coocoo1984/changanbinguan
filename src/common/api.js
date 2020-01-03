@@ -1,9 +1,12 @@
 import Axios from "axios";
 var axios = Axios.create({});
 var config = {
-    getURL: "http://wxadmin.changan-hotel.cn:5000/api/",
-    updateURL: "http://wxadmin.changan-hotel.cn:50001/api/",
-    export: "http://wxadmin.changan-hotel.cn:5000/export/"
+  //getURL: "http://wxadmin.changan-hotel.cn:5000/api/",
+  //updateURL: "http://wxadmin.changan-hotel.cn:50001/api/",
+  //export: "http://wxadmin.changan-hotel.cn:5000/export/",
+  getURL: "http://wxadmin.changan-hotel.cn/read/api/", 
+  updateURL: "http://wxadmin.changan-hotel.cn/write/api/", 
+  export: "http://wxadmin.changan-hotel.cn/export/"
 };
 axios.interceptors.request.use(config => {
   if (window.app.$store.state.User.weichatID || window.userID) {
