@@ -10,7 +10,7 @@
     "server": "node server.js"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
     "crypto": "^1.0.1",
